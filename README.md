@@ -23,11 +23,8 @@ The Harp technology was originally thought to suppress the lack of efficient bin
 |1248 |Audio Switch |Champalimaud Foundation
 |1264 |Rgbs |Champalimaud Foundation
 |1200 |FlyPad |
-|2048-2063| Reserved | MindReach
-|2064-2079| Reserved | Neurophotometrics
 |2064| FP3002 | Neurophotometrics
-|2080-2095| Reserved | International Brain Laboratory
-|2080| FP3002 | IBL Behavior Control
+|2080| IBL Behavior | IBL Behavior Control
 
 ## Licensing
 
