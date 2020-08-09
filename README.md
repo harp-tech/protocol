@@ -1,7 +1,7 @@
 ## Introduction
 
 On this repository you can find documentation of the Harp protocol, what is a Harp device and the Harp Timestamp Bus.
-The Harp technology was originally thought to suppress the lack of efficient binary protocol for scientific hardware communication.
+The Harp technology was originally thought at Champalimaud Foundation to suppress the lack of efficient binary protocol for scientific hardware communication.
 
 ## List of the current devices' IDs reported
 
@@ -23,8 +23,8 @@ The Harp technology was originally thought to suppress the lack of efficient bin
 |1248 |Audio Switch |Champalimaud Foundation
 |1264 |Rgbs |Champalimaud Foundation
 |1200 |FlyPad |
-|2064| FP3002 | Neurophotometrics
-|2080| IBL Behavior | IBL Behavior Control
+|2064 | FP3002 | Neurophotometrics
+|2080 | IBL Behavior | IBL Behavior Control
 
 ## Licensing
 
