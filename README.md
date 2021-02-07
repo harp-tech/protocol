@@ -7,10 +7,11 @@ The Harp technology was originally thought at Champalimaud Foundation to suppres
 
 | ID |Device |Dev  |
 |-|-|-|
+| 256 | USB Hub | OEPS
 | 1024 | Poke | Champalimaud Foundation
-| 1040 | Multi Pwm Genetayor | Champalimaud Foundation
+| 1040 | Multi Pwm Generator | Champalimaud Foundation
 | 1056 | Wear | Champalimaud Foundation
-| 1058 | Wear Basestation Gen2 | OEPS
+| 1058 | Wear Basestation Gen2 | OEPS/Champalimaud Foundation
 | 1072 | 12 Volts Drive | Champalimaud Foundation
 | 1088 | Led Controller | Champalimaud Foundation
 | 1104 | Synchronizer | Champalimaud Foundation
