@@ -5,8 +5,8 @@ The Harp technology was originally thought at Champalimaud Foundation to suppres
 
 ## List of the current devices' IDs reported
 
-| ID |Device |Dev  |
-|-|-|
+| ID | Device |
+|:---:|:---|
 | 256 | USB Hub |
 | 1024 | Poke |
 | 1040 | Multi Pwm Generator |
