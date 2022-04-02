@@ -33,6 +33,7 @@ The Harp technology was originally thought at Champalimaud Foundation to suppres
 | 2064 | Neurophotometrics FP3002 |
 | 2080 | IBL Behavior Control |
 | 2094 | RFID Reader |
+| 2110 | BioReader |
 
 ## Licensing
 
