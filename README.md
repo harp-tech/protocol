@@ -27,6 +27,7 @@ The Harp technology was originally thought at Champalimaud Foundation to suppres
 | 1184 | PyControl Adapter |
 | 1216 | Behavior |
 | 1232 | Load Cells Reader |
+| 1236 | Analog Input |
 | 1248 | Audio Switch |
 | 1264 | Rgbs |
 | 1200 | FlyPad |
