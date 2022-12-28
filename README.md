@@ -26,6 +26,8 @@ The Harp technology was originally thought at Champalimaud Foundation to suppres
 | 1170 | Camera Controller Gen2 |
 | 1184 | PyControl Adapter |
 | 1216 | Behavior |
+| 1224 | Vestibular VR H1 |
+| 1225 | Vestibular VR H2 |
 | 1232 | Load Cells Reader |
 | 1236 | Analog Input |
 | 1248 | Audio Switch |
