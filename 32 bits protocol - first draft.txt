@@ -1,0 +1,22 @@
+[MessageType] 	5b	type W, R, E
+				error
+				8b or 32b
+
+			1b	bundle 0 default not bundle
+			5b 	PayloadType
+		
+			1b	port exist 0 default not exist
+			16b	Endereço
+
+			bundle
+
+
+[port] 		32b	if exist, optional
+[length]		32b
+[seconds]		32b
+[nanoseconds]	32b
+[payload]
+
+[checksum]		16b	counter (starts from 0 when goes to active mode)
+			16b	checksum
+			Thischecksum it’s an equation that depends on the previous n. Here it-s divided for easy of understanding.
