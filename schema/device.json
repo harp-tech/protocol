@@ -1,0 +1,94 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema",
+    "$id": "https://harp-tech.org/2023-01/device",
+    "type": "object",
+    "properties": {
+        "device": {
+            "description": "Specifies the name of the device.",
+            "type": "string"
+        },
+        "whoAmI": {
+            "description": "Specifies the unique identifier for this device type.",
+            "type": "integer"
+        },
+        "firmwareVersion": {
+            "description": "Specifies the semantic version of the device firmware.",
+            "type": "string"
+        },
+        "hardwareVersion": {
+            "description": "Specifies the semantic version of the device hardware.",
+            "type": "string"
+        },
+        "registers": {
+            "description": "Specifies the collection of registers implementing the device function.",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "description":"Specifies the unique name of the register.",
+                        "type": "string"
+                    },
+                    "description": {
+                        "description": "Specifies a summary description of the register function.",
+                        "type": "string"
+                    },
+                    "address": {
+                        "description": "Specifies the unique 8-bit address of the register.",
+                        "type": "integer"
+                    },
+                    "registerType": {
+                        "description": "Specifies the expected use of the register.",
+                        "type": "string",
+                        "enum": ["Command", "Event"]
+                    },
+                    "payloadType": {
+                        "description": "Specifies the type of the register payload.",
+                        "type": "string",
+                        "enum": ["U8", "S8", "U16", "S16", "U32", "S32", "U64", "S64", "Float"]
+                    },
+                    "arrayType": {
+                        "description": "Specifies the optional array format for the register payload.",
+                        "oneOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            {
+                                "type": "integer"
+                            }
+                        ]
+                    },
+                    "maskType": {
+                        "description": "Specifies which mask type should be used when reading or writing the register payload.",
+                        "type": "string"
+                    },
+                    "converter": {
+                        "description": "Specifies an optional converter method used to parse the register payload.",
+                        "type": "boolean"
+                    },
+                    "alias": {
+                        "description": "Specifies an optional alias used to generate the register high-level interface.",
+                        "type": "string"
+                    },
+                    "visibility": {
+                        "description": "Specifies whether the register function is exposed in the high-level interface.",
+                        "type": "string",
+                        "enum": ["public", "private"]
+                    },
+                    "group": {
+                        "description": "Specifies an optional group name used to expose the register function in the high-level interface.",
+                        "type": "string"
+                    }
+                },
+                "required": ["name", "address", "registerType", "payloadType"]
+            }
+        }
+    },
+    "required": ["device", "whoAmI", "firmwareVersion", "hardwareVersion", "registers"]
+}
