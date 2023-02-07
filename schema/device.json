@@ -69,7 +69,7 @@
                         "type": "string"
                     },
                     "converter": {
-                        "description": "Specifies an optional converter method used to parse the register payload.",
+                        "description": "Flags the existence of an optional converter method used to parse or format the mask value in the high-level interface.",
                         "type": "boolean"
                     },
                     "alias": {
@@ -87,6 +87,50 @@
                     }
                 },
                 "required": ["name", "address", "registerType", "payloadType"]
+            }
+        },
+        "masks": {
+            "description": "Specifies the collection of masks available to be used with the different registers.",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "description":"Specifies the unique name of the mask.",
+                        "type": "string"
+                    },
+                    "description": {
+                        "description": "Specifies a summary description of the mask function.",
+                        "type": "string"
+                    },
+                    "value": {
+                        "description": "Specifies the value of the mask.",
+                        "type": ["string", "integer"]
+                    },
+                    "payloadType": {
+                        "description": "Specifies the type of the mask payload.",
+                        "type": "string",
+                        "enum": ["U8", "S8", "U16", "S16", "U32", "S32", "U64", "S64", "Float"]
+                    },
+                    "maskType": {
+                        "description": "Specifies which mask type the current instance belongs to.",
+                        "type": "string"
+                    },
+                    "converter": {
+                        "description": "Flags the existence of an optional converter method used to parse or format the mask value in the high-level interface.",
+                        "type": "boolean"
+                    },
+                    "alias": {
+                        "description": "Specifies an optional alias used to generate the mask high-level interface.",
+                        "type": "string"
+                    },
+                    "visibility": {
+                        "description": "Specifies whether the mask function is exposed in the high-level interface.",
+                        "type": "string",
+                        "enum": ["public", "private"]
+                    }
+                },
+                "required": ["name", "value", "payloadType"]
             }
         }
     },
