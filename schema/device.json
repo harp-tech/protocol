@@ -132,6 +132,74 @@
                 },
                 "required": ["name", "value", "payloadType"]
             }
+        },
+        "io": {
+            "description": "Specifies the IO configuration used to automatically generate the firmware",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "description":"Specifies the unique name of the IO pin.",
+                        "type": "string"
+                    },
+                    "description": {
+                        "description": "Specifies a summary description of the IO function.",
+                        "type": "string"
+                    },
+                    "port": {
+                        "description": "Specifies the microcontroller port.",
+                        "type": "string"
+                    },
+                    "pin": {
+                        "description": "Specifies the pin on targeted in the defined port.",
+                        "type": "integer"
+                    },
+                    "direction":{
+                        "description": "Specifies the pin to behave as an input or output.",
+                        "type": "string",
+                        "enum": ["input", "output"]
+                    },
+                    "useInput":{
+                        "description": "Specifies ???? TODO",
+                        "type": "boolean"
+                    },
+                    "pull":{
+                        "description": "Specifies state of the pin pull, or latch, circuit circuit.",
+                        "type": "string",
+                        "enum": ["up", "down", "tristate", "busholder"]
+                    },
+                    "sense":{
+                        "description": "Specifies event a digital input pin is sensitive to.",
+                        "type": "string",
+                        "enum": ["both", "rising", "falling", "low", "none"]
+                    },
+                    "interruptPriority":{
+                        "description": "Specifies priority of the interrupt event.",
+                        "type": "string",
+                        "enum": ["low", "med", "high", "off"]
+                    },
+                    "interruptNumber":{
+                        "description": "Specifies ?????.",
+                        "type": "integer",
+                        "enum": [0, 1]
+                    },
+                    "out":{
+                        "description": "Specifies ?????.",
+                        "type": "string",
+                        "enum": ["digital", "wire_or", "wire_and", "wired_or_pull", "wired_and_pull"]
+                    },
+                    "outDefault":{
+                        "description": "Specifies ?????.",
+                        "type": "boolean"
+                    },
+                    "outInvert":{
+                        "description": "Specifies whether the output should be inverted. TODO????",
+                        "type": "boolean"
+                    }
+                },
+                "required": ["name", "port", "pin", "direction"]
+            }
         }
     },
     "required": ["device", "whoAmI", "firmwareVersion", "hardwareVersion", "registers"]
