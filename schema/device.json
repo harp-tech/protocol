@@ -53,11 +53,16 @@
                     "description": "Specifies the unique name of the bit field.",
                     "type": "string"
                 },
+                "description": {
+                    "description": "Specifies a summary description of the bit field.",
+                    "type": "string"
+                },
                 "value": {
                     "description": "Specifies the value of the bit field.",
                     "type": "integer"
                 }
-            }
+            },
+            "required": ["name", "value"]
         },
         "bitMask": {
             "description": "Specifies a bit mask used for reading or writing specific register payloads.",
@@ -67,11 +72,16 @@
                     "description": "Specifies the unique name of the bit mask.",
                     "type": "string"
                 },
+                "description": {
+                    "description": "Specifies a summary description of the bit mask function.",
+                    "type": "string"
+                },
                 "bits": {
                     "type": "array",
                     "items": { "$ref": "#/definitions/bitField" }
                 }
-            }
+            },
+            "required": ["name"]
         },
         "register": {
             "type": "object",
@@ -86,7 +96,8 @@
                 },
                 "address": {
                     "description": "Specifies the unique 8-bit address of the register.",
-                    "type": "integer"
+                    "type": "integer",
+                    "maximum": 255
                 },
                 "registerType": {
                     "description": "Specifies the expected use of the register.",
