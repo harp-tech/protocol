@@ -26,185 +26,176 @@
         "registers": {
             "description": "Specifies the collection of registers implementing the device function.",
             "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "description":"Specifies the unique name of the register.",
-                        "type": "string"
-                    },
-                    "description": {
-                        "description": "Specifies a summary description of the register function.",
-                        "type": "string"
-                    },
-                    "address": {
-                        "description": "Specifies the unique 8-bit address of the register.",
-                        "type": "integer"
-                    },
-                    "registerType": {
-                        "description": "Specifies the expected use of the register.",
-                        "type": "string",
-                        "enum": ["Command", "Event"]
-                    },
-                    "payloadType": {
-                        "description": "Specifies the type of the register payload.",
-                        "type": "string",
-                        "enum": ["U8", "S8", "U16", "S16", "U32", "S32", "U64", "S64", "Float"]
-                    },
-                    "arrayType": {
-                        "description": "Specifies the optional array format for the register payload.",
-                        "oneOf": [
-                            {
-                                "type": "string"
-                            },
-                            {
-                                "type": "array",
-                                "items": {
-                                    "type": "string"
-                                }
-                            },
-                            {
-                                "type": "integer"
-                            }
-                        ]
-                    },
-                    "maskType": {
-                        "description": "Specifies which mask type should be used when reading or writing the register payload.",
-                        "type": "string"
-                    },
-                    "converter": {
-                        "description": "Flags the existence of an optional converter method used to parse or format the mask value in the high-level interface.",
-                        "type": "boolean"
-                    },
-                    "alias": {
-                        "description": "Specifies an optional alias used to generate the register high-level interface.",
-                        "type": "string"
-                    },
-                    "visibility": {
-                        "description": "Specifies whether the register function is exposed in the high-level interface.",
-                        "type": "string",
-                        "enum": ["public", "private"]
-                    },
-                    "group": {
-                        "description": "Specifies an optional group name used to expose the register function in the high-level interface.",
-                        "type": "string"
-                    }
-                },
-                "required": ["name", "address", "registerType", "payloadType"]
-            }
+            "items": { "$ref": "#/definitions/register" }
         },
         "masks": {
             "description": "Specifies the collection of masks available to be used with the different registers.",
             "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "description":"Specifies the unique name of the mask.",
-                        "type": "string"
-                    },
-                    "description": {
-                        "description": "Specifies a summary description of the mask function.",
-                        "type": "string"
-                    },
-                    "value": {
-                        "description": "Specifies the value of the mask.",
-                        "type": ["string", "integer"]
-                    },
-                    "payloadType": {
-                        "description": "Specifies the type of the mask payload.",
-                        "type": "string",
-                        "enum": ["U8", "S8", "U16", "S16", "U32", "S32", "U64", "S64", "Float"]
-                    },
-                    "maskType": {
-                        "description": "Specifies which mask type the current instance belongs to.",
-                        "type": "string"
-                    },
-                    "converter": {
-                        "description": "Flags the existence of an optional converter method used to parse or format the mask value in the high-level interface.",
-                        "type": "boolean"
-                    },
-                    "alias": {
-                        "description": "Specifies an optional alias used to generate the mask high-level interface.",
-                        "type": "string"
-                    },
-                    "visibility": {
-                        "description": "Specifies whether the mask function is exposed in the high-level interface.",
-                        "type": "string",
-                        "enum": ["public", "private"]
-                    }
-                },
-                "required": ["name", "value", "payloadType"]
-            }
+            "items": { "$ref": "#/definitions/bitMask" }
         },
-        "io": {
-            "description": "Specifies the IO configuration used to automatically generate the firmware",
+        "ios": {
+            "description": "Specifies the IO pin configuration used to automatically generate the firmware.",
             "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "description":"Specifies the unique name of the IO pin.",
-                        "type": "string"
-                    },
-                    "description": {
-                        "description": "Specifies a summary description of the IO function.",
-                        "type": "string"
-                    },
-                    "port": {
-                        "description": "Specifies the microcontroller port.",
-                        "type": "string"
-                    },
-                    "pin": {
-                        "description": "Specifies the pin on targeted in the defined port.",
-                        "type": "integer"
-                    },
-                    "direction":{
-                        "description": "Specifies the pin to behave as an input or output.",
-                        "type": "string",
-                        "enum": ["input", "output"]
-                    },
-                    "useInput":{
-                        "description": "Specifies ???? TODO",
-                        "type": "boolean"
-                    },
-                    "pull":{
-                        "description": "Specifies state of the pin pull, or latch, circuit circuit.",
-                        "type": "string",
-                        "enum": ["up", "down", "tristate", "busholder"]
-                    },
-                    "sense":{
-                        "description": "Specifies event a digital input pin is sensitive to.",
-                        "type": "string",
-                        "enum": ["both", "rising", "falling", "low", "none"]
-                    },
-                    "interruptPriority":{
-                        "description": "Specifies priority of the interrupt event.",
-                        "type": "string",
-                        "enum": ["low", "med", "high", "off"]
-                    },
-                    "interruptNumber":{
-                        "description": "Specifies ?????.",
-                        "type": "integer",
-                        "enum": [0, 1]
-                    },
-                    "out":{
-                        "description": "Specifies ?????.",
-                        "type": "string",
-                        "enum": ["digital", "wire_or", "wire_and", "wired_or_pull", "wired_and_pull"]
-                    },
-                    "outDefault":{
-                        "description": "Specifies ?????.",
-                        "type": "boolean"
-                    },
-                    "outInvert":{
-                        "description": "Specifies whether the output should be inverted. TODO????",
-                        "type": "boolean"
-                    }
-                },
-                "required": ["name", "port", "pin", "direction"]
-            }
+            "items": { "$ref": "#/definitions/pin" }
         }
     },
-    "required": ["device", "whoAmI", "firmwareVersion", "hardwareVersion", "registers"]
+    "required": ["device", "whoAmI", "firmwareVersion", "hardwareVersion", "registers"],
+    "definitions": {
+        "payloadType": {
+            "description": "Specifies the type of the register payload.",
+            "type": "string",
+            "enum": ["U8", "S8", "U16", "S16", "U32", "S32", "U64", "S64", "Float"]
+        },
+        "bitField": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description": "Specifies the unique name of the bit field.",
+                    "type": "string"
+                },
+                "value": {
+                    "description": "Specifies the value of the bit field.",
+                    "type": "integer"
+                }
+            }
+        },
+        "bitMask": {
+            "description": "Specifies a bit mask used for reading or writing specific register payloads.",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description": "Specifies the unique name of the bit mask.",
+                    "type": "string"
+                },
+                "bits": {
+                    "type": "array",
+                    "items": { "$ref": "#/definitions/bitField" }
+                }
+            }
+        },
+        "register": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description":"Specifies the unique name of the register.",
+                    "type": "string"
+                },
+                "description": {
+                    "description": "Specifies a summary description of the register function.",
+                    "type": "string"
+                },
+                "address": {
+                    "description": "Specifies the unique 8-bit address of the register.",
+                    "type": "integer"
+                },
+                "registerType": {
+                    "description": "Specifies the expected use of the register.",
+                    "type": "string",
+                    "enum": ["Command", "Event"]
+                },
+                "payloadType": {
+                    "$ref": "#/definitions/payloadType"
+                },
+                "arrayType": {
+                    "description": "Specifies the optional array format for the register payload.",
+                    "oneOf": [
+                        {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        {
+                            "type": "integer"
+                        }
+                    ]
+                },
+                "maskType": {
+                    "$ref": "#/definitions/bitMask/properties/name"
+                },
+                "converter": {
+                    "description": "Flags the existence of an optional converter method used to parse or format the mask value in the high-level interface.",
+                    "type": "boolean"
+                },
+                "alias": {
+                    "description": "Specifies an optional alias used to generate the register high-level interface.",
+                    "type": "string"
+                },
+                "visibility": {
+                    "description": "Specifies whether the register function is exposed in the high-level interface.",
+                    "type": "string",
+                    "enum": ["public", "private"]
+                },
+                "group": {
+                    "description": "Specifies an optional group name used to expose the register function in the high-level interface.",
+                    "type": "string"
+                }
+            },
+            "required": ["name", "address", "registerType", "payloadType"]
+        },
+        "pin": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description":"Specifies the unique name of the IO pin.",
+                    "type": "string"
+                },
+                "description": {
+                    "description": "Specifies a summary description of the IO function.",
+                    "type": "string"
+                },
+                "port": {
+                    "description": "Specifies the microcontroller port.",
+                    "type": "string"
+                },
+                "pin": {
+                    "description": "Specifies the unique pin number in the defined port.",
+                    "type": "integer"
+                },
+                "direction": {
+                    "description": "Specifies whether the pin will be used as input or output.",
+                    "type": "string",
+                    "enum": ["input", "output"]
+                },
+                "useInput": {
+                    "description": "Specifies ???? TODO",
+                    "type": "boolean"
+                },
+                "pull": {
+                    "description": "Specifies the state of the pin pull, or latch, circuit.",
+                    "type": "string",
+                    "enum": ["up", "down", "tristate", "busholder"]
+                },
+                "sense":{
+                    "description": "Specifies event a digital input pin is sensitive to.",
+                    "type": "string",
+                    "enum": ["both", "rising", "falling", "low", "none"]
+                },
+                "interruptPriority": {
+                    "description": "Specifies the priority of the interrupt event for this pin.",
+                    "type": "string",
+                    "enum": ["low", "med", "high", "off"]
+                },
+                "interruptNumber":{
+                    "description": "Specifies ?????.",
+                    "type": "integer",
+                    "enum": [0, 1]
+                },
+                "out":{
+                    "description": "Specifies ?????.",
+                    "type": "string",
+                    "enum": ["digital", "wire_or", "wire_and", "wired_or_pull", "wired_and_pull"]
+                },
+                "outDefault":{
+                    "description": "Specifies ?????.",
+                    "type": "boolean"
+                },
+                "outInvert":{
+                    "description": "Specifies whether the output should be inverted. TODO????",
+                    "type": "boolean"
+                }
+            },
+            "required": ["name", "port", "pin", "direction"]
+        }
+    }
 }
