@@ -19,6 +19,10 @@
             "description": "Specifies the semantic version of the device hardware.",
             "type": "string"
         },
+        "architecture": {
+            "description": "Architecture of the microcontroller.",
+            "type": "string"
+        },
         "registers": {
             "description": "Specifies the collection of registers implementing the device function.",
             "type": "array",
