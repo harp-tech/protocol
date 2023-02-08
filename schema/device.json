@@ -46,26 +46,8 @@
             "type": "string",
             "enum": ["U8", "S8", "U16", "S16", "U32", "S32", "U64", "S64", "Float"]
         },
-        "bitField": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "description": "Specifies the unique name of the bit field.",
-                    "type": "string"
-                },
-                "description": {
-                    "description": "Specifies a summary description of the bit field.",
-                    "type": "string"
-                },
-                "value": {
-                    "description": "Specifies the value of the bit field.",
-                    "type": "integer"
-                }
-            },
-            "required": ["name", "value"]
-        },
         "bitMask": {
-            "description": "Specifies a bit mask used for reading or writing specific register payloads.",
+            "description": "Specifies a bit mask used for reading or writing specific registers.",
             "type": "object",
             "properties": {
                 "name": {
@@ -76,12 +58,13 @@
                     "description": "Specifies a summary description of the bit mask function.",
                     "type": "string"
                 },
+                "payloadType": { "$ref": "#/definitions/payloadType" },
                 "bits": {
-                    "type": "array",
-                    "items": { "$ref": "#/definitions/bitField" }
+                    "type": "object",
+                    "additionalProperties": { "type": "integer" }
                 }
             },
-            "required": ["name"]
+            "required": ["name", "payloadType"]
         },
         "register": {
             "type": "object",
@@ -104,9 +87,7 @@
                     "type": "string",
                     "enum": ["Command", "Event"]
                 },
-                "payloadType": {
-                    "$ref": "#/definitions/payloadType"
-                },
+                "payloadType": { "$ref": "#/definitions/payloadType" },
                 "arrayType": {
                     "description": "Specifies the optional array format for the register payload.",
                     "oneOf": [
