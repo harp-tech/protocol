@@ -140,7 +140,7 @@
                     "description": "Specifies the microcontroller port.",
                     "type": "string"
                 },
-                "pin": {
+                "pinNumber": {
                     "description": "Specifies the unique pin number in the defined port.",
                     "type": "integer"
                 },
@@ -150,11 +150,11 @@
                     "enum": ["input", "output"]
                 },
                 "useInput": {
-                    "description": "Specifies ???? TODO",
+                    "description": "Specifies whether the output pin can also read its state from the input `mode`",
                     "type": "boolean"
                 },
                 "pull": {
-                    "description": "Specifies the state of the pin pull, or latch, circuit.",
+                    "description": " JUST FOR INPUTS ... Specifies the state of the pin input pull, or latch, circuit.",
                     "type": "string",
                     "enum": ["up", "down", "tristate", "busholder"]
                 },
@@ -169,21 +169,21 @@
                     "enum": ["low", "med", "high", "off"]
                 },
                 "interruptNumber":{
-                    "description": "Specifies ?????.",
-                    "type": "integer",
-                    "enum": [0, 1]
+                    "description": "Specifies the interrupt number associated with the specific pin.",
+                    "type": "string",
+                    "enum": ["INT0", "INT1"]
                 },
                 "out":{
-                    "description": "Specifies ?????.",
+                    "description": "ONLY OUTPUTS. Specifies output mode of the pin.",
                     "type": "string",
                     "enum": ["digital", "wire_or", "wire_and", "wired_or_pull", "wired_and_pull"]
                 },
                 "outDefault":{
-                    "description": "Specifies ?????.",
-                    "type": "boolean"
+                    "description": "Specifies the initial state of the output line at boot time.",
+                    "enum": [0, 1]
                 },
                 "outInvert":{
-                    "description": "Specifies whether the output should be inverted. TODO????",
+                    "description": "Specifies whether the output should be inverted.",
                     "type": "boolean"
                 }
             },
