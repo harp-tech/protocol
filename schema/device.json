@@ -15,7 +15,7 @@
             "description": "Specifies the semantic version of the device firmware.",
             "type": "string"
         },
-        "hardwareVersion": {
+        "hardwareTargets": {
             "description": "Specifies the semantic version of the device hardware.",
             "type": "string"
         },
@@ -39,7 +39,7 @@
             "items": { "$ref": "#/definitions/pin" }
         }
     },
-    "required": ["device", "whoAmI", "firmwareVersion", "hardwareVersion", "registers"],
+    "required": ["device", "whoAmI", "firmwareVersion", "hardwareTargets", "registers"],
     "definitions": {
         "payloadType": {
             "description": "Specifies the type of the register payload.",
@@ -85,7 +85,7 @@
                 "registerType": {
                     "description": "Specifies the expected use of the register.",
                     "type": "string",
-                    "enum": ["Command", "Event"]
+                    "enum": ["Command", "Event", "Both"]
                 },
                 "payloadType": { "$ref": "#/definitions/payloadType" },
                 "arrayType": {
@@ -108,10 +108,6 @@
                 "converter": {
                     "description": "Flags the existence of an optional converter method used to parse or format the mask value in the high-level interface.",
                     "type": "boolean"
-                },
-                "alias": {
-                    "description": "Specifies an optional alias used to generate the register high-level interface.",
-                    "type": "string"
                 },
                 "visibility": {
                     "description": "Specifies whether the register function is exposed in the high-level interface.",
