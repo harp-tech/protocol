@@ -129,7 +129,8 @@
                 "payloadType": { "$ref": "#/definitions/payloadType" },
                 "payloadLength": {
                     "description": "Specifies the length of the register payload.",
-                    "type": "integer"
+                    "type": "integer",
+                    "minimum": 1
                 },
                 "payloadSpec": {
                     "type": "object",
