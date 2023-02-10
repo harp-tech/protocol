@@ -85,8 +85,11 @@
         },
         "payloadMember": {
             "type": "object",
-            "additionalProperties": false,
             "properties": {
+                "description": {
+                    "description": "Specifies a summary description of the payload member.",
+                    "type": "string"
+                },
                 "mask": {
                     "description": "Specifies the mask used to read and write this payload member.",
                     "type": "integer"
