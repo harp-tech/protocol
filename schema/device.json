@@ -58,7 +58,6 @@
                     "description": "Specifies a summary description of the bit mask function.",
                     "type": "string"
                 },
-                "payloadType": { "$ref": "#/definitions/payloadType" },
                 "bits": {
                     "type": "object",
                     "additionalProperties": { "type": "integer" }
