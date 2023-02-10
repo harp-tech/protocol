@@ -80,6 +80,7 @@
                 "address": {
                     "description": "Specifies the unique 8-bit address of the register.",
                     "type": "integer",
+                    "minimum": 32,
                     "maximum": 255
                 },
                 "registerType": {
