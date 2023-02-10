@@ -41,7 +41,7 @@
         "ios": {
             "type": "object",
             "description": "Specifies the IO pin configuration used to automatically generate the firmware.",
-            "additionalProperties": { "$ref": "#/definitions/pin" }
+            "additionalProperties": { "$ref": "#/definitions/pinMapping" }
         }
     },
     "required": ["device", "whoAmI", "firmwareVersion", "hardwareTargets", "registers"],
@@ -155,18 +155,18 @@
             },
             "required": ["address", "registerType", "payloadType"]
         },
-        "pin": {
+        "pinMapping": {
             "type": "object",
             "properties": {
                 "description": {
                     "description": "Specifies a summary description of the IO function.",
                     "type": "string"
                 },
-                "portName": {
+                "port": {
                     "description": "Specifies the microcontroller port.",
                     "type": "string"
                 },
-                "pinNumber": {
+                "pin": {
                     "description": "Specifies the unique pin number in the defined port.",
                     "type": "integer"
                 },
@@ -213,7 +213,7 @@
                     "type": "boolean"
                 }
             },
-            "required": ["portName", "pinNumber", "direction"]
+            "required": ["port", "pin", "direction"]
         }
     }
 }
