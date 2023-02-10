@@ -81,6 +81,27 @@
             },
             "required": ["values"]
         },
+        "payloadMember": {
+            "type": "object",
+            "properties": {
+                "mask": {
+                    "description": "Specifies the mask used to read and write this payload member.",
+                    "type": "integer"
+                },
+                "offset": {
+                    "description": "Specifies the payload array offset where this payload member is stored.",
+                    "type": "integer"
+                },
+                "maskType": {
+                    "description": "Specifies the name of the bit mask or group mask used to represent the payload data.",
+                    "type": "string"
+                },
+                "converter": {
+                    "description": "Flags the existence of an optional converter method used to parse or format the payload value in the high-level interface.",
+                    "type": "boolean"
+                }
+            }
+        },
         "register": {
             "type": "object",
             "properties": {
@@ -104,26 +125,20 @@
                     "enum": ["Command", "Event", "Both"]
                 },
                 "payloadType": { "$ref": "#/definitions/payloadType" },
-                "arrayType": {
-                    "description": "Specifies the optional array format for the register payload.",
+                "payloadLength": {
+                    "description": "Specifies the length of the register payload.",
+                    "type": "integer"
+                },
+                "payloadSpec": {
                     "oneOf": [
                         {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/payloadMember"
                         },
                         {
-                            "type": "integer"
+                            "type": "object",
+                            "additionalProperties": { "$ref": "#/definitions/payloadMember" }
                         }
                     ]
-                },
-                "maskType": {
-                    "$ref": "#/definitions/bitMask/properties/name"
-                },
-                "converter": {
-                    "description": "Flags the existence of an optional converter method used to parse or format the mask value in the high-level interface.",
-                    "type": "boolean"
                 },
                 "visibility": {
                     "description": "Specifies whether the register function is exposed in the high-level interface.",
