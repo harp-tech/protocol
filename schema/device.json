@@ -59,13 +59,12 @@
                     "description": "Specifies a summary description of the bit mask function.",
                     "type": "string"
                 },
-                "payloadType": { "$ref": "#/definitions/payloadType" },
                 "bits": {
                     "type": "object",
                     "additionalProperties": { "type": "integer" }
                 }
             },
-            "required": ["payloadType", "bits"]
+            "required": ["bits"]
         },
         "groupMask": {
             "description": "Specifies a group mask used for reading or writing specific registers.",
@@ -75,13 +74,12 @@
                     "description": "Specifies a summary description of the group mask function.",
                     "type": "string"
                 },
-                "payloadType": { "$ref": "#/definitions/payloadType" },
                 "values": {
                     "type": "object",
                     "additionalProperties": { "type": "integer" }
                 }
             },
-            "required": ["payloadType", "values"]
+            "required": ["values"]
         },
         "payloadMember": {
             "type": "object",
