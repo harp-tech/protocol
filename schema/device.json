@@ -83,6 +83,7 @@
         },
         "payloadMember": {
             "type": "object",
+            "additionalProperties": false,
             "properties": {
                 "mask": {
                     "description": "Specifies the mask used to read and write this payload member.",
