@@ -129,15 +129,16 @@
                     "type": "integer"
                 },
                 "payloadSpec": {
-                    "oneOf": [
-                        {
-                            "$ref": "#/definitions/payloadMember"
-                        },
-                        {
-                            "type": "object",
-                            "additionalProperties": { "$ref": "#/definitions/payloadMember" }
-                        }
-                    ]
+                    "type": "object",
+                    "additionalProperties": { "$ref": "#/definitions/payloadMember" }
+                },
+                "maskType": {
+                    "description": "Specifies the name of the bit mask or group mask used to represent the payload data.",
+                    "type": "string"
+                },
+                "converter": {
+                    "description": "Flags the existence of an optional converter method used to parse or format the payload value in the high-level interface.",
+                    "type": "boolean"
                 },
                 "visibility": {
                     "description": "Specifies whether the register function is exposed in the high-level interface.",
