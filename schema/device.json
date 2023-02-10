@@ -24,9 +24,9 @@
             "type": "string"
         },
         "registers": {
+            "type": "object",
             "description": "Specifies the collection of registers implementing the device function.",
-            "type": "array",
-            "items": { "$ref": "#/definitions/register" }
+            "additionalProperties": { "$ref": "#/definitions/register" }
         },
         "bitMasks": {
             "type": "object",
@@ -105,10 +105,6 @@
         "register": {
             "type": "object",
             "properties": {
-                "name": {
-                    "description":"Specifies the unique name of the register.",
-                    "type": "string"
-                },
                 "description": {
                     "description": "Specifies a summary description of the register function.",
                     "type": "string"
@@ -150,7 +146,7 @@
                     "type": "string"
                 }
             },
-            "required": ["name", "address", "registerType", "payloadType"]
+            "required": ["address", "registerType", "payloadType"]
         },
         "pin": {
             "type": "object",
