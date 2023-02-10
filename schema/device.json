@@ -133,7 +133,7 @@
                     "description": "Specifies a summary description of the IO function.",
                     "type": "string"
                 },
-                "port": {
+                "portName": {
                     "description": "Specifies the microcontroller port.",
                     "type": "string"
                 },
@@ -167,13 +167,13 @@
                 },
                 "interruptNumber":{
                     "description": "Specifies the interrupt number associated with the specific pin.",
-                    "type": "string",
-                    "enum": ["INT0", "INT1"]
+                    "type": "integer",
+                    "enum": [0, 1]
                 },
                 "out":{
                     "description": "ONLY OUTPUTS. Specifies output mode of the pin.",
                     "type": "string",
-                    "enum": ["digital", "wire_or", "wire_and", "wired_or_pull", "wired_and_pull"]
+                    "enum": ["digital", "wireOr", "wireAnd", "wiredOrPull", "wiredAndPull"]
                 },
                 "outDefault":{
                     "description": "Specifies the initial state of the output line at boot time.",
@@ -184,7 +184,7 @@
                     "type": "boolean"
                 }
             },
-            "required": ["name", "port", "pin", "direction"]
+            "required": ["portName", "pinNumber", "direction"]
         }
     }
 }
