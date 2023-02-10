@@ -28,15 +28,15 @@
             "type": "array",
             "items": { "$ref": "#/definitions/register" }
         },
-        "masks": {
+        "bitMasks": {
+            "type": "object",
             "description": "Specifies the collection of masks available to be used with the different registers.",
-            "type": "array",
-            "items": { "$ref": "#/definitions/bitMask" }
+            "additionalProperties": { "$ref": "#/definitions/bitMask" }
         },
         "ios": {
+            "type": "object",
             "description": "Specifies the IO pin configuration used to automatically generate the firmware.",
-            "type": "array",
-            "items": { "$ref": "#/definitions/pin" }
+            "additionalProperties": { "$ref": "#/definitions/pin" }
         }
     },
     "required": ["device", "whoAmI", "firmwareVersion", "hardwareTargets", "registers"],
@@ -50,10 +50,6 @@
             "description": "Specifies a bit mask used for reading or writing specific registers.",
             "type": "object",
             "properties": {
-                "name": {
-                    "description": "Specifies the unique name of the bit mask.",
-                    "type": "string"
-                },
                 "description": {
                     "description": "Specifies a summary description of the bit mask function.",
                     "type": "string"
@@ -63,7 +59,7 @@
                     "additionalProperties": { "type": "integer" }
                 }
             },
-            "required": ["name", "payloadType"]
+            "required": ["bits"]
         },
         "register": {
             "type": "object",
@@ -124,10 +120,6 @@
         "pin": {
             "type": "object",
             "properties": {
-                "name": {
-                    "description":"Specifies the unique name of the IO pin.",
-                    "type": "string"
-                },
                 "description": {
                     "description": "Specifies a summary description of the IO function.",
                     "type": "string"
