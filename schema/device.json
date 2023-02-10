@@ -33,6 +33,11 @@
             "description": "Specifies the collection of masks available to be used with the different registers.",
             "additionalProperties": { "$ref": "#/definitions/bitMask" }
         },
+        "groupMasks": {
+            "type": "object",
+            "description": "Specifies the collection of group masks available to be used with the different registers.",
+            "additionalProperties": { "$ref": "#/definitions/groupMask" }
+        },
         "ios": {
             "type": "object",
             "description": "Specifies the IO pin configuration used to automatically generate the firmware.",
@@ -60,6 +65,21 @@
                 }
             },
             "required": ["bits"]
+        },
+        "groupMask": {
+            "description": "Specifies a group mask used for reading or writing specific registers.",
+            "type": "object",
+            "properties": {
+                "description": {
+                    "description": "Specifies a summary description of the group mask function.",
+                    "type": "string"
+                },
+                "values": {
+                    "type": "object",
+                    "additionalProperties": { "type": "integer" }
+                }
+            },
+            "required": ["values"]
         },
         "register": {
             "type": "object",
