@@ -101,8 +101,8 @@
                     "type": "string"
                 },
                 "converter": {
-                    "description": "Flags the existence of an optional converter method used to parse or format the payload value in the high-level interface.",
-                    "type": "boolean"
+                    "description": "Specifies a custom converter method used to parse or format the payload value in the high-level interface.",
+                    "type": "string"
                 }
             }
         },
@@ -139,8 +139,8 @@
                     "type": "string"
                 },
                 "converter": {
-                    "description": "Flags the existence of an optional converter method used to parse or format the payload value in the high-level interface.",
-                    "type": "boolean"
+                    "description": "Specifies a custom converter method used to parse or format the payload value in the high-level interface.",
+                    "type": "string"
                 },
                 "visibility": {
                     "description": "Specifies whether the register function is exposed in the high-level interface.",
