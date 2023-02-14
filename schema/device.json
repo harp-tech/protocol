@@ -122,7 +122,7 @@
                 "registerType": {
                     "description": "Specifies the expected use of the register.",
                     "type": "string",
-                    "enum": ["Command", "Event", "Both"]
+                    "enum": ["Command", "Event"]
                 },
                 "payloadType": { "$ref": "#/definitions/payloadType" },
                 "payloadLength": {
