@@ -89,6 +89,18 @@
             "description": "Specifies a custom converter method used to parse or format the payload value in the high-level interface.",
             "type": "string"
         },
+        "minValue": {
+            "description": "Specifies the minimum allowable value for the payload or payload member.",
+            "type": "number"
+        },
+        "maxValue": {
+            "description": "Specifies the maximum allowable value for the payload or payload member.",
+            "type": "number"
+        },
+        "defaultValue": {
+            "description": "Specifies the default value for the payload or payload member.",
+            "type": "number"
+        },
         "payloadMember": {
             "type": "object",
             "properties": {
@@ -105,7 +117,10 @@
                     "type": "integer"
                 },
                 "maskType": { "$ref": "#/definitions/maskType" },
-                "converter": { "$ref": "#/definitions/converter" }
+                "converter": { "$ref": "#/definitions/converter" },
+                "minValue": { "$ref": "#/definitions/minValue" },
+                "maxValue": { "$ref": "#/definitions/maxValue" },
+                "defaultValue": { "$ref": "#/definitions/defaultValue" }
             }
         },
         "register": {
@@ -138,6 +153,9 @@
                 },
                 "maskType": { "$ref": "#/definitions/maskType" },
                 "converter": { "$ref": "#/definitions/converter" },
+                "minValue": { "$ref": "#/definitions/minValue" },
+                "maxValue": { "$ref": "#/definitions/maxValue" },
+                "defaultValue": { "$ref": "#/definitions/defaultValue" },
                 "visibility": {
                     "description": "Specifies whether the register function is exposed in the high-level interface.",
                     "type": "string",
