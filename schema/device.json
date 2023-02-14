@@ -81,6 +81,14 @@
             },
             "required": ["values"]
         },
+        "maskType": {
+            "description": "Specifies the name of the bit mask or group mask used to represent the payload value.",
+            "type": "string"
+        },
+        "converter": {
+            "description": "Specifies a custom converter method used to parse or format the payload value in the high-level interface.",
+            "type": "string"
+        },
         "payloadMember": {
             "type": "object",
             "properties": {
@@ -96,14 +104,8 @@
                     "description": "Specifies the payload array offset where this payload member is stored.",
                     "type": "integer"
                 },
-                "maskType": {
-                    "description": "Specifies the name of the bit mask or group mask used to represent the payload data.",
-                    "type": "string"
-                },
-                "converter": {
-                    "description": "Specifies a custom converter method used to parse or format the payload value in the high-level interface.",
-                    "type": "string"
-                }
+                "maskType": { "$ref": "#/definitions/maskType" },
+                "converter": { "$ref": "#/definitions/converter" }
             }
         },
         "register": {
@@ -134,14 +136,8 @@
                     "type": "object",
                     "additionalProperties": { "$ref": "#/definitions/payloadMember" }
                 },
-                "maskType": {
-                    "description": "Specifies the name of the bit mask or group mask used to represent the payload data.",
-                    "type": "string"
-                },
-                "converter": {
-                    "description": "Specifies a custom converter method used to parse or format the payload value in the high-level interface.",
-                    "type": "string"
-                },
+                "maskType": { "$ref": "#/definitions/maskType" },
+                "converter": { "$ref": "#/definitions/converter" },
                 "visibility": {
                     "description": "Specifies whether the register function is exposed in the high-level interface.",
                     "type": "string",
