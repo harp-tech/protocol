@@ -51,6 +51,10 @@
             "type": "string",
             "enum": ["U8", "S8", "U16", "S16", "U32", "S32", "U64", "S64", "Float"]
         },
+        "registerType": {
+            "type": "string",
+            "enum": ["Command", "Event"]
+        },
         "bitMask": {
             "description": "Specifies a bit mask used for reading or writing specific registers.",
             "type": "object",
@@ -138,8 +142,16 @@
                 },
                 "registerType": {
                     "description": "Specifies the expected use of the register.",
-                    "type": "string",
-                    "enum": ["Command", "Event"]
+                    "oneOf": [
+                        { "$ref": "#/definitions/registerType" },
+                        {
+                            "type": "array",
+                            "items": { "$ref": "#/definitions/registerType" },
+                            "uniqueItems": true,
+                            "minItems": 1,
+                            "maxItems": 2
+                        }
+                    ]
                 },
                 "payloadType": { "$ref": "#/definitions/payloadType" },
                 "payloadLength": {
