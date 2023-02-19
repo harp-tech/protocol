@@ -89,6 +89,10 @@
             "description": "Specifies the name of the bit mask or group mask used to represent the payload value.",
             "type": "string"
         },
+        "interfaceType": {
+            "description": "Specifies the name of the type used to represent the payload value in the high-level interface.",
+            "type": "string"
+        },
         "converter": {
             "description": "Specifies a custom converter method used to parse or format the payload value in the high-level interface.",
             "type": "string"
@@ -121,6 +125,7 @@
                     "type": "integer"
                 },
                 "maskType": { "$ref": "#/definitions/maskType" },
+                "interfaceType": { "$ref": "#/definitions/interfaceType" },
                 "converter": { "$ref": "#/definitions/converter" },
                 "minValue": { "$ref": "#/definitions/minValue" },
                 "maxValue": { "$ref": "#/definitions/maxValue" },
@@ -164,6 +169,7 @@
                     "additionalProperties": { "$ref": "#/definitions/payloadMember" }
                 },
                 "maskType": { "$ref": "#/definitions/maskType" },
+                "interfaceType": { "$ref": "#/definitions/interfaceType" },
                 "converter": { "$ref": "#/definitions/converter" },
                 "minValue": { "$ref": "#/definitions/minValue" },
                 "maxValue": { "$ref": "#/definitions/maxValue" },
