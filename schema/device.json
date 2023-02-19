@@ -37,11 +37,6 @@
             "type": "object",
             "description": "Specifies the collection of group masks available to be used with the different registers.",
             "additionalProperties": { "$ref": "#/definitions/groupMask" }
-        },
-        "ios": {
-            "type": "object",
-            "description": "Specifies the IO pin configuration used to automatically generate the firmware.",
-            "additionalProperties": { "$ref": "#/definitions/pinMapping" }
         }
     },
     "required": ["device", "whoAmI", "firmwareVersion", "hardwareTargets", "registers"],
@@ -185,66 +180,6 @@
                 }
             },
             "required": ["address", "registerType", "payloadType"]
-        },
-        "pinMapping": {
-            "type": "object",
-            "properties": {
-                "description": {
-                    "description": "Specifies a summary description of the IO function.",
-                    "type": "string"
-                },
-                "port": {
-                    "description": "Specifies the microcontroller port.",
-                    "type": "string"
-                },
-                "pin": {
-                    "description": "Specifies the unique pin number in the defined port.",
-                    "type": "integer"
-                },
-                "direction": {
-                    "description": "Specifies whether the pin will be used as input or output.",
-                    "type": "string",
-                    "enum": ["input", "output"]
-                },
-                "useInput": {
-                    "description": "Specifies whether the output pin can also read its state from the input `mode`",
-                    "type": "boolean"
-                },
-                "pull": {
-                    "description": " JUST FOR INPUTS ... Specifies the state of the pin input pull, or latch, circuit.",
-                    "type": "string",
-                    "enum": ["up", "down", "tristate", "busholder"]
-                },
-                "sense":{
-                    "description": "Specifies event a digital input pin is sensitive to.",
-                    "type": "string",
-                    "enum": ["both", "rising", "falling", "low", "none"]
-                },
-                "interruptPriority": {
-                    "description": "Specifies the priority of the interrupt event for this pin.",
-                    "type": "string",
-                    "enum": ["low", "med", "high", "off"]
-                },
-                "interruptNumber":{
-                    "description": "Specifies the interrupt number associated with the specific pin.",
-                    "type": "integer",
-                    "enum": [0, 1]
-                },
-                "out":{
-                    "description": "ONLY OUTPUTS. Specifies output mode of the pin.",
-                    "type": "string",
-                    "enum": ["digital", "wireOr", "wireAnd", "wiredOrPull", "wiredAndPull"]
-                },
-                "outDefault":{
-                    "description": "Specifies the initial state of the output line at boot time.",
-                    "enum": [0, 1]
-                },
-                "outInvert":{
-                    "description": "Specifies whether the output should be inverted.",
-                    "type": "boolean"
-                }
-            },
-            "required": ["port", "pin", "direction"]
         }
     }
 }

@@ -1,0 +1,90 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema",
+    "$id": "https://harp-tech.org/2023-02/ios",
+    "type": "object",
+    "description": "Specifies the IO pin configuration used to automatically generate firmware.",
+    "additionalProperties": {
+        "oneOf": [
+            { "$ref": "#/definitions/inputPin" },
+            { "$ref": "#/definitions/outputPin" }
+        ]
+    },
+    "definitions": {
+        "portPin": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "description": "Specifies a summary description of the IO pin function.",
+                    "type": "string"
+                },
+                "port": {
+                    "description": "Specifies the microcontroller port where the pin is located.",
+                    "type": "string"
+                },
+                "pinNumber": {
+                    "description": "Specifies the unique pin number in the defined port.",
+                    "type": "integer"
+                },
+                "direction": {
+                    "description": "Specifies whether the pin will be used as input or output.",
+                    "type": "string",
+                    "enum": ["input", "output"]
+                }
+            },
+            "required": ["port", "pinNumber", "direction"]
+        },
+        "inputPin": {
+            "allOf": [{ "$ref": "#/definitions/portPin" }],
+            "properties": {
+                "direction": {
+                    "enum": ["input"]
+                },
+                "pinMode": {
+                    "description": "Specifies how the input pin is configured to handle floating inputs.",
+                    "type": "string",
+                    "enum": ["pullup", "pulldown", "tristate", "busholder"]
+                },
+                "triggerMode": {
+                    "description": "Specifies when the interrupt event for this pin should be triggered.",
+                    "type": "string",
+                    "enum": ["none", "rising", "falling", "toggle", "low"]
+                },
+                "interruptPriority": {
+                    "description": "Specifies the priority of the interrupt event for this pin.",
+                    "type": "string",
+                    "enum": ["off", "low", "medium", "high"]
+                },
+                "interruptNumber": {
+                    "description": "Specifies the interrupt number associated with this pin.",
+                    "type": "integer",
+                    "enum": [0, 1]
+                }
+            }
+        },
+        "outputPin": {
+            "allOf": [{ "$ref": "#/definitions/portPin" }],
+            "properties": {
+                "direction": {
+                    "enum": ["output"]
+                },
+                "allowRead": {
+                    "description": "Specifies whether reading the state of the output pin is allowed.",
+                    "type": "boolean"
+                },
+                "pinMode": {
+                    "description": "Specifies the output pin wiring configuration.",
+                    "type": "string",
+                    "enum": ["wiredOr", "wiredAnd", "wiredOrPull", "wiredAndPull"]
+                },
+                "initialState": {
+                    "description": "Specifies the initial state of the output pin at boot time.",
+                    "enum": ["low", "high"]
+                },
+                "invert": {
+                    "description": "Specifies whether the output logic of the pin should be inverted.",
+                    "type": "boolean"
+                }
+            }
+        }
+    }
+}
