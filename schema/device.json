@@ -50,6 +50,21 @@
             "type": "string",
             "enum": ["Command", "Event"]
         },
+        "maskValue": {
+            "oneOf": [
+                { "type": "integer" },
+                {
+                    "type": "object",
+                    "properties": {
+                        "description": {
+                            "description": "Specifies a summary description of the mask value function.",
+                            "type": "string"
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            ]
+        },
         "bitMask": {
             "description": "Specifies a bit mask used for reading or writing specific registers.",
             "type": "object",
@@ -60,7 +75,7 @@
                 },
                 "bits": {
                     "type": "object",
-                    "additionalProperties": { "type": "integer" }
+                    "additionalProperties": { "$ref": "#/definitions/maskValue" }
                 }
             },
             "required": ["bits"]
@@ -75,7 +90,7 @@
                 },
                 "values": {
                     "type": "object",
-                    "additionalProperties": { "type": "integer" }
+                    "additionalProperties": { "$ref": "#/definitions/maskValue" }
                 }
             },
             "required": ["values"]
