@@ -48,7 +48,7 @@
         },
         "registerType": {
             "type": "string",
-            "enum": ["Command", "Event"]
+            "enum": ["Read", "Write", "Event"]
         },
         "maskValue": {
             "oneOf": [
@@ -164,7 +164,7 @@
                             "items": { "$ref": "#/definitions/registerType" },
                             "uniqueItems": true,
                             "minItems": 1,
-                            "maxItems": 2
+                            "maxItems": 3
                         }
                     ]
                 },
