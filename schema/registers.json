@@ -1,0 +1,179 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema",
+    "$id": "https://harp-tech.org/2023-03/registers",
+    "type": "object",
+    "properties": {
+        "registers": {
+            "type": "object",
+            "description": "Specifies the collection of registers implementing the device function.",
+            "additionalProperties": { "$ref": "#/definitions/register" }
+        },
+        "bitMasks": {
+            "type": "object",
+            "description": "Specifies the collection of masks available to be used with the different registers.",
+            "additionalProperties": { "$ref": "#/definitions/bitMask" }
+        },
+        "groupMasks": {
+            "type": "object",
+            "description": "Specifies the collection of group masks available to be used with the different registers.",
+            "additionalProperties": { "$ref": "#/definitions/groupMask" }
+        }
+    },
+    "required": ["registers"],
+    "definitions": {
+        "payloadType": {
+            "description": "Specifies the type of the register payload.",
+            "type": "string",
+            "enum": ["U8", "S8", "U16", "S16", "U32", "S32", "U64", "S64", "Float"]
+        },
+        "registerType": {
+            "type": "string",
+            "enum": ["Read", "Write", "Event"]
+        },
+        "maskValue": {
+            "oneOf": [
+                { "type": "integer" },
+                {
+                    "type": "object",
+                    "properties": {
+                        "description": {
+                            "description": "Specifies a summary description of the mask value function.",
+                            "type": "string"
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            ]
+        },
+        "bitMask": {
+            "description": "Specifies a bit mask used for reading or writing specific registers.",
+            "type": "object",
+            "properties": {
+                "description": {
+                    "description": "Specifies a summary description of the bit mask function.",
+                    "type": "string"
+                },
+                "bits": {
+                    "type": "object",
+                    "additionalProperties": { "$ref": "#/definitions/maskValue" }
+                }
+            },
+            "required": ["bits"]
+        },
+        "groupMask": {
+            "description": "Specifies a group mask used for reading or writing specific registers.",
+            "type": "object",
+            "properties": {
+                "description": {
+                    "description": "Specifies a summary description of the group mask function.",
+                    "type": "string"
+                },
+                "values": {
+                    "type": "object",
+                    "additionalProperties": { "$ref": "#/definitions/maskValue" }
+                }
+            },
+            "required": ["values"]
+        },
+        "maskType": {
+            "description": "Specifies the name of the bit mask or group mask used to represent the payload value.",
+            "type": "string"
+        },
+        "interfaceType": {
+            "description": "Specifies the name of the type used to represent the payload value in the high-level interface.",
+            "type": "string"
+        },
+        "converter": {
+            "description": "Specifies a custom converter method used to parse or format the payload value in the high-level interface.",
+            "type": "string"
+        },
+        "minValue": {
+            "description": "Specifies the minimum allowable value for the payload or payload member.",
+            "type": "number"
+        },
+        "maxValue": {
+            "description": "Specifies the maximum allowable value for the payload or payload member.",
+            "type": "number"
+        },
+        "defaultValue": {
+            "description": "Specifies the default value for the payload or payload member.",
+            "type": "number"
+        },
+        "payloadMember": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "description": "Specifies a summary description of the payload member.",
+                    "type": "string"
+                },
+                "mask": {
+                    "description": "Specifies the mask used to read and write this payload member.",
+                    "type": "integer"
+                },
+                "offset": {
+                    "description": "Specifies the payload array offset where this payload member is stored.",
+                    "type": "integer"
+                },
+                "maskType": { "$ref": "#/definitions/maskType" },
+                "interfaceType": { "$ref": "#/definitions/interfaceType" },
+                "converter": { "$ref": "#/definitions/converter" },
+                "minValue": { "$ref": "#/definitions/minValue" },
+                "maxValue": { "$ref": "#/definitions/maxValue" },
+                "defaultValue": { "$ref": "#/definitions/defaultValue" }
+            }
+        },
+        "register": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "description": "Specifies a summary description of the register function.",
+                    "type": "string"
+                },
+                "address": {
+                    "description": "Specifies the unique 8-bit address of the register.",
+                    "type": "integer",
+                    "maximum": 255
+                },
+                "registerType": {
+                    "description": "Specifies the expected use of the register.",
+                    "oneOf": [
+                        { "$ref": "#/definitions/registerType" },
+                        {
+                            "type": "array",
+                            "items": { "$ref": "#/definitions/registerType" },
+                            "uniqueItems": true,
+                            "minItems": 1,
+                            "maxItems": 3
+                        }
+                    ]
+                },
+                "payloadType": { "$ref": "#/definitions/payloadType" },
+                "payloadLength": {
+                    "description": "Specifies the length of the register payload.",
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "payloadSpec": {
+                    "type": "object",
+                    "additionalProperties": { "$ref": "#/definitions/payloadMember" }
+                },
+                "maskType": { "$ref": "#/definitions/maskType" },
+                "interfaceType": { "$ref": "#/definitions/interfaceType" },
+                "converter": { "$ref": "#/definitions/converter" },
+                "minValue": { "$ref": "#/definitions/minValue" },
+                "maxValue": { "$ref": "#/definitions/maxValue" },
+                "defaultValue": { "$ref": "#/definitions/defaultValue" },
+                "visibility": {
+                    "description": "Specifies whether the register function is exposed in the high-level interface.",
+                    "type": "string",
+                    "enum": ["public", "private"]
+                },
+                "group": {
+                    "description": "Specifies an optional group name used to expose the register function in the high-level interface.",
+                    "type": "string"
+                }
+            },
+            "required": ["address", "registerType", "payloadType"]
+        }
+    }
+}
