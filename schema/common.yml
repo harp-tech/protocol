@@ -46,11 +46,13 @@ registers:
     address: 8
     registerType: [Read, Write, Event]
     payloadType: U32
+    volatile: yes
   TimestampMicros:
     description: Stores the fractional part of the system timestamp, in microseconds.
     address: 9
     registerType: Read
     payloadType: U16
+    volatile: yes
   OperationControl:
     description: Stores the configuration mode of the device.
     address: 10

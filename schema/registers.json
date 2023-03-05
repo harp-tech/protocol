@@ -147,6 +147,11 @@
                         }
                     ]
                 },
+                "volatile": {
+                    "description": "Specifies whether register values can be saved in non-volatile memory.",
+                    "type": "string",
+                    "enum": ["no", "yes"]
+                },
                 "payloadType": { "$ref": "#/definitions/payloadType" },
                 "payloadLength": {
                     "description": "Specifies the length of the register payload.",
