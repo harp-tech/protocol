@@ -172,10 +172,6 @@
                     "description": "Specifies whether the register function is exposed in the high-level interface.",
                     "type": "string",
                     "enum": ["public", "private"]
-                },
-                "group": {
-                    "description": "Specifies an optional group name used to expose the register function in the high-level interface.",
-                    "type": "string"
                 }
             },
             "required": ["address", "registerType", "payloadType"]
