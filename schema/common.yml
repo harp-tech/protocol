@@ -3,61 +3,61 @@ registers:
   WhoAmI:
     description: Specifies the identity class of the device.
     address: 0
-    registerType: Read
-    payloadType: U16
+    access: Read
+    type: U16
     interfaceType: int
   HardwareVersionHigh:
     description: Specifies the major hardware version of the device.
     address: 1
-    registerType: Read
-    payloadType: U8
+    access: Read
+    type: U8
   HardwareVersionLow:
     description: Specifies the minor hardware version of the device.
     address: 2
-    registerType: Read
-    payloadType: U8
+    access: Read
+    type: U8
   AssemblyVersion:
     description: Specifies the version of the assembled components in the device.
     address: 3
-    registerType: Read
-    payloadType: U8
+    access: Read
+    type: U8
   CoreVersionHigh:
     description: Specifies the major version of the Harp core implemented by the device.
     address: 4
-    registerType: Read
-    payloadType: U8
+    access: Read
+    type: U8
   CoreVersionLow:
     description: Specifies the minor version of the Harp core implemented by the device.
     address: 5
-    registerType: Read
-    payloadType: U8
+    access: Read
+    type: U8
   FirmwareVersionHigh:
     description: Specifies the major version of the Harp core implemented by the device.
     address: 6
-    registerType: Read
-    payloadType: U8
+    access: Read
+    type: U8
   FirmwareVersionLow:
     description: Specifies the minor version of the Harp core implemented by the device.
     address: 7
-    registerType: Read
-    payloadType: U8
+    access: Read
+    type: U8
   TimestampSeconds:
     description: Stores the integral part of the system timestamp, in seconds.
     address: 8
-    registerType: [Read, Write, Event]
-    payloadType: U32
+    access: [Read, Write, Event]
+    type: U32
     volatile: yes
   TimestampMicros:
     description: Stores the fractional part of the system timestamp, in microseconds.
     address: 9
-    registerType: Read
-    payloadType: U16
+    access: Read
+    type: U16
     volatile: yes
   OperationControl:
     description: Stores the configuration mode of the device.
     address: 10
-    registerType: Write
-    payloadType: U8
+    access: Write
+    type: U8
     payloadSpec:
       OperationMode:
         description: Specifies the operation mode of the device.
@@ -86,8 +86,8 @@ registers:
   Reset:
     description: Resets the device and saves non-volatile registers.
     address: 11
-    registerType: Write
-    payloadType: U8
+    access: Write
+    type: U8
     payloadSpec:
       ResetFromDefault:
         description: If this flag is enabled, the device resets and boots with all registers set to default values.
@@ -116,19 +116,19 @@ registers:
   DeviceName:
     description: Stores the user-specified device name.
     address: 12
-    registerType: Write
-    payloadType: U8
-    payloadLength: 25
+    access: Write
+    type: U8
+    length: 25
   SerialNumber:
     description: Specifies the unique serial number of the device.
     address: 13
-    registerType: Write
-    payloadType: U16
+    access: Write
+    type: U16
   ClockConfiguration:
     description: Specifies the configuration for the device synchronization clock.
     address: 14
-    registerType: Write
-    payloadType: U8
+    access: Write
+    type: U8
     payloadSpec:
       ClockRepeater:
         description: If this flag is enabled, specifies the device will repeat the clock synchronization signal to the clock output connector, if available.

@@ -21,12 +21,12 @@
     },
     "required": ["registers"],
     "definitions": {
-        "payloadType": {
+        "type": {
             "description": "Specifies the type of the register payload.",
             "type": "string",
             "enum": ["U8", "S8", "U16", "S16", "U32", "S32", "U64", "S64", "Float"]
         },
-        "registerType": {
+        "access": {
             "type": "string",
             "enum": ["Read", "Write", "Event"]
         },
@@ -134,13 +134,13 @@
                     "type": "integer",
                     "maximum": 255
                 },
-                "registerType": {
+                "access": {
                     "description": "Specifies the expected use of the register.",
                     "oneOf": [
-                        { "$ref": "#/definitions/registerType" },
+                        { "$ref": "#/definitions/access" },
                         {
                             "type": "array",
-                            "items": { "$ref": "#/definitions/registerType" },
+                            "items": { "$ref": "#/definitions/access" },
                             "uniqueItems": true,
                             "minItems": 1,
                             "maxItems": 3
@@ -152,8 +152,8 @@
                     "type": "string",
                     "enum": ["no", "yes"]
                 },
-                "payloadType": { "$ref": "#/definitions/payloadType" },
-                "payloadLength": {
+                "type": { "$ref": "#/definitions/type" },
+                "length": {
                     "description": "Specifies the length of the register payload.",
                     "type": "integer",
                     "minimum": 1
@@ -174,7 +174,7 @@
                     "enum": ["public", "private"]
                 }
             },
-            "required": ["address", "registerType", "payloadType"]
+            "required": ["address", "access", "type"]
         }
     }
 }
