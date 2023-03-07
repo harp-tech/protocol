@@ -125,14 +125,16 @@
         "register": {
             "type": "object",
             "properties": {
-                "description": {
-                    "description": "Specifies a summary description of the register function.",
-                    "type": "string"
-                },
                 "address": {
                     "description": "Specifies the unique 8-bit address of the register.",
                     "type": "integer",
                     "maximum": 255
+                },
+                "type": { "$ref": "#/definitions/type" },
+                "length": {
+                    "description": "Specifies the length of the register payload.",
+                    "type": "integer",
+                    "minimum": 1
                 },
                 "access": {
                     "description": "Specifies the expected use of the register.",
@@ -147,32 +149,30 @@
                         }
                     ]
                 },
+                "description": {
+                    "description": "Specifies a summary description of the register function.",
+                    "type": "string"
+                },
+                "minValue": { "$ref": "#/definitions/minValue" },
+                "maxValue": { "$ref": "#/definitions/maxValue" },
+                "defaultValue": { "$ref": "#/definitions/defaultValue" },
+                "maskType": { "$ref": "#/definitions/maskType" },
+                "visibility": {
+                    "description": "Specifies whether the register function is exposed in the high-level interface.",
+                    "type": "string",
+                    "enum": ["public", "private"]
+                },
                 "volatile": {
                     "description": "Specifies whether register values can be saved in non-volatile memory.",
                     "type": "string",
                     "enum": ["no", "yes"]
                 },
-                "type": { "$ref": "#/definitions/type" },
-                "length": {
-                    "description": "Specifies the length of the register payload.",
-                    "type": "integer",
-                    "minimum": 1
-                },
                 "payloadSpec": {
                     "type": "object",
                     "additionalProperties": { "$ref": "#/definitions/payloadMember" }
                 },
-                "maskType": { "$ref": "#/definitions/maskType" },
                 "interfaceType": { "$ref": "#/definitions/interfaceType" },
-                "converter": { "$ref": "#/definitions/converter" },
-                "minValue": { "$ref": "#/definitions/minValue" },
-                "maxValue": { "$ref": "#/definitions/maxValue" },
-                "defaultValue": { "$ref": "#/definitions/defaultValue" },
-                "visibility": {
-                    "description": "Specifies whether the register function is exposed in the high-level interface.",
-                    "type": "string",
-                    "enum": ["public", "private"]
-                }
+                "converter": { "$ref": "#/definitions/converter" }
             },
             "required": ["address", "access", "type"]
         }
