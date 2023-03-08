@@ -102,10 +102,6 @@
         "payloadMember": {
             "type": "object",
             "properties": {
-                "description": {
-                    "description": "Specifies a summary description of the payload member.",
-                    "type": "string"
-                },
                 "mask": {
                     "description": "Specifies the mask used to read and write this payload member.",
                     "type": "integer"
@@ -114,12 +110,16 @@
                     "description": "Specifies the payload array offset where this payload member is stored.",
                     "type": "integer"
                 },
-                "maskType": { "$ref": "#/definitions/maskType" },
-                "interfaceType": { "$ref": "#/definitions/interfaceType" },
-                "converter": { "$ref": "#/definitions/converter" },
+                "description": {
+                    "description": "Specifies a summary description of the payload member.",
+                    "type": "string"
+                },
                 "minValue": { "$ref": "#/definitions/minValue" },
                 "maxValue": { "$ref": "#/definitions/maxValue" },
-                "defaultValue": { "$ref": "#/definitions/defaultValue" }
+                "defaultValue": { "$ref": "#/definitions/defaultValue" },
+                "maskType": { "$ref": "#/definitions/maskType" },
+                "interfaceType": { "$ref": "#/definitions/interfaceType" },
+                "converter": { "$ref": "#/definitions/converter" }
             }
         },
         "register": {
