@@ -21,10 +21,6 @@
                     "description": "Specifies the semantic version of the device hardware.",
                     "type": "string"
                 },
-                "architecture": {
-                    "description": "Architecture of the microcontroller.",
-                    "type": "string"
-                },
                 "registers": {
                     "additionalProperties": {
                         "properties": {
