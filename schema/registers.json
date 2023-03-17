@@ -164,8 +164,7 @@
                 },
                 "volatile": {
                     "description": "Specifies whether register values can be saved in non-volatile memory.",
-                    "type": "string",
-                    "enum": ["no", "yes"]
+                    "type": "boolean"
                 },
                 "payloadSpec": {
                     "type": "object",
