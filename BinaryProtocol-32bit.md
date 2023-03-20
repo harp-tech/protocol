@@ -21,10 +21,10 @@ The Harp Message consists of the necessary information to execute a well-informe
 
 <table>
 <tr>
-    <th>31 &mdash; 24</th>
-    <th>23 &mdash; 16</th>
-    <th>15 &mdash; 8</th>
-    <th>7 &mdash; 0</th>
+    <th><code>  31 &mdash; 24  </code></th>
+    <th><code>  23 &mdash; 16  </code></th>
+    <th><code>  15 &mdash;  8  </code></th>
+    <th><code>   7 &mdash;  0  </code></th>
 </tr>
 <tr>
     <td align="center" colspan="2">RegisterAddress</td>
