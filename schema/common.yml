@@ -126,6 +126,7 @@ bitMasks:
   ResetFlags:
     description: Specifies the behavior of the non-volatile registers when resetting the device.
     bits:
+      None: {0, description: All reset flags are cleared.}
       RestoreDefault: {0x1, description: The device will boot with all the registers reset to their default factory values.}
       RestoreEeprom: {0x2, description: The device will boot and restore all the registers to the values stored in non-volatile memory.}
       Save: {0x4,  description: The device will boot and save all the current register values to non-volatile memory.}
@@ -135,6 +136,7 @@ bitMasks:
   ClockConfigurationFlags:
     description: Specifies configuration flags for the device synchronization clock.
     bits:
+      None: {0, description: All clock configuration flags are cleared.}
       ClockRepeater: {0x1, description: The device will repeat the clock synchronization signal to the clock output connector, if available. }
       ClockGenerator: {0x2, description: The device resets and generates the clock synchronization signal on the clock output connector, if available. }
       RepeaterCapability: {0x8, description: Specifies the device has the capability to repeat the clock synchronization signal to the clock output connector. }
