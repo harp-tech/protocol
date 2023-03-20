@@ -19,45 +19,26 @@ Note that the Harp Binary Protocol uses Little-Endian for byte organization.
 
 The Harp Message consists of the necessary information to execute a well-informed exchange of data. It follows the next structure.
 
-<style>
-    table tr td {
-        border-left: solid 1px;
-        border-right: solid 1px;
-        border-bottom: solid 1px;
-    }
-    table tr td.field {
-        min-width: 2em;
-        text-align: center;
-    }
-    table tr td.optional {
-        background-color: gray;
-    }
-    table tr td.payload {
-        background-color: blue;
-        height: 3em;
-    }
-</style>
-
 <table>
 <tr>
-    <td>31</td><td>...</td><td>24</td>
-    <td>23</td><td>...</td><td>16</td>
-    <td>15</td><td>...</td><td>8</td>
-    <td>7</td><td>...</td><td>0</td>
+    <th>31 &mdash; 24</th>
+    <th>23 &mdash; 16</th>
+    <th>15 &mdash; 8</th>
+    <th>7 &mdash; 0</th>
 </tr>
 <tr>
-    <td class="field" colspan="6">RegisterAddress</td>
-    <td class="field" colspan="3">PayloadType</td>
-    <td class="field" colspan="3">MessageType</td>
+    <td align="center" colspan="2">RegisterAddress</td>
+    <td align="center" colspan="1">PayloadType</td>
+    <td align="center" colspan="1">MessageType</td>
 </tr>
-<tr><td class="field" colspan="12">Length</td></tr>
-<tr><td class="field optional" colspan="12">Port</td></tr>
-<tr><td class="field optional" colspan="12">Seconds</td></tr>
-<tr><td class="field optional" colspan="12">Nanoseconds</td></tr>
-<tr><td class="field payload" colspan="12">Payload</td></tr>
+<tr><td align="center" colspan="4">Length</td></tr>
+<tr><td align="center" colspan="4">Port</td></tr>
+<tr><td align="center" colspan="4">Seconds</td></tr>
+<tr><td align="center" colspan="4">Nanoseconds</td></tr>
+<tr><td align="center" colspan="4">Payload</td></tr>
 <tr>
-    <td class="field" colspan="6">Counter</td>
-    <td class="field" colspan="6">Checksum</td>
+    <td align="center" colspan="2">Counter</td>
+    <td align="center" colspan="2">Checksum</td>
 </tr>
 </table>
 
@@ -69,23 +50,23 @@ Blue background – The field [Payload] can have more than one 32 bits word.
 
 <table>
 <tr>
-    <td class="field">7</td>
-    <td class="field">6</td>
-    <td class="field">5</td>
-    <td class="field">4</td>
-    <td class="field">3</td>
-    <td class="field">2</td>
-    <td class="field">1</td>
-    <td class="field">0</td>
+    <th align="center">7</th>
+    <th align="center">6</th>
+    <th align="center">5</th>
+    <th align="center">4</th>
+    <th align="center">3</th>
+    <th align="center">2</th>
+    <th align="center">1</th>
+    <th align="center">0</th>
 </tr>
 <tr>
-    <td class="field">Flag32</td>
-    <td class="field">0</td>
-    <td class="field">0</td>
-    <td class="field">FlagError</td>
-    <td class="field">0</td>
-    <td class="field">0</td>
-    <td class="field" colspan="2">Type</td>
+    <td align="center">Flag32</td>
+    <td align="center">0</td>
+    <td align="center">0</td>
+    <td align="center">FlagError</td>
+    <td align="center">0</td>
+    <td align="center">0</td>
+    <td align="center" colspan="2">Type</td>
 </tr>
 </table>
 
@@ -113,21 +94,21 @@ When the Flag is asserted the current Harp Message is constructed according to t
 
 <table>
 <tr>
-    <td class="field">7</td>
-    <td class="field">6</td>
-    <td class="field">5</td>
-    <td class="field">4</td>
-    <td class="field">3</td>
-    <td class="field">2</td>
-    <td class="field">1</td>
-    <td class="field">0</td>
+    <th align="center">7</th>
+    <th align="center">6</th>
+    <th align="center">5</th>
+    <th align="center">4</th>
+    <th align="center">3</th>
+    <th align="center">2</th>
+    <th align="center">1</th>
+    <th align="center">0</th>
 </tr>
 <tr>
-    <td class="field">IsSigned</td>
-    <td class="field">IsFloat</td>
-    <td class="field">0</td>
-    <td class="field">HasTimestamp</td>
-    <td class="field" colspan="4">Type</td>
+    <td align="center">IsSigned</td>
+    <td align="center">IsFloat</td>
+    <td align="center">0</td>
+    <td align="center">HasTimestamp</td>
+    <td align="center" colspan="4">Type</td>
 </tr>
 </table>
 
