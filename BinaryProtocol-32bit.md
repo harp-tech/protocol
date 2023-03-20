@@ -32,19 +32,21 @@ The Harp Message consists of the necessary information to execute a well-informe
     <td align="center" colspan="1">MessageType</td>
 </tr>
 <tr><td align="center" colspan="4">Length</td></tr>
-<tr><td align="center" colspan="4">Port</td></tr>
-<tr><td align="center" colspan="4">Seconds</td></tr>
-<tr><td align="center" colspan="4">Nanoseconds</td></tr>
-<tr><td align="center" colspan="4">Payload</td></tr>
+<tr><td align="center" colspan="4">Port *</td></tr>
+<tr><td align="center" colspan="4">Seconds *</td></tr>
+<tr><td align="center" colspan="4">Nanoseconds *</td></tr>
+<tr><td align="center" colspan="4">Payload *</td></tr>
 <tr>
     <td align="center" colspan="2">Counter</td>
     <td align="center" colspan="2">Checksum</td>
 </tr>
 </table>
 
-Gray background – Optional fields
+\* Optional fields
 
-Blue background – The field [Payload] can have more than one 32 bits word.
+> __Note__
+> 
+> The field [Payload] can have more than one 32 bits word.
 
 ## MessageType
 
@@ -133,7 +135,9 @@ This bit indicates if the [payload] contains rational values. If the bit is not 
 
 If the bit is asserted, it indicates that the [payload] contains integers with signal.
 
-> **Note:** The bits [IsFloat] and [IsSigned] must not be asserted at the same time.
+> __Note__
+> 
+> The bits [IsFloat] and [IsSigned] must not be asserted at the same time.
 
 ## RegisterAddress
 
