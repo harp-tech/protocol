@@ -129,7 +129,7 @@ bitMasks:
       None: {0, description: All reset flags are cleared.}
       RestoreDefault: {0x1, description: The device will boot with all the registers reset to their default factory values.}
       RestoreEeprom: {0x2, description: The device will boot and restore all the registers to the values stored in non-volatile memory.}
-      Save: {0x4,  description: The device will boot and save all the current register values to non-volatile memory.}
+      Save: {0x4, description: The device will boot and save all the current register values to non-volatile memory.}
       RestoreName: {0x8, description: The device will boot with the default device name.}
       BootFromDefault: {0x40, description: Specifies that the device has booted from default factory values.}
       BootFromEeprom: {0x80, description: Specifies that the device has booted from non-volatile values stored in EEPROM.}
@@ -137,9 +137,9 @@ bitMasks:
     description: Specifies configuration flags for the device synchronization clock.
     bits:
       None: {0, description: All clock configuration flags are cleared.}
-      ClockRepeater: {0x1, description: The device will repeat the clock synchronization signal to the clock output connector, if available. }
-      ClockGenerator: {0x2, description: The device resets and generates the clock synchronization signal on the clock output connector, if available. }
-      RepeaterCapability: {0x8, description: Specifies the device has the capability to repeat the clock synchronization signal to the clock output connector. }
-      GeneratorCapability: {0x10, description: Specifies the device has the capability to generate the clock synchronization signal to the clock output connector. }
-      ClockUnlock: {0x40, description: The device will unlock the timestamp register counter and will accept commands to set new timestamp values. }
-      ClockLock: {0x80, description: The device will lock the timestamp register counter and will not accept commands to set new timestamp values. }
+      ClockRepeater: {0x1, description: "The device will repeat the clock synchronization signal to the clock output connector, if available."}
+      ClockGenerator: {0x2, description: "The device resets and generates the clock synchronization signal on the clock output connector, if available."}
+      RepeaterCapability: {0x8, description: Specifies the device has the capability to repeat the clock synchronization signal to the clock output connector.}
+      GeneratorCapability: {0x10, description: Specifies the device has the capability to generate the clock synchronization signal to the clock output connector.}
+      ClockUnlock: {0x40, description: The device will unlock the timestamp register counter and will accept commands to set new timestamp values.}
+      ClockLock: {0x80, description: The device will lock the timestamp register counter and will not accept commands to set new timestamp values.}
