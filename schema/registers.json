@@ -84,8 +84,9 @@
             "type": "string"
         },
         "converter": {
-            "description": "Specifies a custom converter method used to parse or format the payload value in the high-level interface.",
-            "type": "string"
+            "description": "Specifies whether a custom converter will be used to parse or format the payload value.",
+            "type": "string",
+            "enum": ["None", "Payload", "RawPayload"]
         },
         "minValue": {
             "description": "Specifies the minimum allowable value for the payload or payload member.",
