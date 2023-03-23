@@ -1,23 +1,25 @@
-# Binary Protocol 32 bits (v0.1)
+# Binary Protocol 32-bit (v0.1)
 
 ## Introduction
 
-The Harp Binary Protocol is a binary communication protocol created in order to facilitate and unify the interaction between different devices. It was design with efficiency and parse ease in mind.
+The Harp Protocol is a binary communication protocol created in order to facilitate and unify the interaction between different devices. It was designed with efficiency and ease of parsing in mind.
 
-The protocol is based on addresses. Each address points to a certain position register available in the device. These positions are called registers.  Each register should have a defined data type and a meaning/purpose.
+The protocol is based on addresses. Each address points to a certain memory position available in the device. These positions are called registers. Each register is defined by a data type and some meaningful functionality attached to the data.
 
-Although is not mandatory, usually the Harp Binary Protocol is exchanged between a Controller and a Peripheral. The Controller can be a computer, or a server and the Peripheral can be a data acquisition or an actuator device.
+The Harp Binary Protocol is commonly used for all exchanges between a Controller and a Device. The Controller can be a computer, or a server and the Device can be a data acquisition or actuator microcontroller.
 
 The available packets are:
- * Command: Sent by the Controller to the Peripheral. They allow to change the registers content and to read the registers content.
- * Reply: Sent by the Peripheral as an answer to a Command.
- * Event: Sent by the Peripheral when an external or internal event happens. An Event carry the content of a register.
+ * Command: Sent by the Controller to the Device. Command messages can be used to read or write the register contents.
+ * Reply: Sent by the Device in response to a Command.
+ * Event: Sent by the Device when an external or internal event of interest happens. An Event message will always carry the contents of the register that the event refers to.
 
-Note that the Harp Binary Protocol uses Little-Endian for byte organization.
+> **Note**
+>
+> The Harp Binary Protocol uses Little-Endian byte ordering.
 
 ## Harp Message
 
-The Harp Message consists of the necessary information to execute a well-informed exchange of data. It follows the next structure.
+The Harp Message contains a minimal amount of information to execute a well-defined exchange of data. It follows the structure below.
 
 <table>
 <tr>
@@ -46,7 +48,7 @@ The Harp Message consists of the necessary information to execute a well-informe
 
 > __Note__
 > 
-> The field [Payload] can have more than one 32 bits word.
+> The field [Payload] can have more than one 32-bit word.
 
 ## MessageType
 
@@ -74,6 +76,8 @@ The Harp Message consists of the necessary information to execute a well-informe
 
 ### Type (2 bits)
 
+Specifies the type of the Harp Message.
+
 |   Value   |  Description  |
 | :-------  |  ----------- |
 | 1 (Read)  |  Read the content of the register with address [RegisterAddress]  |
@@ -82,15 +86,15 @@ The Harp Message consists of the necessary information to execute a well-informe
 
 ### FlagError (1 bit)
 
-When this bit is set it means that an error occured. Examples of possible errors:
+This bit is set when an error occurred while executing the command. Examples of possible errors:
 
- *  Controller tries to read a register that doesn’t exist.
- * Controller tries to write unacceptable data to a certain register.
- * [PayloadType] doesn’t match with the register [RegisterAddress] type.
+ * The Controller tries to read a register that doesn’t exist.
+ * The Controller tries to write data which is out of bounds for the specific register functionality.
+ * [PayloadType] doesn’t match the register [RegisterAddress] type.
 
 ### Flag32 (1 bit)
 
-When the Flag is asserted the current Harp Message is constructed according to the Harp Binary Protocol 32 bits. To comply with this document, this bit should always be equal to 1.
+If this Flag is set, the current Harp Message is constructed according to the 32-bit Harp Binary Protocol. To comply with this document, this bit should always be equal to 1.
 
 ## PayloadType
 
@@ -116,6 +120,8 @@ When the Flag is asserted the current Harp Message is constructed according to t
 
 ### Type (4 bits)
 
+Specifies the size of the word in the [Payload].
+
 |  Value  |  Description  |
 | :-----: |  -----------: |
 | 1       |    8 bits     |
@@ -125,23 +131,23 @@ When the Flag is asserted the current Harp Message is constructed according to t
 
 ### HasTimestamp (1 bit)
 
-When this bit is asserted the Harp Message contains a timestamp. The fields [Seconds] and [NanoSeconds] are present in the message.
+If this bit is set the Harp Message contains a timestamp. In this case the fields [Seconds] and [Nanoseconds] must be present in the message.
 
 ### IsFloat (1 bit)
 
-This bit indicates if the [payload] contains rational values. If the bit is not asserted, the payload contains integers.
+This bit indicates whether the [Payload] represents fractional values. If the bit is not set, the payload contains integers.
 
 ### IsSigned (1 bit)
 
-If the bit is asserted, it indicates that the [payload] contains integers with signal.
+If the bit is set, indicates that the [Payload] contains integers with signal.
 
-> __Note__
+> **Note**
 > 
-> The bits [IsFloat] and [IsSigned] must not be asserted at the same time.
+> The bits [IsFloat] and [IsSigned] must never be set simultaneously.
 
 ## RegisterAddress
 
-Contains the address to which register the Harp Message refers to.
+Contains the address of the register to which the Harp Message refers to.
 
 ## Length
 
@@ -149,17 +155,17 @@ Contains the number of 32-bit words that are still available and need to be read
 
 ## Port
 
-This field is optional. If the device is a Hub of Harp Messages, it indicates the origin or destination of the Harp Message. If the field is not used or it’s equal to 0xFFFFFFFF, it points to the device itself.
+This field is optional. If the device is a Hub of Harp Devices, it indicates the origin or destination of the Harp Message. If the field is not used or it’s equal to 0xFFFFFFFF, it points to the device itself.
 
 ## Seconds
 
-It contains the seconds of the Harp Timestamp clock. This field is optional. In order to indicate that this field is available, the bit [HasTimestamp] in the field [PayloadType] needs to be asserted.
+Contains the seconds of the Harp Timestamp clock. This field is optional. In order to indicate that this field is available, the bit [HasTimestamp] in the field [PayloadType] needs to be set.
 
 ## Nanoseconds
 
 It contains the fractional part of the Harp Timestamp clock in nanoseconds.
 
-This field is optional. In order to indicate that this field is available, the bit [HasTimestamp] in the field [PayloadType] needs to be asserted.
+This field is optional. In order to indicate that this field is available, the bit [HasTimestamp] in the field [PayloadType] needs to be set.
 
 ## Payload
 
@@ -167,13 +173,12 @@ Contains the data to be transferred.
 
 ## Checksum
 
-The checksum is equal to the U16 (unsigned 16 bits) sum of all the bytes of the Harp Message.
+The checksum is equal to the U16 (unsigned 16-bit) sum of all the bytes in the Harp Message.
 
 The receiver of the message should calculate the checksum and compare it with the received. If they don’t match, the Harp Message should be discarded.
 
 ## Counter
 
-Contains a U16 (unsigned 16 bits) counter that starts from 0 (zero) when the device boots.
+Contains a S16 (signed 16-bit) counter that starts from negative one when the device boots.
 
-It should reset to 0 (zero) when the device goes to Active Mode.
-
+It should reset to negative one when the device goes into Active Mode.
