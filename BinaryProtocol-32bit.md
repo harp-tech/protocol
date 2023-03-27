@@ -151,7 +151,7 @@ Contains the address of the register to which the Harp Message refers to.
 
 ## Length
 
-Contains the number of 32-bit words that are still available and need to be read to complete the Harp Message.
+Contains the number of bytes that are still available and need to be read to complete the Harp message. If the total number of bytes in the Harp Message is not a multiple of four, the field [Payload] will be followed by 0-3 additional zero bytes to ensure that the total size is divisible by four.
 
 ## Port
 
