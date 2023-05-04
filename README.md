@@ -19,6 +19,7 @@ The Harp technology was originally thought at Champalimaud Foundation to suppres
 | 1108 | Output Expander |
 | 1121 | Simple Analog Generator |
 | 1136 | Archimedes |
+| 1140 | Olfactometer |
 | 1152 | Clock Synchronizer |
 | 1154 | Timestamp Generator Gen1 |
 | 1158 | Timestamp Generator Gen3 |
@@ -33,7 +34,8 @@ The Harp technology was originally thought at Champalimaud Foundation to suppres
 | 1248 | Audio Switch |
 | 1264 | Rgbs |
 | 1200 | FlyPad |
-| 1280 | Pump |
+| 1280 | Sound Card |
+| 1296 | Pump |
 | 2064 | Neurophotometrics FP3002 |
 | 2080 | IBL Behavior Control |
 | 2094 | RFID Reader |
