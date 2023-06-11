@@ -1,0 +1,41 @@
+{
+    "$id": "http://https://github.com/harp-tech/protocol/DeviceWhoAmI.json",
+    "$schema": "https://json-schema.org/draft-07/schema",
+    "definitions": {
+        "device": {
+            "properties": {
+                "contributor": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string",
+                    "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$"
+                },
+
+                "organization": {
+                    "type": "string"
+                },
+                "projectWebsite": {
+                    "type": "string"
+                },
+                "sourceRepository": {
+                    "type": "string"
+                }
+            },
+            "required": ["name"],
+            "type": "object"
+        }
+    },
+    "properties": {
+        "devices": {
+            "description": "A map of device WhoAmI to device information",
+            "patternProperties": {
+                "^[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9]$": {
+                    "$ref": "#/definitions/device"
+                }
+            },
+            "type": "object"
+        }
+    },
+    "title": "DeviceWhoAmI"
+}
