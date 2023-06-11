@@ -5,7 +5,7 @@ The Harp technology was originally thought at Champalimaud Foundation to suppres
 
 ## List of the current devices' IDs reported
 
-A list of currently reserved `WhoAmI` identifiers is available in the [`DeviceWhoAmI.yml`](./DeviceWhoAmI.yml) file.
+A list of currently reserved `WhoAmI` identifiers is available in the [`DeviceWhoAmI.yml`](./DeviceWhoAmI.yml) file. If you want to add reserve a new device, please submit a Pull Request with the desired address to this file. Make sure you include a description of the device in the PR along with a source and project website, if applicable.
 
 ## Licensing
 
