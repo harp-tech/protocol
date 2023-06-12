@@ -3,6 +3,7 @@
 ## Introduction
 This document defines the standards that new Harp Devices should strive to follow. The goal is to create a common ground for the development and operation of Harp devices, to allow quick and easy integration of new devices into the existing ecosystem. While some registers and functionalities are not mandatory, it is strongly recommended that they are implemented or, at least, considered with compatibility in mind.
 
+## Registers
 ### Common Registers
 
 The `Common Registers` are a set of registers that are common to all Harp Devices. These registers are used to identify the device, its version, and its operation mode. The `Common Registers` are mandatory and should be implemented in all Harp Devices. Summary description of each register can be found in [this table](ref missing).
@@ -227,6 +228,7 @@ a) Standby Mode and Active Mode are mandatory. Speed Mode is optional.
 
 Address: `011`
 
+```mermaid
 ---
 displayMode: compact
 ---
@@ -263,7 +265,7 @@ gantt
     0      :d2, after bit3  , 6
     0      :d1, after bit2  , 7
     0      :d0, after bit1  , 8
-
+```
 
 * **RST_DEF [Bit 0]:** If set to 1, the device resets and, reboots with all the registers, both `Common` and `Application`, with the default values. EEPROM will be erased, and the default values will be restored as the permanent boot option. This bit is always read as 0.
 
@@ -283,3 +285,163 @@ gantt
 > To avoid unexpected behaviors, only one bit at a time should be written to register `R_RESET_DEV`.
 
 
+#### **`R_DEVICE_NAME` (25 Bytes) – Device's name**
+
+Address: `012`
+
+An array of 25 bytes that should contain the device name. The last, and unused, bytes must be equal to 0.
+This register is non-volatile. The device will reset if this register is written to.
+
+#### **`R_SERIAL_NUMBER` (U16) – Device's serial number**
+
+Address: `013`
+
+
+```mermaid
+---
+displayMode: compact
+---
+
+gantt
+    title R_SERIAL_NUMBER (013) [U16]
+
+    dateFormat X
+    axisFormat %
+    tickInterval 0
+
+    section Bit
+    15-8      :byte1, 0, 1
+    7-0      :byte0, after byte1  , 2
+    section Id
+    SERIAL_NUMBER      :id1, 0, 2
+    section Default
+    -      :d1, 0, 2
+```
+
+This number should be unique for each unit of the same Device ID.
+To write to this register a two-step write command is needed. First, write the value `0xFFFF`, and then the desired serial number (as a `U16`). The device will reset after the second write command is received.
+
+#### **`R_CLOCK_CONFIG` (U8) – Synchronization clock configuration**
+
+Address: `014`
+
+```mermaid
+---
+displayMode: compact
+---
+gantt
+    title R_CLOCK_CONFIG (014)
+    dateFormat X
+    axisFormat %
+
+    section Bit
+    7      :bit7, 0, 1
+    6      :bit6, after bit7  , 2
+    5      :bit5, after bit6  , 3
+    4      :bit4, after bit5  , 4
+    3      :bit3, after bit4  , 5
+    2      :bit2, after bit3  , 6
+    1      :bit1, after bit2  , 7
+    0      :bit0, after bit1  , 8
+    section Id
+    CLK_LOCK      :id7, 0, 1
+    CLK_UNLOCK      :id6, after bit7  , 2
+    -      :id5, after bit6  , 3
+    GEN_ABLE      :id4, after bit5  , 4
+    REP_ABLE      :id3, after bit4  , 5
+    -      :id2, after bit3  , 6
+    CLK_GEN      :id1, after id2  , 7
+    CLK_REP      :id0, after id1  , 8
+
+    section Default
+    0      :d7, 0, 1
+    1      :d6, after bit7  , 2
+    -      :d5, after bit6  , 3
+    -      :d4, after bit5  , 4
+    -      :d3, after bit4  , 5
+    -      :d2, after bit3  , 6
+    -      :d1, after bit2  , 7
+    -      :d0, after bit1  , 8
+```
+
+* **CLK_REP [Bit 0]:** If set to 1, the device will repeat the Harp Synchronization Clock to the Clock Output connector, if available. It will act has a daisy-chain, by repeating the Clock Input to the Clock Output. Setting this bit, also unlocks the Harp Synchronization Clock.
+
+* **CLK_GEN [Bit 1]:** If set to 1, the device will generate Harp Synchronization Clock to the Clock Output connector, if available. The Clock Input will be ignored. The bit is read as 1 if the device is generating the Harp Synchronization Clock.
+
+* **REP_ABLE [Bit 3]:** This is a read-only bit signaling if the device is able (1) to repeat the Harp Synchronization Clock timestamp.
+
+* **GEN_ABLE [Bit 4]:** This is a read-only bit signaling if the device is able (1) to generate the Harp Synchronization Clock timestamp.
+
+* **CLK_UNLOCK [Bit 6]:** If set to 1, the device will unlock the timestamp register counter (register `R_TIMESTAMP_SECOND`) and it will now accept new timestamp values. The bit is read as 1 if the timestamp register is unlocked.
+
+* **CLK_UNLOCK [Bit 7]:** If set to 1, the device will lock the current timestamp register counter (register `R_TIMESTAMP_SECOND`) and it will reject any new timestamp values. The bit is read as 1 if the timestamp register is locked.
+
+> **Note**
+>
+> The device always wakes up in the `unlock` state.
+
+
+#### **`R_TIMESTAMP_OFFSET` (U8) – Clock calibration offset**
+
+Address: `015`
+
+```mermaid
+---
+displayMode: compact
+---
+
+gantt
+    title R_TIMESTAMP_OFFSET (000) [U8]
+
+    dateFormat X
+    axisFormat %
+    tickInterval 0
+
+    section Bit
+    7-0      :byte1, 0, 1
+    section Id
+    UOFFSET      :id1, 0, 1
+    section Default
+    0      :d1, 0, 1
+```
+When the value of this register is above 0 (zero), the device’s timestamp will be offset by this amount. The register is sensitive to 500 microsecond increments. This register is non-volatile.
+
+## Release notes:
+
+- V0.2
+    * First draft released.
+
+- V1.0
+
+    * R_RESET_DEV and R_DEVICE_NAME are now optional.
+    * Changed Normal Mode to Standby Mode.
+    * Added bit ALIVE_EN to register R_OPERATION_CTRL. This is an important feature.
+    * Major release.
+
+- V1.1
+  * Added bit MUTE_RPL to register R_OPERATION_CTRL.
+
+- V1.2
+  * Corrected some wrong names.
+
+- V1.3
+  * Added the bit NAME_TO_DEFAULT.
+
+- V1.4
+  * Added the register R_SERIAL_NUMBER.
+
+- V1.5
+  * Added the register R_CLOCK_CONFIG.
+
+- V1.6
+  * Changed device naming to Controller and Peripheral.
+
+- V1.7
+  * Raised version to 1.2 since all the foreseen features are included at this point.
+  * Added the register R_TIMESTAMP_OFFSET.
+
+- V1.8
+  * Replaced HARP_VERSION with CORE_VERSION.
+
+- V2.0
+  * Refactor documentation to markdown format.
