@@ -1,5 +1,27 @@
 ﻿# Common Registers and Operation (Device) 1.2
 
+## Table of contents
+
+- [Common Registers and Operation (Device) 1.2](#common-registers-and-operation-device-12)
+  - [Table of contents](#table-of-contents)
+  - [Introduction](#introduction)
+  - [Registers](#registers)
+    - [Common Registers](#common-registers)
+    - [Operation Modes](#operation-modes)
+  - [Registers](#registers-1)
+    - [Common Registers](#common-registers-1)
+      - [**`R_WHO_AM_I` (U16) – Who Am I**](#r_who_am_i-u16--who-am-i)
+      - [**`R_TIMESTAMP_SECOND` (U32) – System timestamp (seconds)**](#r_timestamp_second-u32--system-timestamp-seconds)
+      - [**`R_TIMESTAMP_SECOND` (U16) – System timestamp (seconds)**](#r_timestamp_second-u16--system-timestamp-seconds)
+      - [**`R_OPERATION_CTRL` (U16) – Operation mode configuruation**](#r_operation_ctrl-u16--operation-mode-configuruation)
+      - [**`R_RESET_DEV` (U8) – Reset device and save non-volatile registers**](#r_reset_dev-u8--reset-device-and-save-non-volatile-registers)
+      - [**`R_DEVICE_NAME` (25 Bytes) – Device's name**](#r_device_name-25-bytes--devices-name)
+      - [**`R_SERIAL_NUMBER` (U16) – Device's serial number**](#r_serial_number-u16--devices-serial-number)
+      - [**`R_CLOCK_CONFIG` (U8) – Synchronization clock configuration**](#r_clock_config-u8--synchronization-clock-configuration)
+      - [**`R_TIMESTAMP_OFFSET` (U8) – Clock calibration offset**](#r_timestamp_offset-u8--clock-calibration-offset)
+  - [Release notes:](#release-notes)
+
+
 ## Introduction
 This document defines the standards that new Harp Devices should strive to follow. The goal is to create a common ground for the development and operation of Harp devices, to allow quick and easy integration of new devices into the existing ecosystem. While some registers and functionalities are not mandatory, it is strongly recommended that they are implemented or, at least, considered with compatibility in mind.
 
