@@ -1,5 +1,7 @@
 ﻿# Common Registers and Operation (Device) 1.2
 
+<img src="./Logo/HarpLogoSmall.svg" width="200">
+
 ## Table of contents
 
 - [Common Registers and Operation (Device) 1.2](#common-registers-and-operation-device-12)
