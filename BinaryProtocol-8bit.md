@@ -1,4 +1,5 @@
 # Binary Protocol 8-bit (harp-1.0)
+<img src="./Logo/HarpLogoSmall.svg" width="200">
 
 ## Table of Contents:
 - [Binary Protocol 8-bit (harp-1.0)](#binary-protocol-8-bit-harp-10)
