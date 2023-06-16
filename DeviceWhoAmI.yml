@@ -62,14 +62,14 @@ devices:
     projectWebsite: https://github.com/harp-tech/device.timestampgeneratorgen3
   1168:
     <<: *harptechdevice
-    name: CameraTriggerControl
-    sourceRepository: https://github.com/harp-tech/device.cameratriggercontrol
-    projectWebsite: https://github.com/harp-tech/device.cameratriggercontrol
-  1170:
-    <<: *harptechdevice
     name: CameraController
     sourceRepository: https://github.com/harp-tech/device.cameracontroller
     projectWebsite: https://github.com/harp-tech/device.cameracontroller
+  1170:
+    <<: *harptechdevice
+    name: CameraControllerGen2
+    sourceRepository: https://github.com/harp-tech/device.cameracontrollergen2
+    projectWebsite: https://github.com/harp-tech/device.cameracontrollergen2
   1184:
     name: PyControlAdapter
   1216:
