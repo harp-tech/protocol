@@ -17,7 +17,7 @@
       - [IsSigned (1 bit)](#issigned-1-bit)
     - [\[`Payload`\] (? bytes)](#payload--bytes)
       - [Seconds (4 bytes)](#seconds-4-bytes)
-      - [Nanoseconds (2 bytes)](#nanoseconds-2-bytes)
+      - [Microseconds (2 bytes)](#microseconds-2-bytes)
     - [\[`Checksum`\] (1 byte)](#checksum-1-byte)
   - [Features and Code Examples](#features-and-code-examples)
     - [\[`MessageType`\] and `Error Flag`](#messagetype-and-error-flag)
@@ -72,7 +72,7 @@ Contains the address of the register to which the Harp Message refers to.
 
 ### [`Port`] (1 byte)
 
-If the device is a Hub of Harp Devices, it indicates the origin or destination of the Harp Message. If the field is not used or it’s equal to `0xFFFFFFFF`, it points to the device itself.
+If the device is a Hub of Harp Devices, it indicates the origin or destination of the Harp Message. If the field is not used or it’s equal to `0xFF`, it points to the device itself.
 
 ### [`PayloadType`] (1 byte)
 
@@ -135,9 +135,9 @@ If [`PayloadType`] `HasTimestamp` flag is set, the following optional fields are
 
 Contains the number of seconds (`U32`) of the Harp Timestamp clock. This field is optional. In order to indicate that this field is available, the bit [HasTimestamp] in the field [PayloadType] needs to be set.
 
-#### Nanoseconds (2 bytes)
+#### Microseconds (2 bytes)
 
-It contains the fractional part of the Harp Timestamp clock in nanoseconds (`U16` containing the number of microseconds divided by 32).
+It contains the fractional part of the Harp Timestamp clock in microseconds (`U16` containing the number of microseconds divided by 32).
 
 This field is optional. In order to indicate that this field is available, the bit [HasTimestamp] in the field [PayloadType] needs to be set.
 
