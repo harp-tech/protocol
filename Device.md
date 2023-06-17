@@ -14,8 +14,8 @@
     - [Common Registers](#common-registers-1)
       - [**`R_WHO_AM_I` (U16) – Who Am I**](#r_who_am_i-u16--who-am-i)
       - [**`R_TIMESTAMP_SECOND` (U32) – System timestamp (seconds)**](#r_timestamp_second-u32--system-timestamp-seconds)
-      - [**`R_TIMESTAMP_SECOND` (U16) – System timestamp (seconds)**](#r_timestamp_second-u16--system-timestamp-seconds)
-      - [**`R_OPERATION_CTRL` (U16) – Operation mode configuruation**](#r_operation_ctrl-u16--operation-mode-configuruation)
+      - [**`R_TIMESTAMP_MICRO` (U16) – System timestamp (microseconds)**](#r_timestamp_micro-u16--system-timestamp-microseconds)
+      - [**`R_OPERATION_CTRL` (U16) – Operation mode configuration**](#r_operation_ctrl-u16--operation-mode-configuration)
       - [**`R_RESET_DEV` (U8) – Reset device and save non-volatile registers**](#r_reset_dev-u8--reset-device-and-save-non-volatile-registers)
       - [**`R_DEVICE_NAME` (25 Bytes) – Device's name**](#r_device_name-25-bytes--devices-name)
       - [**`R_SERIAL_NUMBER` (U16) – Device's serial number**](#r_serial_number-u16--devices-serial-number)
@@ -136,7 +136,7 @@ gantt
     0      :d1, 0, 4
 ```
 
-#### **`R_TIMESTAMP_SECOND` (U16) – System timestamp (seconds)**
+#### **`R_TIMESTAMP_MICRO` (U16) – System timestamp (microseconds)**
 
 Address: `009`
 
@@ -164,7 +164,7 @@ gantt
 ```
 
 
-#### **`R_OPERATION_CTRL` (U16) – Operation mode configuruation**
+#### **`R_OPERATION_CTRL` (U16) – Operation mode configuration**
 
 Address: `010`
 
@@ -398,7 +398,7 @@ gantt
 
 * **CLK_UNLOCK [Bit 6]:** If set to 1, the device will unlock the timestamp register counter (register `R_TIMESTAMP_SECOND`) and it will now accept new timestamp values. The bit is read as 1 if the timestamp register is unlocked.
 
-* **CLK_UNLOCK [Bit 7]:** If set to 1, the device will lock the current timestamp register counter (register `R_TIMESTAMP_SECOND`) and it will reject any new timestamp values. The bit is read as 1 if the timestamp register is locked.
+* **CLK_LOCK [Bit 7]:** If set to 1, the device will lock the current timestamp register counter (register `R_TIMESTAMP_SECOND`) and it will reject any new timestamp values. The bit is read as 1 if the timestamp register is locked.
 
 > **Note**
 >
