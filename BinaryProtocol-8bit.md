@@ -22,6 +22,15 @@
   - [Features and Code Examples](#features-and-code-examples)
     - [\[`MessageType`\] and `Error Flag`](#messagetype-and-error-flag)
     - [Harp Message \[Length\]](#harp-message-length)
+    - [Parsing \[PayloadType\]](#parsing-payloadtype)
+    - [Using \[Checksum\] to validate communication integrity](#using-checksum-to-validate-communication-integrity)
+    - [Parsing \[Payload\] with Arrays](#parsing-payload-with-arrays)
+  - [Typical usage](#typical-usage)
+    - [Commands](#commands)
+      - [`Write` Message](#write-message)
+    - [`Read` Message](#read-message)
+    - [`Event` message](#event-message)
+  - [Release notes:](#release-notes)
 
 ---
 
@@ -182,3 +191,154 @@ A simple code in C to check for error will be:
  If one byte is not enough to express the length of the Harp Message, use [Length] equal to 255 and add after an unsigned 16 bits word with the Harp Message length.
  Replace the [Length] with:
     [255] (1 byte) [ExtendedLength] (2 bytes)
+
+### Parsing [PayloadType]
+
+For the definition of the `PayloadType` types, a `C#` code snippet is presented.
+Note that the time information can appear without an element Timestamp<>.
+
+```C#
+  int isUnsigned = 0x00;
+  int isSigned = 0x80;
+  int isFloat = 0x40;
+  int hasTimestamp = 0x10;
+
+  enum PayloadType 
+  {
+      U8  = (isUnsigned | 1),
+      S8  = (isSigned   | 1),
+      U16 = (isUnsigned | 2),
+      S16 = (isSigned   | 2),
+      U32 = (isUnsigned | 4),
+      S32 = (isSigned   | 4),
+      U64 = (isUnsigned | 8),
+      S64 = (isSigned   | 8),
+      Float = (isFloat  | 4),
+      Timestamp = hasTimestamp,
+      TimestampedU8  = (hasTimestamp | U8),
+      TimestampedS8  = (hasTimestamp | S8),
+      TimestampedU16 = (hasTimestamp | U16),
+      TimestampedS16 = (hasTimestamp | S16),
+      TimestampedU32 = (hasTimestamp | U32),
+      TimestampedS32 = (hasTimestamp | S32),
+      TimestampedU64 = (hasTimestamp | U64),
+      TimestampedS64 = (hasTimestamp | S64),
+      TimestampedFloat = (hasTimestamp | Float)
+  }
+```
+
+The field `PayloadType` has a flag on the 5th least significant bit that indicates if the time information is available on the Harp Message. The existence of this flag is useful to know if the fields [Seconds] and [Nanoseconds] are present on the Harp Message.
+In `C` one can check if the time information is avaible by using the following snippet:
+
+```C
+int hasTimestamp = 0x10;
+
+if (PayloadType &  hasTimestamp )
+{
+    printf(“The time information is available on the Harp Message’s Payload.\n”);
+}
+```
+
+### Using [Checksum] to validate communication integrity
+
+The `Checksum` field is the sum of all bytes contained in the Harp Message. The receiver of the message should calculate the checksum and compare it with the received. If they don’t match, the Harp Message should be discarded.
+Example on how to calculate the [Checksum] in C language:
+
+```C
+unsigned char Checksum = 0;
+int i = 0;
+for (; i < Length + 1; i++ )
+{
+    Checksum += HarpMessage(i);
+}
+```
+
+### Parsing [Payload] with Arrays
+
+The `Payload` element can contain a single, or an array of values of the same type. The first step to parse these payloads is to first find the number of values contained on the [Payload] element. This can be done using the following `C` code example:
+
+```C
+int arrayLength;
+int hasTimestamp = 0x10;
+int sizeMask = 0x0F;
+
+if (PayloadType & hasTimestamp)
+{
+    // Harp Message has time information
+    arrayLength = (Length – 10) / (PayloadType & sizeMask )
+}
+else
+{
+    // Harp Message doesn’t have time information
+    arrayLength = (Length – 4) / (PayloadType & sizeMask )
+}
+```
+---
+
+## Typical usage
+
+### Commands
+
+The `Peripheral` device that runs the `Harp Protocol` receives `Write` and `Read` `Commands` from the `Host`, and, in turn, sends/responds with `Replies`.
+
+Some `Harp Message`s are shown below to demonstrate the typical usage of the protocol between a `Peripheral` and an `Host`. Note that, from the `Host` to the `Peripheral`, the time information is omitted in Harp Message, since this information is optional.
+We will use the following abbreviations:
+
+  - [CMD] is a Command (From the `Host` to the `Peripheral`);
+  - [RPL] is a Reply (From `Peripheral` to the `Host`)
+  - [EVT] is an Event. (A message sent from the `Peripheral` to the `Host` without a request from the `Host`)s
+
+#### `Write` Message
+
+- [CMD] `Host`:       `2`  `Length` `Address` `Port` `PayloadType` `T` `Checksum`
+- [RPL] `Peripheral`: `2`  `Length` `Address` `Port` `PayloadType` `Timestamp<T>` `Checksum`       OK
+- [RPL] `Peripheral`: `10` `Length` `Address` `Port` `PayloadType` `Timestamp<T>` `Checksum`       ERROR
+
+The time information in the `[RPL]` contains the time when the register with `Address` was updated.
+
+### `Read` Message
+
+- [CMD] `Host`: `1` `4`      `Address` `Port` `PayloadType` `Checksum`
+- [RPL] `Peripheral`: `1` `Length` `Address` `Port` `PayloadType` `Timestamp<T>` `Checksum`       OK
+- [RPL] `Peripheral`: `9` `10`     `Address` `Port` `PayloadType` `Timestamp<T>` `Checksum`        ERROR
+
+The time information in the `[RPL]` contains the time when the register with `Address` was read.
+
+### `Event` message
+
+- [EVT] `Peripheral`: `3` `Length` `Address` `Port` `PayloadType` `Timestamp<T>` `Checksum`      OK
+
+The time information in `[EVT]` contains the time when the register with `Address` was read.
+
+---
+
+## Release notes:
+
+- V0.1
+    * First draft.
+
+- V0.2
+    * Changed Event Command to 3.
+
+- V0.3
+    * Cleaned up document and added C code examples.
+    * First release.
+
+- V1.0
+    * Updating naming of the protocol fields, etc, to latest naming review.
+    * Major release.
+
+- V1.1
+    * Corrected [PayloadType] list on page 2.
+
+- V1.2
+    * Changed device naming to Controller and Peripheral.
+
+- V1.3
+    * Minor corrections.
+
+- V1.9.0
+  * Refactor documentation to markdown format.
+  * Minor typo corrections.
+  * Improve clarity of some sections.
+  * Adopt semantic versioning.
