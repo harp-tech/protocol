@@ -1,4 +1,5 @@
 ﻿# Common Registers and Operation (Device) 1.2
+
 ## Document Version 1.9.0
 
 <img src="./Logo/HarpLogoSmall.svg" width="200">
@@ -12,8 +13,7 @@
   - [Registers](#registers)
     - [Common Registers](#common-registers)
     - [Operation Modes](#operation-modes)
-  - [Registers](#registers-1)
-    - [Common Registers](#common-registers-1)
+    - [**Table - List of available Common Registers**](#table---list-of-available-common-registers)
       - [**`R_WHO_AM_I` (U16) – Who Am I**](#r_who_am_i-u16--who-am-i)
       - [**`R_TIMESTAMP_SECOND` (U32) – System timestamp (seconds)**](#r_timestamp_second-u32--system-timestamp-seconds)
       - [**`R_TIMESTAMP_MICRO` (U16) – System timestamp (microseconds)**](#r_timestamp_micro-u16--system-timestamp-microseconds)
@@ -27,9 +27,11 @@
 
 
 ## Introduction
+
 This document defines the standards that new Harp Devices should strive to follow. The goal is to create a common ground for the development and operation of Harp devices, to allow quick and easy integration of new devices into the existing ecosystem. While some registers and functionalities are not mandatory, it is strongly recommended that they are implemented or, at least, considered with compatibility in mind.
 
 ## Registers
+
 ### Common Registers
 
 The `Common Registers` are a set of registers that are common to all Harp Devices. These registers are used to identify the device, its version, and its operation mode. The `Common Registers` are mandatory and should be implemented in all Harp Devices. Summary description of each register can be found in [this table](ref missing).
@@ -40,18 +42,15 @@ All other registers pertaining to the operation of a specific device (`Applicati
 
 A Harp Device is expected to implement the following `Operation Modes`:
 
-* **`Standby Mode:`**  Replies to host commands. Events are disabled and must not be sent.
-* **`Active Mode:`** Replies to host commands. Events are enabled and sent to host whenever the device deems it so.
-* *`Speed Mode:`* Allows the implementation of a different and specific communication protocol. On this mode, the Harp Binary Protocol is no longer used. The specific protocol designed must implement the possibility to exit this mode.
+- **`Standby Mode:`**  Replies to host commands. Events are disabled and must not be sent.
+- **`Active Mode:`** Replies to host commands. Events are enabled and sent to host whenever the device deems it so.
+- *`Speed Mode:`* Allows the implementation of a different and specific communication protocol. On this mode, the Harp Binary Protocol is no longer used. The specific protocol designed must implement the possibility to exit this mode.
 
 The mandatory Operation Modes are the **`Standby Mode`** and **`Active Mode`**. The **`Speed Mode`** is optional and, in many of the applications, not needed.
 It’s strongly recommended that a Harp Device acting as peripheral should continuously check if the communication with the host is active and healthy. If this doesn’t happen over the last 3 seconds, the Harp Device should go to Standby Mode and flush/destroy its TX buffer.
 
-## Registers
 
-### Common Registers
-
-**Table - List of available Common Registers**
+### **Table - List of available Common Registers**
 
 |**Name**|**Volatile**|**Read Only**|**Type**|**Add.**|**Default**|**Brief Description**|**Mandatory**|
 | :- | :-: | :-: | :-: | :-: | :-: | :- | :-: |
@@ -471,6 +470,6 @@ When the value of this register is above 0 (zero), the device’s timestamp will
 
 - V1.9.0
   * Refactor documentation to markdown format.
-  * Minor typo corrections
+  * Minor typo corrections.
   * Improve clarity of some sections.
   * Adopt semantic versioning.
