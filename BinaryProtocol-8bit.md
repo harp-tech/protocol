@@ -1,8 +1,11 @@
 # Binary Protocol 8-bit (harp-1.0)
+
+## Document Version 1.4.0
 <img src="./Logo/HarpLogoSmall.svg" width="200">
 
 ## Table of Contents:
 - [Binary Protocol 8-bit (harp-1.0)](#binary-protocol-8-bit-harp-10)
+  - [Document Version 1.4.0](#document-version-140)
   - [Table of Contents:](#table-of-contents)
   - [Introduction](#introduction)
   - [Harp Message specification](#harp-message-specification)
@@ -337,7 +340,7 @@ The time information in `[EVT]` contains the time when the register with `Addres
 - V1.3
     * Minor corrections.
 
-- V1.9.0
+- V1.4.0
   * Refactor documentation to markdown format.
   * Minor typo corrections.
   * Improve clarity of some sections.
