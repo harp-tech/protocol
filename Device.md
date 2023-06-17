@@ -1,10 +1,12 @@
 ﻿# Common Registers and Operation (Device) 1.2
+## Document Version 1.9.0
 
 <img src="./Logo/HarpLogoSmall.svg" width="200">
 
 ## Table of contents
 
 - [Common Registers and Operation (Device) 1.2](#common-registers-and-operation-device-12)
+  - [Document Version 1.9.0](#document-version-190)
   - [Table of contents](#table-of-contents)
   - [Introduction](#introduction)
   - [Registers](#registers)
@@ -467,5 +469,8 @@ When the value of this register is above 0 (zero), the device’s timestamp will
 - V1.8
   * Replaced HARP_VERSION with CORE_VERSION.
 
-- V2.0
+- V1.9.0
   * Refactor documentation to markdown format.
+  * Minor typo corrections
+  * Improve clarity of some sections.
+  * Adopt semantic versioning.
