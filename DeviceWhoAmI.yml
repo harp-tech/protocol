@@ -28,7 +28,7 @@ devices:
     <<: *harptechdevice
     name: Synchronizer
     sourceRepository: https://github.com/harp-tech/device.synchronizer
-    projectWebsite: https://github.com/harp-tech/device.inputexpander
+    projectWebsite: https://github.com/harp-tech/device.synchronizer
   1106:
     <<: *harptechdevice
     name: InputExpander
