@@ -123,7 +123,7 @@ Specifies the size of the word in the [Payload].
 
 #### HasTimestamp (1 bit)
 
-If this bit is set the Harp Message contains a timestamp. In this case the fields [Seconds] and [Nanoseconds] must be present in the message.
+If this bit is set the Harp Message contains a timestamp. In this case the fields [Seconds] and [Microseconds] must be present in the message.
 
 #### IsFloat (1 bit)
 
@@ -156,7 +156,7 @@ This field is optional. In order to indicate that this field is available, the b
 > **Note**
 >
 > The full timestamp information can thus be retrieved using the formula:
-> Timestamp(s) = [Seconds] + [Nanoseconds] * 32 * 10-6
+> Timestamp(s) = [Seconds] + [Microseconds] * 32 * 10-6
 
 ### [`Checksum`] (1 byte)
 
@@ -230,7 +230,7 @@ Note that the time information can appear without an element Timestamp<>.
   }
 ```
 
-The field `PayloadType` has a flag on the 5th least significant bit that indicates if the time information is available on the Harp Message. The existence of this flag is useful to know if the fields [Seconds] and [Nanoseconds] are present on the Harp Message.
+The field `PayloadType` has a flag on the 5th least significant bit that indicates if the time information is available on the Harp Message. The existence of this flag is useful to know if the fields [Seconds] and [Microseconds] are present on the Harp Message.
 In `C` one can check if the time information is avaible by using the following snippet:
 
 ```C
@@ -287,9 +287,9 @@ The `Peripheral` device that runs the `Harp Protocol` receives `Write` and `Read
 Some `Harp Message`s are shown below to demonstrate the typical usage of the protocol between a `Peripheral` and an `Host`. Note that, from the `Host` to the `Peripheral`, the time information is omitted in Harp Message, since this information is optional.
 We will use the following abbreviations:
 
-  - [CMD] is a Command (From the `Host` to the `Peripheral`);
-  - [RPL] is a Reply (From `Peripheral` to the `Host`)
-  - [EVT] is an Event. (A message sent from the `Peripheral` to the `Host` without a request from the `Host`)s
+- [CMD] is a Command (From the `Host` to the `Peripheral`);
+- [RPL] is a Reply (From `Peripheral` to the `Host`)
+- [EVT] is an Event. (A message sent from the `Peripheral` to the `Host` without a command (*i.e.* request) from the `Host`)
 
 #### `Write` Message
 
