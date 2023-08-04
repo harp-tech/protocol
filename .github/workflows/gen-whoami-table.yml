@@ -1,10 +1,10 @@
 
-name: "UpdateWhoAmITable"
+name: "gen-whoami-table"
 
 on:
   push:
     paths:
-      - 'DeviceWhoAmI.yml'
+      - 'whoami.yml'
     branches:
       - main
 
@@ -26,12 +26,12 @@ jobs:
           path: ".github/workflows/requirements.txt"
       - name: Generate table
         run: |
-          python3 .github/workflows/gen-whoami-table.py DeviceWhoAmI.yml
+          python3 .github/workflows/gen-whoami-table.py whoami.yml
       - name: Commit changes
         run: |
           git config --global user.email "no-reply@github.com"
           git config --global user.name "GitHub Actions"
-          git add DeviceWhoAmI.md
+          git add whoami.md
           git commit -m "Update device WhoAmI table"
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
           git push
