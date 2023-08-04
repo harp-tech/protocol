@@ -2,6 +2,7 @@
 name: "gen-whoami-table"
 
 on:
+  workflow_dispatch:
   push:
     paths:
       - 'whoami.yml'
