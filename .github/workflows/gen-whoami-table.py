@@ -13,7 +13,7 @@ def main(argv):
 	d = pd.DataFrame.from_dict(devices, orient='index')
 	d.index.names = ['WhoAmI']
 	d = d.fillna('')
-	d.to_markdown("DeviceWhoAmI.md")
+	d.to_markdown("whoami.md")
 
 if __name__ == "__main__":
 	main(sys.argv[1:])
