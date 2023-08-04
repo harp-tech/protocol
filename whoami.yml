@@ -11,14 +11,14 @@ devices:
     name: MultiPwmGenerator
     authors: harp-tech
     copyright: harp-tech
-    sourceUrl: https://github.com/harp-tech/device.multipwm
+    repositoryUrl: https://github.com/harp-tech/device.multipwm
     projectUrl: https://github.com/harp-tech/device.multipwm
   1056:
     name: Wear
   1058:
     <<: *harptechdevice
     name: WearBaseStationGen2
-    sourceUrl: https://github.com/harp-tech/harp_wear_basestation_v2
+    repositoryUrl: https://github.com/harp-tech/harp_wear_basestation_v2
     projectUrl: https://github.com/harp-tech/harp_wear_basestation_v2
   1072:
     name: Driver12Volts
@@ -27,17 +27,17 @@ devices:
   1104:
     <<: *harptechdevice
     name: Synchronizer
-    sourceUrl: https://github.com/harp-tech/device.synchronizer
+    repositoryUrl: https://github.com/harp-tech/device.synchronizer
     projectUrl: https://github.com/harp-tech/device.synchronizer
   1106:
     <<: *harptechdevice
     name: InputExpander
-    sourceUrl: https://github.com/harp-tech/device.inputexpander
+    repositoryUrl: https://github.com/harp-tech/device.inputexpander
     projectUrl: https://github.com/harp-tech/device.inputexpander
   1108:
     <<: *harptechdevice
     name: OutputExpander
-    sourceUrl: https://github.com/harp-tech/device.outputexpander
+    repositoryUrl: https://github.com/harp-tech/device.outputexpander
     projectUrl: https://github.com/harp-tech/device.outputexpander
   1121:
     name: SimpleAnalogGenerator
@@ -48,92 +48,92 @@ devices:
   1152:
     <<: *harptechdevice
     name: ClockSynchronizer
-    sourceUrl: https://github.com/harp-tech/device.clocksync
+    repositoryUrl: https://github.com/harp-tech/device.clocksync
     projectUrl: https://github.com/harp-tech/device.clocksync
   1154:
     <<: *harptechdevice
     name: TimestampGeneratorGen1
-    sourceUrl: https://github.com/harp-tech/harp_timestamp_generator_Gen1
+    repositoryUrl: https://github.com/harp-tech/harp_timestamp_generator_Gen1
     projectUrl: https://github.com/harp-tech/harp_timestamp_generator_Gen1
   1158:
     <<: *harptechdevice
     name: TimestampGeneratorGen3
-    sourceUrl: https://github.com/harp-tech/device.timestampgeneratorgen3
+    repositoryUrl: https://github.com/harp-tech/device.timestampgeneratorgen3
     projectUrl: https://github.com/harp-tech/device.timestampgeneratorgen3
   1168:
     <<: *harptechdevice
     name: CameraController
-    sourceUrl: https://github.com/harp-tech/device.cameracontroller
+    repositoryUrl: https://github.com/harp-tech/device.cameracontroller
     projectUrl: https://github.com/harp-tech/device.cameracontroller
   1170:
     <<: *harptechdevice
     name: CameraControllerGen2
-    sourceUrl: https://github.com/harp-tech/device.cameracontrollergen2
+    repositoryUrl: https://github.com/harp-tech/device.cameracontrollergen2
     projectUrl: https://github.com/harp-tech/device.cameracontrollergen2
   1184:
     name: PyControlAdapter
   1216:
     <<: *harptechdevice
     name: Behavior
-    sourceUrl: https://github.com/harp-tech/device.behavior
+    repositoryUrl: https://github.com/harp-tech/device.behavior
     projectUrl: https://github.com/harp-tech/device.behavior
   1224:
     name: VestibularH1
     authors: NeuroGEARS
     copyright: NeuroGEARS
-    sourceUrl: https://github.com/neurogears/device.vestibularH1
+    repositoryUrl: https://github.com/neurogears/device.vestibularH1
     projectUrl: https://github.com/neurogears/device.vestibularH1
   1225:
     name: VestibularH2
     authors: NeuroGEARS
     copyright: NeuroGEARS
-    sourceUrl: https://github.com/neurogears/device.vestibularH2
+    repositoryUrl: https://github.com/neurogears/device.vestibularH2
     projectUrl: https://github.com/neurogears/device.vestibularH2
   1232:
     <<: *harptechdevice
     name: LoadCells
-    sourceUrl: https://github.com/harp-tech/device.loadcells
+    repositoryUrl: https://github.com/harp-tech/device.loadcells
     projectUrl: https://github.com/harp-tech/device.loadcells
   1236:
     <<: *harptechdevice
     name: AnalogInput
-    sourceUrl: https://github.com/harp-tech/device.analoginput
+    repositoryUrl: https://github.com/harp-tech/device.analoginput
     projectUrl: https://github.com/harp-tech/device.analoginput
   1248:
     <<: *harptechdevice
     name: RgbArray
-    sourceUrl: https://github.com/harp-tech/device.rgbarray
+    repositoryUrl: https://github.com/harp-tech/device.rgbarray
     projectUrl: https://github.com/harp-tech/device.rgbarray
   1200:
     name: FlyPad
   1280:
     <<: *harptechdevice
     name: SoundCard
-    sourceUrl: https://github.com/harp-tech/device.soundcard
+    repositoryUrl: https://github.com/harp-tech/device.soundcard
     projectUrl: https://github.com/harp-tech/device.soundcard
   1296:
     <<: *harptechdevice
     name: SyringePump
-    sourceUrl: https://github.com/harp-tech/device.syringepump
+    repositoryUrl: https://github.com/harp-tech/device.syringepump
     projectUrl: https://github.com/harp-tech/device.syringepump
   2064:
     name: NeurophotometricsFP3002
     copyright: Neurophotometrics
-    sourceUrl: https://github.com/neurophotometrics/neurophotometrics
+    repositoryUrl: https://github.com/neurophotometrics/neurophotometrics
     projectUrl: https://github.com/neurophotometrics/neurophotometrics
   2080:
     <<: *harptechdevice
     name: Ibl_behavior_control
-    sourceUrl: https://github.com/harp-tech/IBL_behavior_control
+    repositoryUrl: https://github.com/harp-tech/IBL_behavior_control
     projectUrl: https://github.com/harp-tech/IBL_behavior_control
   2094:
     <<: *harptechdevice
     name: RfidReader
-    sourceUrl: https://github.com/harp-tech/device.rfidreader
+    repositoryUrl: https://github.com/harp-tech/device.rfidreader
     projectUrl: https://github.com/harp-tech/device.rfidreader
   2110:
     name: Pluma
     authors: NeuroGEARS
     copyright: EmotionalCities
-    sourceUrl: https://github.com/emotional-cities/pluma
+    repositoryUrl: https://github.com/emotional-cities/pluma
     projectUrl: https://github.com/emotional-cities/pluma

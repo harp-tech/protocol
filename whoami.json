@@ -17,7 +17,7 @@
                 "projectUrl": {
                     "type": "string"
                 },
-                "sourceUrl": {
+                "repositoryUrl": {
                     "type": "string"
                 }
             },
