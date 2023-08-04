@@ -1,0 +1,40 @@
+
+name: "gen-whoami-table"
+
+on:
+  push:
+    paths:
+      - 'whoami.yml'
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v3
+        with:
+          ref: main
+          path: this
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install Python dependencies
+        uses: py-actions/py-dependency-install@v4
+        with:
+          path: ".github/workflows/requirements.txt"
+      - name: Generate table
+        run: |
+          python3 .github/workflows/gen-whoami-table.py whoami.yml
+      - name: Commit changes
+        run: |
+          git config --global user.email "no-reply@github.com"
+          git config --global user.name "GitHub Actions"
+          git add whoami.md
+          git commit -m "Update device WhoAmI table"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

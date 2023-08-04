@@ -5,41 +5,7 @@ The Harp technology was originally thought at Champalimaud Foundation to suppres
 
 ## List of the current devices' IDs reported
 
-| ID | Device |
-|:---:|:---|
-| 256 | USB Hub |
-| 1024 | Poke |
-| 1040 | Multi Pwm Generator |
-| 1056 | Wear |
-| 1058 | Wear Basestation Gen2 |
-| 1072 | 12 Volts Drive |
-| 1088 | Led Controller |
-| 1104 | Synchronizer |
-| 1106 | Input Expander |
-| 1108 | Output Expander |
-| 1121 | Simple Analog Generator |
-| 1136 | Archimedes |
-| 1140 | Olfactometer |
-| 1152 | Clock Synchronizer |
-| 1154 | Timestamp Generator Gen1 |
-| 1158 | Timestamp Generator Gen3 |
-| 1168 | Camera Controller |
-| 1170 | Camera Controller Gen2 |
-| 1184 | PyControl Adapter |
-| 1216 | Behavior |
-| 1224 | Vestibular VR H1 |
-| 1225 | Vestibular VR H2 |
-| 1232 | Load Cells Reader |
-| 1236 | Analog Input |
-| 1248 | Audio Switch |
-| 1264 | Rgbs |
-| 1200 | FlyPad |
-| 1280 | Sound Card |
-| 1296 | Pump |
-| 2064 | Neurophotometrics FP3002 |
-| 2080 | IBL Behavior Control |
-| 2094 | RFID Reader |
-| 2110 | BioReader |
+A list of currently reserved `WhoAmI` identifiers is available in the [`whoami.yml`](./whoami.yml) file. If you want to add reserve a new device, please submit a Pull Request with the desired address to this file. Make sure you include a description of the device in the PR along with a source and project website, if applicable.
 
 ## Licensing
 
