@@ -1,24 +1,23 @@
 {
-    "$id": "http://https://github.com/harp-tech/protocol/DeviceWhoAmI.json",
+    "$id": "https://harp-tech.org/2023-07/whoami",
     "$schema": "https://json-schema.org/draft-07/schema",
     "definitions": {
         "device": {
             "properties": {
-                "contributor": {
+                "authors": {
                     "type": "string"
                 },
                 "name": {
                     "type": "string",
                     "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$"
                 },
-
-                "organization": {
+                "copyright": {
                     "type": "string"
                 },
-                "projectWebsite": {
+                "projectUrl": {
                     "type": "string"
                 },
-                "sourceRepository": {
+                "sourceUrl": {
                     "type": "string"
                 }
             },
@@ -36,6 +35,5 @@
             },
             "type": "object"
         }
-    },
-    "title": "DeviceWhoAmI"
+    }
 }
