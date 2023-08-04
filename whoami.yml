@@ -1,6 +1,6 @@
 %YAML 1.1
 ---
-# yaml-language-server: $schema=./DeviceWhoAmI.json
+# yaml-language-server: $schema=./whoami.json
 
 devices:
   256:
