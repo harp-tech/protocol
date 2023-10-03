@@ -231,7 +231,7 @@ a) Standby Mode and Active Mode are mandatory. Speed Mode is optional.
 | 2            	| Reserved.                                                                                              	|
 | 3            	| Speed Mode. The device enters Speed Mode.                                                              	|
 
-* **DUMP [Bit 3]:** When written to 1, the device replies with the values of all core and app registers as `Read` messages, one per register, ordered by address. This bit is always read as 0.
+* **DUMP [Bit 3]:** When written to 1, the device replies with a harp `WRITE` reply from this register, followed by a series of `READ` replies for all core and app registers, one reply per register. This bit is always read as 0.
 * **MUTE_RPL [Bit 4]:** If set to 1, the `Replies` to all the `Commands` are muted, i.e., they will not be sent by the device.
 * **VISUALEN [Bit 5]:** If set to 1, visual indications, typically LEDs, available on the device will operate. If equals to 0, all the visual indications should turn off.
 * **OPLEDEN [Bit 6]:** If set to 1, the LED present on the device will indicate the Operation Mode selected.
