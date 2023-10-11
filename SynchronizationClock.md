@@ -14,7 +14,11 @@ The `Harp Synchronization Clock` is a dedicated bus that disseminates the curren
 
 * The packet is composed of 6 bytes (`header[2]` and `timestamp_s[4]`):
   - `header[2] = {0xAA, 0xAF)`
-  - `timestamp_s` is of type U32, little-endian, and contains the current second.
+  - `timestamp_s` is of type U32, little-endian, and contains the previous elapsed second.
+
+A sample logic trace is shown below:
+
+    !["SynchClockLogicAnalyzer](./assets/synch_logic_trace.png)
 
 > **Important**
 >
@@ -22,7 +26,7 @@ The `Harp Synchronization Clock` is a dedicated bus that disseminates the curren
 
 ## Example code
 
-Example of a microcontroller C code:
+Example of a microcontroller C code dispatching the serialized data:
 
 ```C
 
@@ -49,12 +53,32 @@ ISR(TCD0_OVF_vect, ISR_NAKED)
             case 7:
                 USARTD1_DATA = *timestamp_byte2;
                 break;
+            // The final byte is dispatched much later than the previous 5.
             case 1998:
                 USARTD1_DATA = *timestamp_byte3;
                 break;
         }
     }
 ```
+
+Example of a microcontroller C++ code for converting the four received encoded bytes to the timestamp:
+````C
+    #define HARP_SYNC_OFFSET_US (672)
+
+    // Assume 4 bytes of timestamp data (without header) have been written to this array.
+    alignas(uint32_t) volatile uint8_t sync_data_[4];
+
+    // reinterpret 4-byte sequence as a little-endian uint32_t.
+    uint32_t encoded_sec = *(reinterpret_cast<uint32_t*>(self->sync_data_));
+    // Convert received timestamp to the current time in microseconds.
+    // Add 1[s] per protocol spec since 4-byte sequence encodes the **previous** second.
+    uint64_t curr_us = ((static_cast<uint64_t>(encoded_sec) + 1) * 1e6) - HARP_SYNC_OFFSET_US;
+````
+
+A full example of clocking in the 6-byte sequence can be found in the [Pico Core](https://github.com/AllenNeuralDynamics/harp.core.rp2040/blob/main/firmware/src/harp_synchronizer.cpp).
+
+---
+
 
 ## Physical connection
 
