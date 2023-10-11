@@ -33,7 +33,7 @@ It’s a serial communication protocol that relays the time information. The las
 
 * The packet is composed of 6 bytes (`header[2]` and `timestamp_s[4]`):
   - `header[2] = {0xAA, 0xAF)`
-  - `timestamp_s` is of type U32, little-endian, and contains the current second.
+  - `timestamp_s` is of type U32, little-endian, and contains the previous elapsed second.
 
 > **Important**
 >
@@ -45,7 +45,7 @@ It’s a serial communication protocol that relays the time information. The las
 
 ## Example code
 
-Example of a microcontroller C code:
+Example of a microcontroller C code dispatching the serialized data:
 
 ```C
 
@@ -72,12 +72,28 @@ ISR(TCD0_OVF_vect, ISR_NAKED)
             case 7:
                 USARTD1_DATA = *timestamp_byte2;
                 break;
+            // The final byte is dispatched much later than the previous 5.
             case 1998:
                 USARTD1_DATA = *timestamp_byte3;
                 break;
         }
     }
 ```
+
+Example of a microcontroller C code receiving the encoded time:
+````C
+    #define HARP_SYNC_OFFSET_US (672)
+
+    // Assume 4 bytes of timestamp data have been written to this array.
+    alignas(uint32_t) volatile uint8_t sync_data_[4];
+
+
+    // Interpret 4-byte sequence as a little-endian uint32_t.
+    uint32_t encoded_sec = *((uint32_t*)(self->sync_data_));
+    // Convert received timestamp to current time in microseconds.
+    // Add 1[s] per protocol spec since 4-byte sequence encodes previous second.
+    uint64_t curr_us = ((uint64_t(encoded_sec) + 1) * 1e6) - HARP_SYNC_OFFSET_US;
+````
 
 ---
 
