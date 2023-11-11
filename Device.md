@@ -1,34 +1,10 @@
-﻿# Common Registers and Operation (Device) 1.2
+﻿<img src="./Logo/HarpLogoSmall.svg" width="200">
 
-## Document Version 1.9.0
-
-<img src="./Logo/HarpLogoSmall.svg" width="200">
-
-## Table of contents
-
-- [Common Registers and Operation (Device) 1.2](#common-registers-and-operation-device-12)
-  - [Document Version 1.9.0](#document-version-190)
-  - [Table of contents](#table-of-contents)
-  - [Introduction](#introduction)
-  - [Registers](#registers)
-    - [Common Registers](#common-registers)
-    - [Operation Modes](#operation-modes)
-    - [**Table - List of available Common Registers**](#table---list-of-available-common-registers)
-      - [**`R_WHO_AM_I` (U16) – Who Am I**](#r_who_am_i-u16--who-am-i)
-      - [**`R_TIMESTAMP_SECOND` (U32) – System timestamp (seconds)**](#r_timestamp_second-u32--system-timestamp-seconds)
-      - [**`R_TIMESTAMP_MICRO` (U16) – System timestamp (microseconds)**](#r_timestamp_micro-u16--system-timestamp-microseconds)
-      - [**`R_OPERATION_CTRL` (U16) – Operation mode configuration**](#r_operation_ctrl-u16--operation-mode-configuration)
-      - [**`R_RESET_DEV` (U8) – Reset device and save non-volatile registers**](#r_reset_dev-u8--reset-device-and-save-non-volatile-registers)
-      - [**`R_DEVICE_NAME` (25 Bytes) – Device's name**](#r_device_name-25-bytes--devices-name)
-      - [**`R_SERIAL_NUMBER` (U16) – Device's serial number**](#r_serial_number-u16--devices-serial-number)
-      - [**`R_CLOCK_CONFIG` (U8) – Synchronization clock configuration**](#r_clock_config-u8--synchronization-clock-configuration)
-      - [**`R_TIMESTAMP_OFFSET` (U8) – Clock calibration offset**](#r_timestamp_offset-u8--clock-calibration-offset)
-  - [Release notes:](#release-notes)
-
+# Common Registers and Operation (Device 1.2)
 
 ## Introduction
 
-This document defines the standards that new Harp Devices should strive to follow. The goal is to create a common ground for the development and operation of Harp devices, to allow quick and easy integration of new devices into the existing ecosystem. While some registers and functionalities are not mandatory, it is strongly recommended that they are implemented or, at least, considered with compatibility in mind.
+This document defines the common set of standard functionality that new Harp `Device` hardware should aim to provide. The goal is to create a common ground for the development and operation of Harp devices, and to allow quick and easy integration of new devices into the existing ecosystem. While some registers and functionalities are not mandatory, it is strongly recommended that they are implemented or, at least, considered with compatibility in mind.
 
 ## Registers
 
@@ -433,43 +409,47 @@ When the value of this register is above 0 (zero), the device’s timestamp will
 
 ## Release notes:
 
-- V0.2
+- v0.2
     * First draft released.
 
-- V1.0
+- v1.0
 
     * R_RESET_DEV and R_DEVICE_NAME are now optional.
     * Changed Normal Mode to Standby Mode.
     * Added bit ALIVE_EN to register R_OPERATION_CTRL. This is an important feature.
     * Major release.
 
-- V1.1
+- v1.1
   * Added bit MUTE_RPL to register R_OPERATION_CTRL.
 
-- V1.2
+- v1.2
   * Corrected some wrong names.
 
-- V1.3
+- v1.3
   * Added the bit NAME_TO_DEFAULT.
 
-- V1.4
+- v1.4
   * Added the register R_SERIAL_NUMBER.
 
-- V1.5
+- v1.5
   * Added the register R_CLOCK_CONFIG.
 
-- V1.6
+- v1.6
   * Changed device naming to Controller and Peripheral.
 
-- V1.7
+- v1.7
   * Raised version to 1.2 since all the foreseen features are included at this point.
   * Added the register R_TIMESTAMP_OFFSET.
 
-- V1.8
+- v1.8
   * Replaced HARP_VERSION with CORE_VERSION.
 
-- V1.9.0
+- v1.9.0
   * Refactor documentation to markdown format.
   * Minor typo corrections.
   * Improve clarity of some sections.
   * Adopt semantic versioning.
+
+- v1.9.1
+  * Remove table of contents to avoid redundancy with doc generators.
+  * Minor improvements to clarity of introduction.
