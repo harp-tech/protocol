@@ -36,11 +36,16 @@
                 {
                     "type": "object",
                     "properties": {
+                        "value": {
+                            "description": "Specifies the numerical mask value.",
+                            "type": "integer"
+                        },
                         "description": {
                             "description": "Specifies a summary description of the mask value function.",
                             "type": "string"
                         }
                     },
+                    "required": ["value"],
                     "additionalProperties": false
                 }
             ]
