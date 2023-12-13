@@ -58,7 +58,7 @@ ISR(TCD0_OVF_vect, ISR_NAKED)
 
 ## Physical connection
 
-The physical connection is made by a simple audio cable. In the same folder of this file, you can find an [example](./synchronization%20clock%20-%20physical%20connectionsch.pdf) of the sender and the receiver.
+The physical connection is made by a simple audio cable. In the same folder of this file, you can find an [example](./PhysicalConnector.pdf) of the sender and the receiver.
 The connector used is from `Switchcraft Inc.` with PartNo. `35RASMT2BHNTRX`.
 
 ## Release Notes
