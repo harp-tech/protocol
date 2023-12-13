@@ -1,4 +1,4 @@
-<img src="./Assets/HarpLogo.svg" width="200">
+<img src="./assets/HarpLogo.svg" width="200">
 
 # Binary Protocol 32-bit (v0.1)
 

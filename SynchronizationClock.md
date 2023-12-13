@@ -1,4 +1,4 @@
-<img src="./Assets/HarpLogo.svg" width="200">
+<img src="./assets/HarpLogo.svg" width="200">
 
 # Synchronization Clock Protocol (1.0)
 
@@ -10,7 +10,7 @@ The `Harp Synchronization Clock` is a dedicated bus that disseminates the curren
 * The Baud rate used is 100kbps;
 * The last byte starts *exactly* 672 us before the elapse of the current second (e.g.:)
 
-    !["SynchClockOscilloscope](./Assets/SynchClockOscilloscope.png)
+    !["SynchClockOscilloscope](./assets/SynchClockOscilloscope.png)
 
 * The packet is composed of 6 bytes (`header[2]` and `timestamp_s[4]`):
   - `header[2] = {0xAA, 0xAF)`

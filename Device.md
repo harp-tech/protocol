@@ -1,4 +1,4 @@
-﻿<img src="./Assets/HarpLogo.svg" width="200">
+﻿<img src="./assets/HarpLogo.svg" width="200">
 
 # Common Registers and Operation (Device 1.2)
 
