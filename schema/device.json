@@ -1,0 +1,36 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema",
+    "$id": "https://harp-tech.org/draft-02/schema/device.json",
+    "type": "object",
+    "allOf": [
+        {
+            "properties": {
+                "device": {
+                    "description": "Specifies the name of the device.",
+                    "type": "string"
+                },
+                "whoAmI": {
+                    "description": "Specifies the unique identifier for this device type.",
+                    "type": "integer"
+                },
+                "firmwareVersion": {
+                    "description": "Specifies the semantic version of the device firmware.",
+                    "type": "string"
+                },
+                "hardwareTargets": {
+                    "description": "Specifies the semantic version of the device hardware.",
+                    "type": "string"
+                },
+                "registers": {
+                    "additionalProperties": {
+                        "properties": {
+                            "address": { "minimum": 32 }
+                        }
+                    }
+                }
+            },
+            "required": ["device", "whoAmI", "firmwareVersion", "hardwareTargets"]
+        },
+        { "$ref": "registers.json" }
+    ]
+}
