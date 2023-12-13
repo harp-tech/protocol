@@ -1,4 +1,4 @@
-<img src="./Logo/HarpLogoSmall.svg" width="200">
+<img src="./Assets/HarpLogo.svg" width="200">
 
 # Synchronization Clock Protocol (1.0)
 
