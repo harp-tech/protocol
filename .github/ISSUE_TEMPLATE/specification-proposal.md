@@ -1,7 +1,7 @@
 ---
 name: Create a new specification
 about: For proposals that have been invited by a team member
-title: ''
+title: 'Feature name'
 labels: proposal
 assignees: ''
 
