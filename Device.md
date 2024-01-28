@@ -455,3 +455,5 @@ When the value of this register is above 0 (zero), the device’s timestamp will
 - v1.9.1
   * Remove table of contents to avoid redundancy with doc generators.
   * Minor improvements to clarity of introduction.
+- v1.9.2
+  * Clarify `Connected` behavior between host and device and add application examples.
