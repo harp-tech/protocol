@@ -41,6 +41,12 @@ devices:
     projectUrl: https://github.com/harp-tech/device.outputexpander
   1121:
     name: SimpleAnalogGenerator
+  1130:
+    name: StepperDriver
+    authors: OEPS
+    copyright: tbd
+    repositoryUrl: https://github.com/harp-tech/device.stepperdriver
+    projectUrl: https://github.com/harp-tech/device.stepperdriver
   1136:
     name: Archimedes
   1140:
