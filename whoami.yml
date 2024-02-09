@@ -139,25 +139,25 @@ devices:
     projectUrl: https://github.com/emotional-cities/pluma
   1400:
     name: LicketySplit
-    authors: AIND
-    copyright: AIND
+    authors: AllenNeuralDynamics
+    copyright: AllenNeuralDynamics
     repositoryUrl: https://github.com/AllenNeuralDynamics/harp.device.lickety-split
     projectUrl: https://github.com/AllenNeuralDynamics/harp.device.lickety-split
   1401:
     name: SniffDetection
-    authors: AIND
-    copyright: AIND
+    authors: AllenNeuralDynamics
+    copyright: AllenNeuralDynamics
     repositoryUrl: https://github.com/AllenNeuralDynamics/harp.device.sniff-detector
     projectUrl: https://github.com/AllenNeuralDynamics/harp.device.sniff-detector
   1402:
     name: Treadmill
-    authors: AIND
-    copyright: AIND
+    authors: AllenNeuralDynamics
+    copyright: AllenNeuralDynamics
     repositoryUrl: https://github.com/AllenNeuralDynamics/harp.device.treadmill
     projectUrl: https://github.com/AllenNeuralDynamics/harp.device.treadmill
   1403:
     name: cuTTLefish
-    authors: AIND
-    copyright: AIND
+    authors: AllenNeuralDynamics
+    copyright: AllenNeuralDynamics
     repositoryUrl: https://github.com/AllenNeuralDynamics/harp.device.cuttlefish
     projectUrl: https://github.com/AllenNeuralDynamics/harp.device.cuttlefish
