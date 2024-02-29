@@ -48,7 +48,8 @@ As an application example, devices using USB as the transport layer can poll for
 |R\_SERIAL\_NUMBER|No|No|U16|013|b)|Unique serial number of the device|Optional|
 |R\_CLOCK\_CONFIG|No|No|U8|014|b)|Synchronization clock configuration|Optional|
 |R\_TIMESTAMP\_OFFSET|No|No|U8|015|b)|Adds an offset if user updates the Timestamp|Optional|
-|R\_UID|No|YES|U8|016|b)|Stores a unique identifier (UID) |Optional|
+|R\_UID|No|Yes|U8|016|b)|Stores a unique identifier (UID) |Optional|
+|R\_TAG|-|Yes|U8|017|b)|Firmware tag|Optional|
 
 ||a) These values are stored during factory process and are persistent, i.e., they cannot be changed by the user.<br>b) Check register notes on the specific register explanation<br>c) Only parts of the functionality is mandatory. Check register notes on the explanation.|
 | :- | :- |
@@ -422,6 +423,12 @@ Address: `016`
 
 An array of 16 bytes that should contain a (128bit) UID (Unique Identifier) of the current device. This register is non-volatile and should be read-only. The byte-order is little-endian.
 
+#### **`R_TAG` (8 bytes) – Firmware tag**
+
+Address: `017`
+
+An array of 8 bytes that can be used to store a tag for a specific firmware version. For instance, it could be used to store the git hash of a specific release/commit. If not used, all bytes should be set to 0.
+
 
 ## Release notes:
 
@@ -476,3 +483,6 @@ An array of 16 bytes that should contain a (128bit) UID (Unique Identifier) of t
 - v1.10.0
   * Add `UID` register
   * Add future deprecation warning to `R_SERIAL_NUMBER` register.
+
+- v1.11.0
+  * Add new `Tag` register.
