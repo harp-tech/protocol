@@ -33,6 +33,6 @@
 |     2094 | RfidReader              | harp-tech           | harp-tech           | https://github.com/harp-tech/device.rfidreader                    | https://github.com/harp-tech/device.rfidreader                    |
 |     2110 | Pluma                   | NeuroGEARS          | EmotionalCities     | https://github.com/emotional-cities/pluma                         | https://github.com/emotional-cities/pluma                         |
 |     1400 | LicketySplit            | AllenNeuralDynamics | AllenNeuralDynamics | https://github.com/AllenNeuralDynamics/harp.device.lickety-split  | https://github.com/AllenNeuralDynamics/harp.device.lickety-split  |
-|     1401 | SniffDetection          | AllenNeuralDynamics | AllenNeuralDynamics | https://github.com/AllenNeuralDynamics/harp.device.sniff-detector | https://github.com/AllenNeuralDynamics/harp.device.sniff-detector |
+|     1401 | SniffDetector           | AllenNeuralDynamics | AllenNeuralDynamics | https://github.com/AllenNeuralDynamics/harp.device.sniff-detector | https://github.com/AllenNeuralDynamics/harp.device.sniff-detector |
 |     1402 | Treadmill               | AllenNeuralDynamics | AllenNeuralDynamics | https://github.com/AllenNeuralDynamics/harp.device.treadmill      | https://github.com/AllenNeuralDynamics/harp.device.treadmill      |
 |     1403 | cuTTLefish              | AllenNeuralDynamics | AllenNeuralDynamics | https://github.com/AllenNeuralDynamics/harp.device.cuttlefish     | https://github.com/AllenNeuralDynamics/harp.device.cuttlefish     |
