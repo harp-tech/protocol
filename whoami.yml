@@ -144,7 +144,7 @@ devices:
     repositoryUrl: https://github.com/AllenNeuralDynamics/harp.device.lickety-split
     projectUrl: https://github.com/AllenNeuralDynamics/harp.device.lickety-split
   1401:
-    name: SniffDetection
+    name: SniffDetector
     authors: AllenNeuralDynamics
     copyright: AllenNeuralDynamics
     repositoryUrl: https://github.com/AllenNeuralDynamics/harp.device.sniff-detector
