@@ -473,10 +473,13 @@ gantt
 
 > **Note**
 >
-> This register is read-only and is used to provide status information about the device. The bits are set by the device and sent through a period event. If enabled (via `R_OPERATION_CTRL` bit `ALIVE_EN`), the event will be periodically emitted at a rate of 1Hz, aligned to when the `R_TIMESTAMP_SECOND` register is updated. The status of the device is given by the following bits:
+> This register is read-only and is used to provide status information about the device. The bits are set by the device and sent through a period event. If enabled (via `R_OPERATION_CTRL` bit `ALIVE_EN`), the event will be periodically emitted at a rate of 1Hz, triggered by updates to the `R_TIMESTAMP_SECOND` register. 
 
 
-* **IS_ACTIVE [Bit 0]:** If 1, the device will be in Active Mode. Any other modes will be coded as 0. (See `R_OPERATION_CTRL` bit `OP_MODE` for more information).
+The status of the device is given by the following bits:
+
+
+* **IS_STANDBY [Bit 0]:** If 1, the device will be in Standby Mode. Any other modes will be coded as 0. (See `R_OPERATION_CTRL` bit `OP_MODE` for more information).
 
 * **IS_ERROR_STATE [Bit 1]:** This bit will be read as 1 if the device is in an error state. The implementation of an error state is expected largely implementation specific, however this state should be entered when the device is in a state where it cannot recover without manual intervention.
 
