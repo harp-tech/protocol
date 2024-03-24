@@ -1,4 +1,4 @@
-﻿<img src="./assets/HarpLogo.svg" width="200">
+<img src="./assets/HarpLogo.svg" width="200">
 
 # Common Registers and Operation (Device 1.2)
 
@@ -145,7 +145,7 @@ gantt
 ```
 
 
-#### **`R_OPERATION_CTRL` (U16) – Operation mode configuration**
+#### **`R_OPERATION_CTRL` (U8) – Operation mode configuration**
 
 Address: `010`
 
@@ -486,3 +486,6 @@ An array of 8 bytes that can be used to store a tag for a specific firmware vers
 
 - v1.11.0
   * Add new `Tag` register.
+
+- v1.12.0
+  * Fix typo in `OPERATION_CTRL` register data type (U16 -> U8)
