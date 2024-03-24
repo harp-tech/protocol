@@ -1,4 +1,4 @@
-<img src="./assets/HarpLogo.svg" width="200">
+﻿<img src="./assets/HarpLogo.svg" width="200">
 
 # Common Registers and Operation (Device 1.2)
 
@@ -225,7 +225,7 @@ a) Standby Mode and Active Mode are mandatory. Speed Mode is optional.
 | 1          	| Speed Mode.                                                                                              	|
 | 0.1        	| A critical error occurred. Only a hardware reset or a new power up can remove the device from this Mode. 	|
 
-* **ALIVE_EN [Bit 7]:** If set to 1, the device sends an `Event` Message with the `R_TIMESTAMP_SECONDS` content each second (i.e. Heartbeat). This allows the host to check that the device is alive. Although this is an optional feature, it’s strongly recommended to be implemented.
+* **ALIVE_EN [Bit 7]:** If set to 1, the device sends an `Event` Message with the `R_HEARTBEAT` content each second. This allows the host to check the status of the device periodically. Although this is an optional feature, it’s strongly recommended to be implemented.
 
 
 
@@ -429,6 +429,59 @@ Address: `017`
 
 An array of 8 bytes that can be used to store a tag for a specific firmware version. For instance, it could be used to store the git hash of a specific release/commit. If not used, all bytes should be set to 0. The byte-order is little-endian.
 
+#### **`R_HEARTBEAT` (U16) – Heartbeat register reporting the current status of the device**
+
+Address: `018`
+
+```mermaid
+---
+displayMode: compact
+---
+gantt
+    title R_HEARTBEAT (018)
+    dateFormat X
+    axisFormat %
+
+    section Bit
+    15      :bit15, 0, 1
+    14      :bit14, after bit15  , 2
+    13      :bit13, after bit14  , 3
+    12      :bit12, after bit13  , 4
+    11      :bit11, after bit12  , 5
+    10     :bit10, after bit11  , 6
+    9      :bit9, after bit10  , 7
+    9      :bit8, after bit9  , 8
+    7      :bit7, after bit8  , 9
+    6      :bit6, after bit7  , 10
+    5      :bit5, after bit6  , 11
+    4      :bit4, after bit5  , 12
+    3      :bit3, after bit4  , 13
+    2      :bit2, after bit3  , 14
+    1      :bit1, after bit2  , 15
+    0      :bit0, after bit1  , 16
+
+    section Id
+    IS_ACTIVE      :id0, 15, 16
+    IS_ERROR_STATE      :id1, 14, 15
+    IS_SYNCHRONIZED      :id2, 13, 14
+
+    section Default
+    -      :d7, 15, 16
+    -      :d6, 14  , 15
+    -      :d5, 13  , 14
+```
+
+> **Note**
+>
+> This register is read-only and is used to provide status information about the device. The bits are set by the device and sent through a period event. If enabled (via `R_OPERATION_CTRL` bit `ALIVE_EN`), the event will be periodically emitted at a rate of 1Hz, aligned to when the `R_TIMESTAMP_SECOND` register is updated. The status of the device is given by the following bits:
+
+
+* **IS_ACTIVE [Bit 0]:** If 1, the device will be in Active Mode. Any other modes will be coded as 0. (See `R_OPERATION_CTRL` bit `OP_MODE` for more information).
+
+* **IS_ERROR_STATE [Bit 1]:** This bit will be read as 1 if the device is in an error state. The implementation of an error state is expected largely implementation specific, however this state should be entered when the device is in a state where it cannot recover without manual intervention.
+
+* **IS_SYNCHRONIZED [Bit 3]:** If set to 1, the device is synchronized with the Harp Synchronization Clock. If the device is a clock generator (see `R_CLOCK_CONFIG` bit `CLK_GEN`), by definition, this bit will always be set to 1.
+
 
 ## Release notes:
 
@@ -488,4 +541,5 @@ An array of 8 bytes that can be used to store a tag for a specific firmware vers
   * Add new `Tag` register.
 
 - v1.12.0
+  * Add heartbeat register providing status information
   * Fix typo in `OPERATION_CTRL` register data type (U16 -> U8)
