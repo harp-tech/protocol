@@ -255,7 +255,9 @@ else
 
 ### Commands
 
-The device that implements this Harp Protocol receives `Write` and `Read` commands from the controller, and replies with a copy of the message, timestamped with the hardware time at which the command was applied.
+The device that implements this Harp Protocol receives `Write` and `Read` commands from the controller, and replies with a copy of the message, timestamped with the hardware time at which the command was applied. This behavior is core to the protocol and is expected to be implemented by all devices that use it. As a rule of thumb, for each `Write` or `Read` command, a single reply message should be returned from the device. The message should be emitted from the same register that the command was issued to. It should be noted that the payload of the returned value might be different from the one issued by the command, as the device can operate/transform the issued `Write` command. ([see "Register Polymorphism" section below](#register-polymorphism)).
+
+> Exceptions to the previous contract are possible but should be avoided. The single supported exception is the `R_OPERATION_CTRL` (via  **DUMP [Bit 3]**) that allows the controller to request a dump of all registers in the device. In this case, the device should reply with a single `Write` message from `R_OPERATION_CTRL`, honoring the previous contract, but will it also emit a volley of `Read` messages, one for each register in the device.
 
 Some Harp Messages are shown below to demonstrate the typical usage of the protocol between a device and a controller. Note that timestamp information is usually omitted in messages sent from the controller to the device, since actions are expected to run as soon as possible.
 
@@ -273,7 +275,7 @@ We will use the following abbreviations:
 
 The timestamp information in the [RPL] represents the time when the register with [Address] was updated.
 
-### Read Message
+#### Read Message
 
 - [CMD] **Controller**: `1` `4`      `Address` `Port` `PayloadType` `Checksum`
 - [RPL] **Device**: `1` `Length` `Address` `Port` `PayloadType` `Timestamp<T>` `Checksum`       OK
@@ -281,11 +283,43 @@ The timestamp information in the [RPL] represents the time when the register wit
 
 The timestamp information in the [RPL] represents the time when the register with [Address] was read.
 
-### Event message
+#### Event message
 
 - [EVT] **Device**: `3` `Length` `Address` `Port` `PayloadType` `Timestamp<T>` `Checksum`      OK
 
 The timestamp information in [EVT] represents the time when the register with [Address] was read.
+
+### Intended Usage
+
+#### Register polymorphism
+
+
+While it is possible to have different types of data in the same register, we **STRONGLY** discourage this practice. The protocol was designed to be as simple as possible, and having different types of data in the same register would make the parsing of the messages unnecessary more complex. As a rule, each register should: (1) have a single data type (e.g. `U8`) for all message types (`Read`, `Write`, `Event`), (2) the payload should have the same "function"/"meaning" regardless of the message type (see examples below), and (3) the payload data should be of the same size for all message types.
+It should be noted that this guide doesnt necessarly mean that the payload issued by a `Write` message should be the same as the one issued by a `Read` message, as the device can operate/transform the issued `Write`.
+
+
+> **Examples**
+>
+> Consider the following register:
+>
+>```
+>   CameraFrequency:
+>   - Address: 32
+>   - Type: U8
+>   - Access: Raad, Write
+>   - Description: Sets the frequency of the camera in Hz.
+>```
+>
+> DO NOT ❌
+>
+>   - Return the frequency in U16 for a `Read` command and the frequency in U8 for a `Write` command. (i.e. Share the same data type.)
+>   - Return the frequency in Hz for a `Read` command and the period in seconds for a `Write` command. (i.e. share the same function/meaning.)
+>
+> DO ✅
+>
+>   - Return the frequency in U8 for both a `Read` and `Write` command.
+>   - Return the frequency in Hz for both a `Read` and a `Write` command.
+>   - `Write` a value of `101` to set the frequency, but both `Read` and `Write` return the frequency of 100Hz. This behavior is perfectly acceptable as the device might not be able to set the frequency to the exact value requested by the controller, and instead returns the value that was set.
 
 ---
 
@@ -324,3 +358,7 @@ The timestamp information in [EVT] represents the time when the register with [A
   * Remove table of contents to avoid redundancy with doc generators.
   * Avoid using verbatim literals in titles.
   * Change device naming to Controller and Device.
+
+- v1.4.2
+  * Clarify request-reply contract.
+  * Discourage the use of polymorphic register behavior.
