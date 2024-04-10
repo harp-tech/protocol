@@ -23,7 +23,7 @@ A Harp Device is expected to implement the following `Operation Modes`:
 - *`Speed Mode:`* Allows the implementation of a different and specific communication protocol. On this mode, the Harp Binary Protocol is no longer used. The specific protocol designed must implement the possibility to exit this mode.
 
 The mandatory Operation Modes are the **`Standby Mode`** and **`Active Mode`**. The **`Speed Mode`** is optional and, in many of the applications, not needed.
-Harp Devices should continuously check if the communication with the host is active and healthy. This status check will be largely dependent on the transport layer implementing the harp protocol between host and device. Thus, while each implementing must define `Connected` or `Not Connected` status, it is up to the developer to decide how to implement this status check.
+Harp Devices should continuously check if the communication with the host is active and healthy. This status check will be largely dependent on the transport layer implementing the harp protocol between host and device. Each implementation should clearly distinguish between `Connected` and `Not Connected` states, and it is up to the developer to decide how to implement this status check. When the device transitions to the `Not Connected` state, it should immediately enter `Standy Mode` and stop transmission of further event messages.
 
 As an application example, devices using USB as the transport layer, can check if the USB connection is alive by setting the DTR pin `HIGH`. Once this pin is set `LOW` it may be assumed that the host closed the connection and the device should enter `Standby Mode`.
 
