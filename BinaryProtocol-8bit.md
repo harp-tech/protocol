@@ -306,7 +306,7 @@ It should be noted that this guide doesnt necessarly mean that the payload issue
 >   CameraFrequency:
 >   - Address: 32
 >   - Type: U8
->   - Access: Raad, Write
+>   - Access: Read, Write
 >   - Description: Sets the frequency of the camera in Hz.
 >```
 >
