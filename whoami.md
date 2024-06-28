@@ -36,3 +36,4 @@
 |     1401 | SniffDetector           | AllenNeuralDynamics | AllenNeuralDynamics | https://github.com/AllenNeuralDynamics/harp.device.sniff-detector | https://github.com/AllenNeuralDynamics/harp.device.sniff-detector |
 |     1402 | Treadmill               | AllenNeuralDynamics | AllenNeuralDynamics | https://github.com/AllenNeuralDynamics/harp.device.treadmill      | https://github.com/AllenNeuralDynamics/harp.device.treadmill      |
 |     1403 | cuTTLefish              | AllenNeuralDynamics | AllenNeuralDynamics | https://github.com/AllenNeuralDynamics/harp.device.cuttlefish     | https://github.com/AllenNeuralDynamics/harp.device.cuttlefish     |
+|     1404 | WhiteRabbit             | AllenNeuralDynamics | AllenNeuralDynamics | https://github.com/AllenNeuralDynamics/harp.device.white-rabbit   | https://github.com/AllenNeuralDynamics/harp.device.white-rabbit   |
