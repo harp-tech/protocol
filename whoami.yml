@@ -161,7 +161,7 @@ devices:
     copyright: AllenNeuralDynamics
     repositoryUrl: https://github.com/AllenNeuralDynamics/harp.device.cuttlefish
     projectUrl: https://github.com/AllenNeuralDynamics/harp.device.cuttlefish
- 1404:
+  1404:
     name: WhiteRabbit
     authors: AllenNeuralDynamics
     copyright: AllenNeuralDynamics
