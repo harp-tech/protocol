@@ -44,7 +44,10 @@ devices:
   1136:
     name: Archimedes
   1140:
+    <<: *harptechdevice
     name: Olfactometer
+    repositoryUrl: https://github.com/harp-tech/device.olfactometer
+    projectUrl: https://github.com/harp-tech/device.olfactometer
   1152:
     <<: *harptechdevice
     name: ClockSynchronizer
