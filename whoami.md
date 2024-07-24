@@ -12,7 +12,7 @@
 |     1108 | OutputExpander          | harp-tech           | harp-tech           | https://github.com/harp-tech/device.outputexpander                | https://github.com/harp-tech/device.outputexpander                |
 |     1121 | SimpleAnalogGenerator   |                     |                     |                                                                   |                                                                   |
 |     1136 | Archimedes              |                     |                     |                                                                   |                                                                   |
-|     1140 | Olfactometer            |                     |                     |                                                                   |                                                                   |
+|     1140 | Olfactometer            | harp-tech           | harp-tech           | https://github.com/harp-tech/device.olfactometer                  | https://github.com/harp-tech/device.olfactometer                  |
 |     1152 | ClockSynchronizer       | harp-tech           | harp-tech           | https://github.com/harp-tech/device.clocksync                     | https://github.com/harp-tech/device.clocksync                     |
 |     1154 | TimestampGeneratorGen1  | harp-tech           | harp-tech           | https://github.com/harp-tech/harp_timestamp_generator_Gen1        | https://github.com/harp-tech/harp_timestamp_generator_Gen1        |
 |     1158 | TimestampGeneratorGen3  | harp-tech           | harp-tech           | https://github.com/harp-tech/device.timestampgeneratorgen3        | https://github.com/harp-tech/device.timestampgeneratorgen3        |
