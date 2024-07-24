@@ -46,6 +46,8 @@ It’s strongly recommended that a Harp Device acting as peripheral should conti
 |R\_SERIAL\_NUMBER|No|No|U16|013|b)|Unique serial number of the device|Optional|
 |R\_CLOCK\_CONFIG|No|No|U8|014|b)|Synchronization clock configuration|Optional|
 |R\_TIMESTAMP\_OFFSET|No|No|U8|015|b)|Adds an offset if user updates the Timestamp|Optional|
+|R\_TAG|-|Yes|U8|017|b)|Firmware tag|Optional|
+
 
 ||a) These values are stored during factory process and are persistent, i.e., they cannot be changed by the user.<br>b) Check register notes on the specific register explanation<br>c) Only parts of the functionality is mandatory. Check register notes on the explanation.|
 | :- | :- |
@@ -407,6 +409,13 @@ gantt
 ```
 When the value of this register is above 0 (zero), the device’s timestamp will be offset by this amount. The register is sensitive to 500 microsecond increments. This register is non-volatile.
 
+#### **`R_TAG` (8 bytes) – Device's name**
+
+Address: `017`
+
+An array of 8 bytes that can be used to store a tag for a specific firmware version. For instance, it could be used to store the git hash of a specific release/commit. If not used, all bytes should be set to 0.
+
+
 ## Release notes:
 
 - v0.2
@@ -453,3 +462,6 @@ When the value of this register is above 0 (zero), the device’s timestamp will
 - v1.9.1
   * Remove table of contents to avoid redundancy with doc generators.
   * Minor improvements to clarity of introduction.
+
+- v1.9.2
+  * Add new `Tag` register.
