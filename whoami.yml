@@ -170,3 +170,9 @@ devices:
     copyright: AllenNeuralDynamics
     repositoryUrl: https://github.com/AllenNeuralDynamics/harp.device.white-rabbit
     projectUrl: https://github.com/AllenNeuralDynamics/harp.device.white-rabbit
+  1405:
+    name: EnvironmentSensor
+    authors: AllenNeuralDynamics
+    copyright: AllenNeuralDynamics
+    repositoryUrl: https://github.com/AllenNeuralDynamics/harp.device.environment-sensor
+    projectUrl: https://github.com/AllenNeuralDynamics/harp.device.environment-sensor
