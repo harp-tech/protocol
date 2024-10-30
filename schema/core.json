@@ -1,0 +1,17 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema",
+    "$id": "https://harp-tech.org/draft-03/schema/core.json",
+    "type": "object",
+    "allOf": [
+        {
+            "properties": {
+                "protocolVersion": {
+                    "description": "Specifies the semantic version of the device protocol.",
+                    "type": "string"
+                }
+            },
+            "required": ["protocolVersion"]
+        },
+        { "$ref": "registers.json" }
+    ]
+}
