@@ -1,4 +1,5 @@
-# yaml-language-server: $schema=registers.json
+# yaml-language-server: $schema=core.json
+protocolVersion: "1.13"
 registers:
   WhoAmI:
     address: 0
