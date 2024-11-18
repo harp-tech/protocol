@@ -87,7 +87,7 @@ The connector pinout for a device *receiving* the timestamp is shown below:
 
 !["SynchReceiverSchematic](./assets/harp_clock_sync_receiver.png)
 
-A TVS diode also suggested for ESD protection.
+A TVS diode is also suggested for ESD protection.
 
 > [!NOTE]
 > The device receiving the timestamp must provide 3.3-5V (~10mA) on the audio jack **R** pin.
@@ -101,6 +101,8 @@ The schematic snippet for a device *sending* the timestamp is shown below:
 
 A supplementary PDF [example](./PhysicalConnector.pdf) of the sender and the receiver is also available.
 The connector used is from `Switchcraft Inc.` with PartNo. `35RASMT2BHNTRX`.
+
+A KiCAD schematic template for creating a Harp device based on the [RP2040](https://www.raspberrypi.com/products/rp2040/) microcontroller with circuitry for receiving the timestamp is provided through the [Pico Template](https://github.com/AllenNeuralDynamics/harp.device.pico-template).
 
 ## Release Notes
 
