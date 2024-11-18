@@ -19,10 +19,6 @@ The `Harp Synchronization Clock` is a dedicated bus that disseminates the curren
 A sample logic trace is shown below:
     !["SynchClockLogicAnalyzer](./assets/synch_logic_trace.png)
 
-> **Important**
->
-> To avoid unexpected behaviors, only one bit at a time should be written to register `R_RESET_DEV`.
-
 ## Example code
 
 Example of a microcontroller C code dispatching the serialized data:
