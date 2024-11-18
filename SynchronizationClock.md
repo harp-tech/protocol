@@ -89,7 +89,7 @@ The connector pinout for a device *receiving* the timestamp is shown below:
 
 A TVS diode is also suggested for ESD protection.
 
-> [!NOTE]
+> [!IMPORTANT]
 > The device receiving the timestamp must provide 3.3-5V (~10mA) on the audio jack **R** pin.
 
 The schematic snippet for a device *sending* the timestamp is shown below:
