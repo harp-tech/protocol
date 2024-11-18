@@ -17,7 +17,6 @@ The `Harp Synchronization Clock` is a dedicated bus that disseminates the curren
   - `timestamp_s` is of type U32, little-endian, and contains the previous elapsed second.
 
 A sample logic trace is shown below:
-
     !["SynchClockLogicAnalyzer](./assets/synch_logic_trace.png)
 
 > **Important**
