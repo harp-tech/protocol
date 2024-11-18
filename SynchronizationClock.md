@@ -81,7 +81,7 @@ A full example of clocking in the 6-byte sequence can be found in the [Pico Core
 
 ## Physical connection
 
-The physical connection is made by a simple audio cable.
+The physical connection is made by a simple 3.5mm audio cable.
 
 The connector pinout for a device *receiving* the timestamp is shown below:
 
