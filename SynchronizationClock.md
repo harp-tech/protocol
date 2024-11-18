@@ -81,7 +81,35 @@ A full example of clocking in the 6-byte sequence can be found in the [Pico Core
 
 ## Physical connection
 
-The physical connection is made by a simple audio cable. In the same folder of this file, you can find an [example](./PhysicalConnector.pdf) of the sender and the receiver.
+The physical connection is made by a simple audio cable.
+
+The connector pinout for a device *receiving* the timestamp is shown below:
+
+    !["SynchReceiverSchematic](./assets/harp_clock_sync_receiver.png)
+
+A TVS diode also suggested for ESD protection.
+
+> [!NOTE]
+> The device receiving the timestamp must provide 3.3-5V on the audio jack **R** pin.
+
+
+The schematic snippet for a device *sending* the timestamp is shown below:
+
+    !["SynchReceiverSchematic](./assets/harp_clock_sync_sender.png)
+
+> [!NOTE]
+> The device *sending* the timestamp isolates each clock output port, preventing ground loops from forming when connecting the audio jack between sender and receiver.
+
+
+The connector pinout for a device *receiving* the timestamp is shown below:
+
+    !["SynchReceiverSchematic](./assets/harp_clock_sync_receiver.png)
+
+
+> [!NOTE]
+> The device receiving the timestamp must provide 3.3-5V on the audio jack **R** pin.
+
+A supplementary PDF [example](./PhysicalConnector.pdf) of the sender and the receiver is also available.
 The connector used is from `Switchcraft Inc.` with PartNo. `35RASMT2BHNTRX`.
 
 ## Release Notes
