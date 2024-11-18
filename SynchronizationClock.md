@@ -95,7 +95,7 @@ A TVS diode also suggested for ESD protection.
 
 The schematic snippet for a device *sending* the timestamp is shown below:
 
-    !["SynchReceiverSchematic](./assets/harp_clock_sync_sender.png)
+!["SynchSenderSchematic](./assets/harp_clock_sync_sender.png)
 
 > [!NOTE]
 > The device *sending* the timestamp isolates each clock output port, preventing ground loops from forming when connecting the audio jack between sender and receiver.
@@ -103,7 +103,7 @@ The schematic snippet for a device *sending* the timestamp is shown below:
 
 The connector pinout for a device *receiving* the timestamp is shown below:
 
-    !["SynchReceiverSchematic](./assets/harp_clock_sync_receiver.png)
+!["SynchReceiverSchematic](./assets/harp_clock_sync_receiver.png)
 
 
 > [!NOTE]
