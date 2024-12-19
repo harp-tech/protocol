@@ -427,7 +427,7 @@ An array of 16 bytes that should contain a (128bit) UID (Unique Identifier) of t
 
 Address: `017`
 
-An array of 8 bytes that can be used to store a tag for a specific firmware version. For instance, it could be used to store the git hash of a specific release/commit. If not used, all bytes should be set to 0.
+An array of 8 bytes that can be used to store a tag for a specific firmware version. For instance, it could be used to store the git hash of a specific release/commit. If not used, all bytes should be set to 0. The byte-order is little-endian.
 
 
 ## Release notes:
