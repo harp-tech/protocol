@@ -46,6 +46,7 @@ It’s strongly recommended that a Harp Device acting as peripheral should conti
 |R\_SERIAL\_NUMBER|No|No|U16|013|b)|Unique serial number of the device|Optional|
 |R\_CLOCK\_CONFIG|No|No|U8|014|b)|Synchronization clock configuration|Optional|
 |R\_TIMESTAMP\_OFFSET|No|No|U8|015|b)|Adds an offset if user updates the Timestamp|Optional|
+|R\_HEARTBEAT|YES|YES|U16|018|b)|Provides information about the state of the device|Yes|
 
 ||a) These values are stored during factory process and are persistent, i.e., they cannot be changed by the user.<br>b) Check register notes on the specific register explanation<br>c) Only parts of the functionality is mandatory. Check register notes on the explanation.|
 | :- | :- |
@@ -221,7 +222,7 @@ a) Standby Mode and Active Mode are mandatory. Speed Mode is optional.
 | 1          	| Speed Mode.                                                                                              	|
 | 0.1        	| A critical error occurred. Only a hardware reset or a new power up can remove the device from this Mode. 	|
 
-* **ALIVE_EN [Bit 7]:** If set to 1, the device sends an `Event` Message with the `R_HEARTBEAT` content each second. This allows the host to check that the status of the device periodically. Although this is an optional feature, it’s strongly recommended to be implemented.
+* **ALIVE_EN [Bit 7]:** If set to 1, the device sends an `Event` Message with the `R_HEARTBEAT` content each second. This allows the host to check that the status of the device periodically. This is a required feature.
 
 
 
@@ -441,18 +442,16 @@ gantt
 
     section Id
     IS_ACTIVE      :id0, 15, 16
-    IS_ERROR_STATE      :id1, 14, 15
-    IS_SYNCHRONIZED      :id2, 13, 14
+    IS_SYNCHRONIZED      :id1, 14, 15
 
     section Default
     -      :d7, 15, 16
     -      :d6, 14  , 15
-    -      :d5, 13  , 14
 ```
 
 > **Note**
 >
-> This register is read-only and is used to provide status information about the device. The bits are set by the device and sent through a period event. If enabled (via `R_OPERATION_CTRL` bit `ALIVE_EN`), the event will be periodically emitted at a rate of 1Hz, triggered by updates to the `R_TIMESTAMP_SECOND` register. 
+> This register is read-only and is used to provide status information about the device. The bits are set by the device and sent through a period event. If enabled (via `R_OPERATION_CTRL` bit `ALIVE_EN`), the event will be periodically emitted at a rate of 1Hz, triggered by updates to the `R_TIMESTAMP_SECOND` register.
 
 
 The status of the device is given by the following bits:
@@ -460,9 +459,7 @@ The status of the device is given by the following bits:
 
 * **IS_STANDBY [Bit 0]:** If 1, the device will be in Standby Mode. Any other modes will be coded as 0. (See `R_OPERATION_CTRL` bit `OP_MODE` for more information).
 
-* **IS_ERROR_STATE [Bit 1]:** This bit will be read as 1 if the device is in an error state. The implementation of an error state is expected largely implementation specific, however this state should be entered when the device is in a state where it cannot recover without manual intervention.
-
-* **IS_SYNCHRONIZED [Bit 3]:** If set to 1, the device is synchronized with the Harp Synchronization Clock. If the device is a clock generator (see `R_CLOCK_CONFIG` bit `CLK_GEN`), by definition, this bit will always be set to 1.
+* **IS_SYNCHRONIZED [Bit 1]:** If set to 1, the device is synchronized with a Harp Synchronization Clock. If the device is a clock generator (see `R_CLOCK_CONFIG` bit `CLK_GEN`), by definition, this bit will always be set to 1.
 
 
 ## Release notes:
