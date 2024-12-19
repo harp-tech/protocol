@@ -48,7 +48,7 @@ As an application example, devices using USB as the transport layer can poll for
 |R\_SERIAL\_NUMBER|No|No|U16|013|b)|Unique serial number of the device|Optional|
 |R\_CLOCK\_CONFIG|No|No|U8|014|b)|Synchronization clock configuration|Optional|
 |R\_TIMESTAMP\_OFFSET|No|No|U8|015|b)|Adds an offset if user updates the Timestamp|Optional|
-|R\_UUID|No|YES|U8|016|b)|Stores an universally unique identifier (UUID) |Optional|
+|R\_UID|No|YES|U8|016|b)|Stores a unique identifier (UID) |Optional|
 
 ||a) These values are stored during factory process and are persistent, i.e., they cannot be changed by the user.<br>b) Check register notes on the specific register explanation<br>c) Only parts of the functionality is mandatory. Check register notes on the explanation.|
 | :- | :- |
@@ -327,7 +327,7 @@ To write to this register a two-step write command is needed. First, write the v
 
 > **Note**
 >
-> This register is to be deprecated in the near future in favor of the `R_UUID` register. Until then, we strongly encourage the value of this register to duplicate the first two bytes of `R_UUID`.
+> This register is to be deprecated in the near future in favor of the `R_UID` register. Until then, we strongly encourage the value of this register to duplicate the first two bytes of `R_UID`. Consider that the bytes should be packed in little-endian order.
 
 
 
@@ -416,11 +416,11 @@ gantt
 ```
 When the value of this register is above 0 (zero), the device’s timestamp will be offset by this amount. The register is sensitive to 500 microsecond increments. This register is non-volatile.
 
-#### **`R_UUID` (16 Bytes) – Universally Unique Identifier**
+#### **`R_UID` (16 Bytes) – Unique Identifier**
 
 Address: `016`
 
-An array of 16 bytes that should contain a UUID (Universally Unique Identifier) of the current device. This register is non-volatile and should be read-only.
+An array of 16 bytes that should contain a (128bit) UID (Unique Identifier) of the current device. This register is non-volatile and should be read-only. The byte-order is little-endian.
 
 
 ## Release notes:
@@ -474,5 +474,5 @@ An array of 16 bytes that should contain a UUID (Universally Unique Identifier) 
   * Clarify `Connected` behavior between host and device and add application examples.
 
 - v1.10.0
-  * Add `UUID` register
+  * Add `UID` register
   * Add future deprecation warning to `R_SERIAL_NUMBER` register.
