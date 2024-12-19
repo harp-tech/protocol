@@ -413,7 +413,7 @@ When the value of this register is above 0 (zero), the device’s timestamp will
 
 Address: `017`
 
-An array of 8 bytes that can be used to store a tag for a specific firmware version. For instance, it could be used to store the git hash of a specific release/commit. If not used, all bytes should be set to 0.
+An array of 8 bytes that can be used to store a tag for a specific firmware version. For instance, it could be used to store the git hash of a specific release/commit. If not used, all bytes should be set to 0. The byte-order is little-endian.
 
 
 ## Release notes:
