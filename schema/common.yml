@@ -105,6 +105,11 @@ registers:
     access: Write
     maskType: ClockConfigurationFlags
     description: Specifies the configuration for the device synchronization clock.
+  TimestampOffset:
+    address: 15
+    type: U8
+    access: Write
+    description: Specifies the offset applied to the device's timestamp register when synchronizing to an external clock. The register is sensitive to 500 microsecond increments.
 groupMasks:
   OperationMode:
     description: Specifies the operation mode of the device.
