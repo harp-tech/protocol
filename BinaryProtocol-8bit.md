@@ -294,7 +294,7 @@ The timestamp information in [EVT] represents the time when the register with [A
 #### Register polymorphism
 
 
-While it is possible to have different types of data in the same register, we **STRONGLY** discourage this practice. The protocol was designed to be as simple as possible, and having different types of data in the same register would make the parsing of the messages unnecessary more complex. As a rule, each register should: (1) have a single data type (e.g. `U8`) for all message types (`Read`, `Write`, `Event`), (2) the payload should have the same "function"/"meaning" regardless of the message type (see examples below), and (3) the payload data should be of the same size for all message types.
+While it is technically possible to have different types of data in the same register, we **STRONGLY** discourage this practice. The protocol was designed to be as simple as possible, and having different types of data in the same register would make the parsing of the messages unnecessarily more complex. As a rule, each register should: (1) have a single data type (e.g. `U8`) for all message types (`Read`, `Write`, `Event`), (2) have a payload with the same "function"/"meaning" regardless of the message type (see examples below), and (3) have the same payload size for all message types coming from the device.
 It should be noted that this guide doesnt necessarly mean that the payload issued by a `Write` message should be the same as the one issued by a `Read` message, as the device can operate/transform the issued `Write`.
 
 
