@@ -480,7 +480,7 @@ The status of the device is given by the following bits:
 
 * **IS_STANDBY [Bit 0]:** If 1, the device will be in Standby Mode. Any other modes will be coded as 0. (See `R_OPERATION_CTRL` bit `OP_MODE` for more information).
 
-* **IS_SYNCHRONIZED [Bit 1]:** If set to 1, the device is synchronized with a Harp Synchronization Clock. If the device is a clock generator (see `R_CLOCK_CONFIG` bit `CLK_GEN`), by definition, this bit will always be set to 1.
+* **IS_SYNCHRONIZED [Bit 1]:** If set to 1, the device is synchronized with an external Harp clock generator. If the device is itself a clock generator (see `R_CLOCK_CONFIG` bit `CLK_GEN`), by definition, this bit will always be set to 1.
 
 
 ## Release notes:
