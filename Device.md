@@ -327,7 +327,7 @@ To write to this register a two-step write command is needed. First, write the v
 
 > **Note**
 >
-> This register is to be deprecated in the near future in favor of the `R_UID` register. Until then, we strongly encourage the value of this register to duplicate the first two bytes of `R_UID`. Consider that the bytes should be packed in little-endian order.
+> This register is to be deprecated in the near future in favor of the `R_UID` register. Until then, we strongly encourage the value of this register to duplicate the first two bytes of `R_UID`. In this case, similarly to the harp protocol specification, the two bytes should be packed in little-endian order.
 
 
 
