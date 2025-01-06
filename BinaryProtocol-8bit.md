@@ -310,16 +310,12 @@ It should be noted that this recommendation does not require that the payload is
 >   - Description: Sets the frequency of the camera in Hz.
 >```
 >
-> DO NOT ❌
+> ❌ DO NOT return the frequency in U16 for a `Read` command and the frequency in U8 for a `Write` command. (i.e. share the same data type.)
+> ❌ DO NOT return the frequency in Hz for a `Read` command and the period in seconds for a `Write` command. (i.e. share the same function/meaning.)
 >
->   - Return the frequency in U16 for a `Read` command and the frequency in U8 for a `Write` command. (i.e. Share the same data type.)
->   - Return the frequency in Hz for a `Read` command and the period in seconds for a `Write` command. (i.e. share the same function/meaning.)
->
-> DO ✅
->
->   - Return the frequency in U8 for both a `Read` and `Write` command.
->   - Return the frequency in Hz for both a `Read` and a `Write` command.
->   - `Write` a value of `101` to set the frequency, but both `Read` and `Write` return the frequency of 100Hz. This behavior is perfectly acceptable as the device might not be able to set the frequency to the exact value requested by the controller, and instead returns the value that was set.
+> ✅ DO return the frequency in U8 for both a `Read` and `Write` command.
+> ✅ DO return the frequency in Hz for both a `Read` and a `Write` command.
+> ✅ DO allow writing a value of `101` to set the frequency, but both `Read` and `Write` return the frequency of 100Hz. This behavior is perfectly acceptable as the device might not be able to set the frequency to the exact value requested by the controller, and instead returns the value that was set.
 
 ---
 
