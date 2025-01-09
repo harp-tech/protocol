@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft-07/schema",
-    "$id": "https://harp-tech.org/draft-02/schema/device.json",
+    "$id": "https://harp-tech.org/draft-03/schema/device.json",
     "type": "object",
     "allOf": [
         {
@@ -14,11 +14,13 @@
                     "type": "integer"
                 },
                 "firmwareVersion": {
-                    "description": "Specifies the semantic version of the device firmware.",
+                    "description": "Specifies the version of the device firmware.",
+                    "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$",
                     "type": "string"
                 },
                 "hardwareTargets": {
-                    "description": "Specifies the semantic version of the device hardware.",
+                    "description": "Specifies the version of the device hardware.",
+                    "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$",
                     "type": "string"
                 },
                 "registers": {
@@ -31,6 +33,6 @@
             },
             "required": ["device", "whoAmI", "firmwareVersion", "hardwareTargets"]
         },
-        { "$ref": "registers.json" }
+        { "$ref": "core.json" }
     ]
 }
