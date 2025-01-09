@@ -255,7 +255,9 @@ else
 
 ### Commands
 
-The device that implements this Harp Protocol receives `Write` and `Read` commands from the controller, and replies with a message from the same address and same type, timestamped with the hardware time at which the command was applied. This behavior is core to the protocol and is expected to be implemented by all devices that use it. As a rule of thumb, for each `Write` or `Read` command, a single reply message should be returned from the device. The message should be emitted from the same register that the command was issued to. It should be noted that the payload of the returned value might be different from the one issued by the command, as the device can operate/transform the issued `Write` command. ([see "Register Polymorphism" section below](#register-polymorphism)).
+The device that implements this Harp Protocol receives `Write` and `Read` commands from the controller. As a rule of thumb, for each `Write` and `Read` command, a single reply message should be returned from the device with the same register address and register type, timestamped with the hardware time at which the command was evaluated. This behavior is fundamental to the protocol and is expected to be implemented by all Harp devices.
+
+It should be noted that the payload of the returned value might be different from the one issued by a `Write` command, as the device may have to transform or adapt the actual value written on the register. ([see "Register Polymorphism" section below](#register-polymorphism)).
 
 > Exceptions to the previous contract are possible but should be avoided. The single supported exception is the `R_OPERATION_CTRL` register (via  **DUMP [Bit 3]**) which allows the controller to request a dump of all registers in the device. In this case, the device replies with a single `Write` message from `R_OPERATION_CTRL`, honoring the above contract, but it will also emit a sequence of `Read` messages back-to-back, containing the state of each register in the device.
 
@@ -294,8 +296,14 @@ The timestamp information in [EVT] represents the time when the register with [A
 #### Register polymorphism
 
 
-While it is technically possible to have different types of data in the same register, we **STRONGLY** discourage this practice. The protocol was designed to be as simple as possible, and having different types of data in the same register would make the parsing of the messages unnecessarily more complex. As a rule, each register should: (1) have a single data type (e.g. `U8`) for all message types (`Read`, `Write`, `Event`), (2) have a payload with the same "function"/"meaning" regardless of the message type (see examples below), and (3) have the same payload size for all message types coming from the device.
-It should be noted that this recommendation does not require that the payload issued by a `Write` message should be the same as the one issued by a `Read` message, as the device can operate/transform the issued `Write`.
+While it is technically possible to have different types of data in the same register, we **STRONGLY** discourage this practice. The protocol was designed to be as simple as possible, and having different types of data in the same register would make the parsing of the messages unnecessarily more complex.
+
+As a general rule, each register should:
+  1. have a single data type (e.g. `U8`) for all message types (`Read`, `Write`, `Event`),
+  2. have a payload with the same functional semantics regardless of the message type (see examples below), and
+  3. have the same payload size for all message types coming from the device.
+
+It should be noted that this recommendation does not require that the payload issued by a `Write` message be the same as the one issued by a `Read` message, as the device may have to transform or update the actual value stored in the register.
 
 
 > **Examples**
@@ -315,7 +323,7 @@ It should be noted that this recommendation does not require that the payload is
 >
 > ✅ DO return the frequency in U8 for both a `Read` and `Write` command.
 > ✅ DO return the frequency in Hz for both a `Read` and a `Write` command.
-> ✅ DO allow writing a value of `101` to set the frequency, but both `Read` and `Write` return the frequency of 100Hz. This behavior is perfectly acceptable as the device might not be able to set the frequency to the exact value requested by the controller, and instead returns the value that was set.
+> ✅ DO allow writing a value of `101` to set the frequency even if both `Read` and `Write` replies will only return the frequency of 100Hz. This behavior is perfectly acceptable as the device might not be able to set the frequency to the exact value requested by the controller, and instead returns the value that was set.
 
 ---
 
