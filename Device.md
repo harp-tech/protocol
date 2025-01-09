@@ -444,30 +444,19 @@ gantt
     axisFormat %
 
     section Bit
-    15      :bit15, 0, 1
-    14      :bit14, after bit15  , 2
-    13      :bit13, after bit14  , 3
-    12      :bit12, after bit13  , 4
-    11      :bit11, after bit12  , 5
-    10     :bit10, after bit11  , 6
-    9      :bit9, after bit10  , 7
-    9      :bit8, after bit9  , 8
-    7      :bit7, after bit8  , 9
-    6      :bit6, after bit7  , 10
-    5      :bit5, after bit6  , 11
-    4      :bit4, after bit5  , 12
-    3      :bit3, after bit4  , 13
-    2      :bit2, after bit3  , 14
-    1      :bit1, after bit2  , 15
-    0      :bit0, after bit1  , 16
+    15-2      :reserved, 0, 1
+    1         :bit1, 1, 2
+    0         :bit0, 2, 3
 
     section Id
-    IS_ACTIVE      :id0, 15, 16
-    IS_SYNCHRONIZED      :id1, 14, 15
+    -               :idr, 0, 1
+    IS_ACTIVE       :id0, 1, 2
+    IS_SYNCHRONIZED :id1, 2, 3
 
     section Default
-    -      :d7, 15, 16
-    -      :d6, 14  , 15
+    -      :dr, 0, 1
+    -      :d7, 1, 2
+    -      :d6, 2, 3
 ```
 
 > **Note**
