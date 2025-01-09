@@ -14,11 +14,13 @@
                     "type": "integer"
                 },
                 "firmwareVersion": {
-                    "description": "Specifies the semantic version of the device firmware.",
+                    "description": "Specifies the version of the device firmware.",
+                    "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$",
                     "type": "string"
                 },
                 "hardwareTargets": {
-                    "description": "Specifies the semantic version of the device hardware.",
+                    "description": "Specifies the version of the device hardware.",
+                    "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$",
                     "type": "string"
                 },
                 "registers": {

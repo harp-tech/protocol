@@ -6,7 +6,8 @@
         {
             "properties": {
                 "protocolVersion": {
-                    "description": "Specifies the semantic version of the device protocol.",
+                    "description": "Specifies the version of the device protocol.",
+                    "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$",
                     "type": "string"
                 }
             },
