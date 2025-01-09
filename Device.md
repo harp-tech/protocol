@@ -50,6 +50,7 @@ As an application example, devices using USB as the transport layer can poll for
 |R\_TIMESTAMP\_OFFSET|No|No|U8|015|b)|Adds an offset if user updates the Timestamp|Optional|
 |R\_UID|No|Yes|U8|016|b)|Stores a unique identifier (UID) |Optional|
 |R\_TAG|-|Yes|U8|017|b)|Firmware tag|Optional|
+|R\_HEARTBEAT|Yes|Yes|U16|018|b)|Provides information about the state of the device|Yes|
 
 ||a) These values are stored during factory process and are persistent, i.e., they cannot be changed by the user.<br>b) Check register notes on the specific register explanation<br>c) Only parts of the functionality is mandatory. Check register notes on the explanation.|
 | :- | :- |
@@ -145,7 +146,7 @@ gantt
 ```
 
 
-#### **`R_OPERATION_CTRL` (U16) – Operation mode configuration**
+#### **`R_OPERATION_CTRL` (U8) – Operation mode configuration**
 
 Address: `010`
 
@@ -225,7 +226,7 @@ a) Standby Mode and Active Mode are mandatory. Speed Mode is optional.
 | 1          	| Speed Mode.                                                                                              	|
 | 0.1        	| A critical error occurred. Only a hardware reset or a new power up can remove the device from this Mode. 	|
 
-* **ALIVE_EN [Bit 7]:** If set to 1, the device sends an `Event` Message with the `R_TIMESTAMP_SECONDS` content each second (i.e. Heartbeat). This allows the host to check that the device is alive. Although this is an optional feature, it’s strongly recommended to be implemented.
+* **ALIVE_EN [Bit 7]:** If set to 1, the device sends an `Event` Message with the `R_HEARTBEAT` content each second. This allows the host to check the status of the device periodically. This is a required feature.
 
 
 
@@ -429,6 +430,47 @@ Address: `017`
 
 An array of 8 bytes that can be used to store a tag for a specific firmware version. For instance, it could be used to store the git hash of a specific release/commit. If not used, all bytes should be set to 0. The byte-order is little-endian.
 
+#### **`R_HEARTBEAT` (U16) – Heartbeat register reporting the current status of the device**
+
+Address: `018`
+
+```mermaid
+---
+displayMode: compact
+---
+gantt
+    title R_HEARTBEAT (018)
+    dateFormat X
+    axisFormat %
+
+    section Bit
+    15-2      :reserved, 0, 1
+    1         :bit1, 1, 2
+    0         :bit0, 2, 3
+
+    section Id
+    -               :idr, 0, 1
+    IS_ACTIVE       :id0, 1, 2
+    IS_SYNCHRONIZED :id1, 2, 3
+
+    section Default
+    -      :dr, 0, 1
+    -      :d7, 1, 2
+    -      :d6, 2, 3
+```
+
+> **Note**
+>
+> This register is read-only and is used to provide status information about the device. The bits are set by the device and sent through a period event. If enabled (via `R_OPERATION_CTRL` bit `ALIVE_EN`), the event will be periodically emitted at a rate of 1Hz, triggered by updates to the `R_TIMESTAMP_SECOND` register.
+
+
+The status of the device is given by the following bits:
+
+
+* **IS_STANDBY [Bit 0]:** If 1, the device will be in Standby Mode. Any other modes will be coded as 0. (See `R_OPERATION_CTRL` bit `OP_MODE` for more information).
+
+* **IS_SYNCHRONIZED [Bit 1]:** If set to 1, the device is synchronized with an external Harp clock generator. If the device is itself a clock generator (see `R_CLOCK_CONFIG` bit `CLK_GEN`), by definition, this bit will always be set to 1.
+
 
 ## Release notes:
 
@@ -486,3 +528,7 @@ An array of 8 bytes that can be used to store a tag for a specific firmware vers
 
 - v1.11.0
   * Add new `Tag` register.
+
+- v1.12.0
+  * Add heartbeat register providing status information
+  * Fix typo in `OPERATION_CTRL` register data type (U16 -> U8)
