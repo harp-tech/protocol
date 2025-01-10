@@ -257,7 +257,7 @@ else
 
 The device that implements this Harp Protocol receives `Write` and `Read` commands from the controller. As a rule of thumb, for each `Write` and `Read` command, a single reply message should be returned from the device with the same register address and register type, timestamped with the hardware time at which the command was evaluated. This behavior is fundamental to the protocol and is expected to be implemented by all Harp devices.
 
-It should be noted that the payload of the returned value might be different from the one issued by a `Write` command, as the device may have to transform or adapt the actual value written on the register. ([see "Register Polymorphism" section below](#register-polymorphism)).
+It should be noted that the payload of the returned value might be different from the one issued by a `Write` command, as the device may have to transform or adapt the actual value written on the register ([see "Register Polymorphism" section below](#register-polymorphism)).
 
 > Exceptions to the previous contract are possible but should be avoided. The single supported exception is the `R_OPERATION_CTRL` register (via  **DUMP [Bit 3]**) which allows the controller to request a dump of all registers in the device. In this case, the device replies with a single `Write` message from `R_OPERATION_CTRL`, honoring the above contract, but it will also emit a sequence of `Read` messages back-to-back, containing the state of each register in the device.
 
