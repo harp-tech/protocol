@@ -581,15 +581,15 @@ The bytes in this register specify the [semantic version](https://semver.org/) o
   * Clarify `Connected` behavior between host and device and add application examples.
 
 - v1.10.0
-  * Add `UID` register
+  * Add `R_UID` register
   * Add future deprecation warning to `R_SERIAL_NUMBER` register.
 
 - v1.11.0
-  * Add new `Tag` register.
+  * Add new `R_TAG` register.
 
 - v1.12.0
   * Add heartbeat register providing status information
-  * Fix typo in `OPERATION_CTRL` register data type (U16 -> U8)
+  * Fix typo in `R_OPERATION_CTRL` register data type (U16 -> U8)
 
 - v1.13.0
   * Add `R_VERSION` register.
