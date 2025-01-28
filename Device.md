@@ -51,6 +51,7 @@ As an application example, devices using USB as the transport layer can poll for
 |R\_UID|No|Yes|U8|016|b)|Stores a unique identifier (UID) |Optional|
 |R\_TAG|-|Yes|U8|017|b)|Firmware tag|Optional|
 |R\_HEARTBEAT|Yes|Yes|U16|018|b)|Provides information about the state of the device|Yes|
+|R\_VERSION|-|Yes|U8|018|a)|Semantic version information for the device|Yes|
 
 ||a) These values are stored during factory process and are persistent, i.e., they cannot be changed by the user.<br>b) Check register notes on the specific register explanation<br>c) Only parts of the functionality is mandatory. Check register notes on the explanation.|
 | :- | :- |
@@ -474,6 +475,60 @@ The status of the device is given by the following bits:
 
 * **IS_SYNCHRONIZED [Bit 1]:** If set to 1, the device is synchronized with an external Harp clock generator. If the device is itself a clock generator (see `R_CLOCK_CONFIG` bit `CLK_GEN`), by definition, this bit will always be set to 1.
 
+#### **`R_VERSION` (U8) – Semantic version information**
+
+Address: `019`
+
+```mermaid
+---
+displayMode: compact
+---
+gantt
+    title R_VERSION (019)
+    dateFormat X
+    axisFormat %
+
+    section Byte
+    0         :prot_major, 0, 1
+    1         :prot_minor, 1, 2
+    2         :prot_patch, 2, 3
+    3         :core_major, 3, 4
+    4         :core_minor, 4, 5
+    5         :core_patch, 5, 6
+    6         :core_major, 6, 7
+    7         :core_minor, 7, 8
+    8         :core_patch, 8, 9
+    9         :core_major, 9, 10
+    10        :core_minor, 10, 11
+    11        :core_patch, 11, 12
+
+    section Id
+    HARDWARE        :hardware, 0, 3
+    CORE            :core, 3, 6
+    FIRMWARE        :firmware, 6, 9
+    PROTOCOL        :protocol, 9, 11
+    SDK             :architecture, 11, 12
+
+    section Default
+    -      :dr, 0, 3
+    -      :d7, 3, 6
+    -      :d6, 6, 9
+    -      :d6, 9, 11
+    -      :d6, 11, 12
+```
+
+The bytes in this register specify the [semantic version](https://semver.org/) of each of the device components. Each component is versioned following the order `major`, `minor`, `patch`, except for the `PROTOCOL` version where the last byte is replaced by the `SDK` byte used to identify the core microcontroller SDK.
+
+* **HARDWARE:** The semantic version of the device hardware.
+
+* **CORE:** The semantic version of the core microcontroller SDK.
+
+* **FIRMWARE:** The semantic version of the device firmware application.
+
+* **PROTOCOL:** The major and minor version of the communication protocol implemented by the device.
+
+* **SDK:** The identifier of the core microcontroller SDK targeted by the device.
+
 
 ## Release notes:
 
@@ -535,3 +590,6 @@ The status of the device is given by the following bits:
 - v1.12.0
   * Add heartbeat register providing status information
   * Fix typo in `OPERATION_CTRL` register data type (U16 -> U8)
+
+- v1.13.0
+  * Add `R_VERSION` register.
