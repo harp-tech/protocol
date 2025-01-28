@@ -489,18 +489,18 @@ gantt
     axisFormat %
 
     section Byte
-    0         :prot_major, 0, 1
-    1         :prot_minor, 1, 2
-    2         :prot_patch, 2, 3
+    0         :hw_major, 0, 1
+    1         :hw_minor, 1, 2
+    2         :hw_patch, 2, 3
     3         :core_major, 3, 4
     4         :core_minor, 4, 5
     5         :core_patch, 5, 6
-    6         :core_major, 6, 7
-    7         :core_minor, 7, 8
-    8         :core_patch, 8, 9
-    9         :core_major, 9, 10
-    10        :core_minor, 10, 11
-    11        :core_patch, 11, 12
+    6         :fw_major, 6, 7
+    7         :fw_minor, 7, 8
+    8         :fw_patch, 8, 9
+    9         :prot_major, 9, 10
+    10        :prot_minor, 10, 11
+    11        :sdk, 11, 12
 
     section Id
     HARDWARE        :hardware, 0, 3
