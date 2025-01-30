@@ -44,7 +44,6 @@ devices:
   1130:
     name: StepperDriver
     authors: OEPS
-    copyright: tbd
     repositoryUrl: https://github.com/harp-tech/device.stepperdriver
     projectUrl: https://github.com/harp-tech/device.stepperdriver
   1136:
