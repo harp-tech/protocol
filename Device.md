@@ -176,7 +176,7 @@ gantt
     VISUALEN      :id5, after bit6  , 3
     MUTE_RPL      :id4, after bit5  , 4
     DUMP      :id3, after bit4  , 5
-    -      :id2, after bit3  , 6
+    HEARTBEAT_EN  :id2, after bit3  , 6
     OP_MODE      :id1, after id2  , 8
     section Default
     1      :d7, 0, 1
@@ -184,24 +184,26 @@ gantt
     1      :d5, after bit6  , 3
     0      :d4, after bit5  , 4
     0      :d3, after bit4  , 5
-    -      :d2, after bit3  , 6
+    1      :d2, after bit3  , 6
     0      :d1, after d2  , 8
     section Implementation
-    Optional      :i7, 0, 1
+    a)            :i7, 0, 1
     Optional      :i6, after bit7  , 2
     Optional      :i5, after bit6  , 3
     Optional      :i4, after bit5  , 4
     Optional      :i3, after bit4  , 5
-    -      :i2, after bit3  , 6
-    a)      :i1, after i2  , 8
+    Required      :i2, after bit3  , 6
+    b)      :i1, after i2  , 8
 
 
 ```
 
-a) Standby Mode and Active Mode are mandatory. Speed Mode is optional.
+a) The ALIVE_EN bit is deprecated and may be removed from future protocol versions.
+
+b) Standby Mode and Active Mode are mandatory. Speed Mode is deprecated.
 
 
-* **OP_MODE [Bits 1:0]:** These bits define the operation mode of the device. Note that, if Speed Mode is selected, the device will no longer reply to the HARP commands, only to its specific Speed Mode commands.
+* **OP_MODE [Bits 1:0]:** These bits define the operation mode of the device. Note that, in legacy core implementations, if Speed Mode is selected, the device will no longer reply to Harp commands, only to its specific Speed Mode commands.
 
 **Table - Available Operation modes**
 
@@ -210,9 +212,10 @@ a) Standby Mode and Active Mode are mandatory. Speed Mode is optional.
 | 0            	| Standby Mode. The device has all the `Events` turned off.                                              	|
 | 1            	| Active Mode. The device turns ON the `Events` detection. Only the enabled Events will be operating.    	|
 | 2            	| Reserved.                                                                                              	|
-| 3            	| Speed Mode. The device enters Speed Mode.                                                              	|
+| 3            	| Deprecated. Speed Mode. The device enters Speed Mode.                                                              	|
 
-* **DUMP [Bit 3]:** When written to 1, the device adds the content of all registers to the streaming buffer as `Read` messages. This bit is always read as 0.
+* **HEARTBEAT_EN [Bit 2]:** When set to 1, the device sends an `Event` Message with the `R_HEARTBEAT` content each second. This allows the host to check the status of the device periodically. This is a required feature. If the `ALIVE_EN` bit is also set, this bit has precedence and the device should send `R_HEARTBEAT` periodically instead of `R_TIMESTAMP_SECOND`.
+* **DUMP [Bit 3]:** When set to 1, the device adds the content of all registers to the streaming buffer as `Read` messages. This bit is always read as 0.
 * **MUTE_RPL [Bit 4]:** If set to 1, the `Replies` to all the `Commands` are muted, i.e., they will not be sent by the device.
 * **VISUALEN [Bit 5]:** If set to 1, visual indications, typically LEDs, available on the device will operate. If equals to 0, all the visual indications should turn off.
 * **OPLEDEN [Bit 6]:** If set to 1, the LED present on the device will indicate the Operation Mode selected.
@@ -226,7 +229,7 @@ a) Standby Mode and Active Mode are mandatory. Speed Mode is optional.
 | 1          	| Speed Mode.                                                                                              	|
 | 0.1        	| A critical error occurred. Only a hardware reset or a new power up can remove the device from this Mode. 	|
 
-* **ALIVE_EN [Bit 7]:** If set to 1, the device sends an `Event` Message with the `R_HEARTBEAT` content each second. This allows the host to check the status of the device periodically. This is a required feature.
+* **ALIVE_EN [Bit 7]:** If set to 1, the device sends an `Event` Message with the `R_TIMESTAMP_SECOND` content each second. This allows the host to check the status of the device periodically. This feature is deprecated and may be removed from future protocol versions.
 
 
 
