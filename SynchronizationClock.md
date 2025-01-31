@@ -14,15 +14,14 @@ The `Harp Synchronization Clock` is a dedicated bus that disseminates the curren
 
 * The packet is composed of 6 bytes (`header[2]` and `timestamp_s[4]`):
   - `header[2] = {0xAA, 0xAF)`
-  - `timestamp_s` is of type U32, little-endian, and contains the current second.
+  - `timestamp_s` is of type U32, little-endian, and contains the previous elapsed second.
 
-> **Important**
->
-> To avoid unexpected behaviors, only one bit at a time should be written to register `R_RESET_DEV`.
+A sample logic trace is shown below:
+    !["SynchClockLogicAnalyzer](./assets/synch_logic_trace.png)
 
 ## Example code
 
-Example of a microcontroller C code:
+Example of a microcontroller C code dispatching the serialized data:
 
 ```C
 
@@ -49,6 +48,7 @@ ISR(TCD0_OVF_vect, ISR_NAKED)
             case 7:
                 USARTD1_DATA = *timestamp_byte2;
                 break;
+            // The final byte is dispatched much later than the previous 5.
             case 1998:
                 USARTD1_DATA = *timestamp_byte3;
                 break;
@@ -56,10 +56,49 @@ ISR(TCD0_OVF_vect, ISR_NAKED)
     }
 ```
 
+Example of a microcontroller C++ code for converting the four received encoded bytes to the timestamp:
+````C
+    #define HARP_SYNC_OFFSET_US (672)
+
+    // Assume 4 bytes of timestamp data (without header) have been written to this array.
+    alignas(uint32_t) volatile uint8_t sync_data_[4];
+
+    // reinterpret 4-byte sequence as a little-endian uint32_t.
+    uint32_t encoded_sec = *(reinterpret_cast<uint32_t*>(self->sync_data_));
+    // Convert received timestamp to the current time in microseconds.
+    // Add 1[s] per protocol spec since 4-byte sequence encodes the **previous** second.
+    uint64_t curr_us = ((static_cast<uint64_t>(encoded_sec) + 1) * 1e6) - HARP_SYNC_OFFSET_US;
+````
+
+A full example demonstrating a state machine receiving the 6-byte sequence can be found in the [Pico Core](https://github.com/AllenNeuralDynamics/harp.core.rp2040/blob/main/firmware/src/harp_synchronizer.cpp).
+
+---
+
+
 ## Physical connection
 
-The physical connection is made by a simple audio cable. In the same folder of this file, you can find an [example](./PhysicalConnector.pdf) of the sender and the receiver.
+The physical connection is made by a simple 3.5mm audio cable.
+
+The connector pinout for a device *receiving* the timestamp is shown below:
+
+!["SynchReceiverSchematic](./assets/harp_clock_sync_receiver.png)
+
+A TVS diode is also suggested for ESD protection.
+
+> [!IMPORTANT]
+> The device receiving the timestamp must provide 3.3-5V (~10mA) on the audio jack **R** pin.
+
+The schematic snippet for a device *sending* the timestamp is shown below:
+
+!["SynchSenderSchematic](./assets/harp_clock_sync_sender.png)
+
+> [!NOTE]
+> The device *sending* the timestamp isolates each clock output port, preventing ground loops from forming when connecting the audio jack between sender and receiver.
+
+A supplementary PDF [example](./PhysicalConnector.pdf) of the sender and the receiver is also available.
 The connector used is from `Switchcraft Inc.` with PartNo. `35RASMT2BHNTRX`.
+
+A KiCAD schematic template for creating a Harp device based on the [RP2040](https://www.raspberrypi.com/products/rp2040/) microcontroller with circuitry for receiving the timestamp is provided through the [Pico Template](https://github.com/AllenNeuralDynamics/harp.device.pico-template).
 
 ## Release Notes
 
