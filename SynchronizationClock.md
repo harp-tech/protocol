@@ -17,7 +17,7 @@ The `Harp Synchronization Clock` is a dedicated bus that disseminates the curren
   - `timestamp_s` is of type U32, little-endian, and contains the previous elapsed second.
 
 A sample logic trace is shown below:
-    !["SynchClockLogicAnalyzer](./assets/synch_logic_trace.png)
+    !["SynchClockLogicAnalyzer](./assets/SyncLogicTrace.png)
 
 ## Example code
 
@@ -81,7 +81,7 @@ The physical connection is made by a simple 3.5mm audio cable.
 
 The connector pinout for a device *receiving* the timestamp is shown below:
 
-!["SynchReceiverSchematic](./assets/harp_clock_sync_receiver.png)
+!["SynchReceiverSchematic](./assets/HarpClockSyncReceiver.png)
 
 A TVS diode is also suggested for ESD protection.
 
@@ -90,7 +90,7 @@ A TVS diode is also suggested for ESD protection.
 
 The schematic snippet for a device *sending* the timestamp is shown below:
 
-!["SynchSenderSchematic](./assets/harp_clock_sync_sender.png)
+!["SynchSenderSchematic](./assets/HarpClockSyncSender.png)
 
 > [!NOTE]
 > The device *sending* the timestamp isolates each clock output port, preventing ground loops from forming when connecting the audio jack between sender and receiver.
