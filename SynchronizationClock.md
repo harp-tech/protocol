@@ -95,7 +95,7 @@ The schematic snippet for a device *sending* the timestamp is shown below:
 > [!NOTE]
 > The device *sending* the timestamp isolates each clock output port, preventing ground loops from forming when connecting the audio jack between sender and receiver.
 
-A supplementary PDF [example](./PhysicalConnector.pdf) of the sender and the receiver is also available.
+A supplementary PDF [example](./assets/PhysicalConnector/PhysicalConnector.pdf) of the sender and the receiver is also available.
 The connector used is from `Switchcraft Inc.` with PartNo. `35RASMT2BHNTRX`.
 
 A KiCAD schematic template for creating a Harp device based on the [RP2040](https://www.raspberrypi.com/products/rp2040/) microcontroller with circuitry for receiving the timestamp is provided through the [Pico Template](https://github.com/AllenNeuralDynamics/harp.device.pico-template).
