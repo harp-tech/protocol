@@ -15,7 +15,7 @@ This processing step could be entirely eliminated if we could ensure that all me
 For each device, we define a "container" file format which is essentially a folder that will store data from a single device, and where the payload from messages coming from each register is saved sequentially to a separate binary file:
 
 ```plaintext
-📦<Device>.harp
+📦<Device>
  ┣ 📜<DeviceName>_0_<suffix>.bin
  ┣ 📜<DeviceName>_1_<suffix>.bin
  ┣ ...
