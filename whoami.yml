@@ -181,3 +181,9 @@ devices:
     copyright: AllenNeuralDynamics
     repositoryUrl: https://github.com/AllenNeuralDynamics/harp.device.environment-sensor
     projectUrl: https://github.com/AllenNeuralDynamics/harp.device.environment-sensor
+  1407:
+    name: cuTTLefishFip
+    authors: AllenNeuralDynamics
+    copyright: AllenNeuralDynamics
+    repositoryUrl: https://github.com/AllenNeuralDynamics/harp.device.cuttlefish-fip
+    projectUrl: https://github.com/AllenNeuralDynamics/harp.device.cuttlefish-fip
