@@ -2,6 +2,10 @@
 
 # Binary Protocol 32-bit (v0.1)
 
+> **Caution**
+>
+> This document, and corresponding specification, is still under development. The information contained in this document is subject to change without notice. If you have any issues, questions and/or suggestion, please open an issue in this repository.
+
 ## Introduction
 
 The Harp Protocol is a binary communication protocol created in order to facilitate and unify the interaction between different devices. It was designed with efficiency and ease of parsing in mind.
