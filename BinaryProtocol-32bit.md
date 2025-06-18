@@ -2,7 +2,7 @@
 
 # Binary Protocol 32-bit (v0.1)
 
-> **Caution**
+> [!CAUTION]
 >
 > This document, and corresponding specification, is still under development. The information contained in this document is subject to change without notice. If you have any issues, questions and/or suggestion, please open an issue in this repository.
 
