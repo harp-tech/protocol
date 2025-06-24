@@ -96,7 +96,7 @@ gantt
     0      :d1, 0, 2
 ```
 
-Used to verify the identity of the device. A list of devices can be found at <https://github.com/harp-tech/protocol>. To reserve a range or certain IDs for your project or company, please follow the instructions in this repository. If the device doesn’t have a pre-allocated ID on the IDs list, this register should be set as 0.
+Used to verify the identity of the device. A list of devices can be found at <https://github.com/harp-tech/protocol>. To reserve a range or certain IDs for your project or company, please follow the instructions in this repository. If the device doesn’t have a pre-allocated ID on the IDs list, this register should be set as `0` (Zero).
 
 #### **`R_HW_VERSION_H` (U8) – Major Hardware Version**
 
@@ -305,10 +305,9 @@ Contains the minor firmware version number. The value is persistent and it is no
 
 Address: `008`
 
-Contains the current system timestamp in whole seconds. The default value is 0 (ZERO) and will increment one unit for each elapsed second.
+Contains the current system timestamp in whole seconds. The default value is `0` (Zero) and will increment one unit for each elapsed second.
 
 ```mermaid
-
 ---
 displayMode: compact
 ---
@@ -335,9 +334,7 @@ gantt
 
 Address: `009`
 
-Contains the microseconds count within each second. Each LSB corresponds to 32 microseconds. The maximum value is 31249. The default value is `0` (ZERO) if not implemented.
-
-While optional, this register is highly recommended to be implemented in order to provide sub-second timestamping precision.
+Contains the microseconds count within each second. Each LSB corresponds to 32 microseconds. The maximum value is 31249. The default value is `0` (Zero) if not implemented.
 
 ```mermaid
 ---
@@ -345,7 +342,7 @@ displayMode: compact
 ---
 
 gantt
-    title R_TIMESTAMP_SECONDS (009) [U16]
+    title R_TIMESTAMP_MICRO (009) [U16]
 
     dateFormat X
     axisFormat %
@@ -355,9 +352,9 @@ gantt
     15-8      :byte1, 0, 1
     7-0      :byte0, after byte1  , 2
     section Id
-    USECONDS      :id1, 0, 2
+    MICROSECONDS      :id1, 0, 2
     section Default
-    -      :d1, 0, 2
+    0      :d1, 0, 2
 ```
 
 
@@ -514,10 +511,9 @@ The implementation of this register is optional.
 
 Address: `012`
 
-An array of 25 bytes that should contain the device name. The last, and unused, bytes must be equal to 0.
-This register is non-volatile. The device will reset if this register is written to.
+An array of 25 bytes that should contain the device name. The last, and unused, bytes must be equal to `0` (Zero). This register is non-volatile. The device will reset if this register is written to.
 
-The default value of this register, if not implemented, is `0` (ZERO).
+The default value of this register, if not implemented, is `0` (Zero).
 
 
 #### **`R_SERIAL_NUMBER` (U16) – Device's serial number**
@@ -615,9 +611,10 @@ The implementation of this register is optional but highly recommend for devices
 > The device always wakes up in the `unlock` state.
 
 
-#### **`R_RESERVED` (U8) – RESERVED**
+#### **`R_RESERVED` (U8) – Reserved**
 
 Address: `015`
+
 
 ```mermaid
 ---
@@ -625,7 +622,7 @@ displayMode: compact
 ---
 
 gantt
-    title R_TIMESTAMP_OFFSET (000) [U8]
+    title R_RESERVED (015) [U8]
 
     dateFormat X
     axisFormat %
@@ -638,7 +635,7 @@ gantt
     section Default
     0      :d1, 0, 1
 ```
-This register is reserved, read-only, and has a default value of `0` (ZERO).
+This register is reserved, read-only, and has a default value of `0` (Zero).
 
 #### **`R_UID` (16 Bytes) – Unique Identifier**
 
@@ -663,14 +660,12 @@ gantt
     section Id
     UID      :id1, 0, 1
     section Default
-    -      :d1, 0, 1
+    0      :d1, 0, 1
 ```
 
-An array of 16 bytes that should contain a (128bit) UID (Unique Identifier) of the current device. This register is non-volatile and should be read-only. The byte-order is little-endian.
+An array of 16 bytes that should contain a (128-bit) UID (Unique Identifier) of the current device. This register is non-volatile and should be read-only. The byte-order is little-endian. If not implemented, the device should return a default value of `0` (Zero) for all bytes.
 
-If not implemented, the device should return a default value of `0` (ZERO) for all bytes.
-
-#### **`R_TAG` (8 bytes) – Firmware tag**
+#### **`R_TAG` (8 Bytes) – Firmware tag**
 
 Address: `017`
 
@@ -696,9 +691,9 @@ gantt
     0      :d1, 0, 1
 ```
 
-An array of 8 bytes that can be used to store a tag for a specific firmware version. For instance, it could be used to store the git hash of a specific release/commit. If not used, all bytes should be set to 0. The byte-order is little-endian. This register is read-only.
+An array of 8 bytes that can be used to store a tag for a specific firmware version. For instance, it could be used to store the git hash of a specific release/commit. If not used, all bytes should be set to `0` (Zero). The byte-order is little-endian. This register is read-only.
 
-If not implemented, the device should return a default value of `0` (ZERO) for all bytes.
+If not implemented, the device should return a default value of `0` (Zero) for all bytes.
 
 #### **`R_HEARTBEAT` (U16) – Heartbeat register reporting the current status of the device**
 
