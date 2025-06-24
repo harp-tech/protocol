@@ -14,6 +14,7 @@ The `Common Registers` are a set of registers that are common to all Harp Device
 
 All other registers pertaining to the operation of a specific device (`Application Registers`) should always take a register number equal, or greater, than 32. Moreoever, numbering and naming of these registers will be left to the developer, as they are specific to each device.
 
+
 ### Optional registers
 
 Some registers are optional and may not be fully implemented in all devices. These registers are marked as `Optional` in the table below. All optional registers are still expected to implement `Read` commands and should return a default value. Moreoever, they should be included as part of the `R_OPERATION_CTRL` register dump.
@@ -41,19 +42,19 @@ As an application example, devices using USB as the transport layer can poll for
 |**Name**|**Volatile**|**Read Only**|**Type**|**Add.**|**Default**|**Brief Description**|**Mandatory**|
 | :- | :-: | :-: | :-: | :-: | :-: | :- | :-: |
 |R\_WHO\_AM\_I|-|Yes|U16|000|a)|Who am I|Yes|
-|R\_HW\_VERSION\_H|-|Yes|U8|001|a)|Major Hardware version|Yes|
-|R\_HW\_VERSION\_L|-|Yes|U8|002|a)|Minor Hardware version|Yes|
-|R\_ASSEMBLY\_VERSION|-|Yes|U8|003|a)|Version of the assembled components|Optional|
-|R\_CORE\_VERSION\_H|-|Yes|U8|004|a)|Major core version|Optional|
-|R\_CORE\_VERSION\_L|-|Yes|U8|005|a)|Minor core version|Optional|
-|R\_FW\_VERSION\_H|-|Yes|U8|006|a)|Major Firmware version of the application|Yes|
-|R\_FW\_VERSION\_L|-|Yes|U8|007|a)|Minor Firmware version of the application|Yes|
+|R\_HW\_VERSION\_H|-|Yes|U8|001|a)|Major Hardware version|Deprecated|
+|R\_HW\_VERSION\_L|-|Yes|U8|002|a)|Minor Hardware version|Deprecated|
+|R\_ASSEMBLY\_VERSION|-|Yes|U8|003|a)|Version of the assembled components|Deprecated|
+|R\_CORE\_VERSION\_H|-|Yes|U8|004|a)|Major core version|Deprecated|
+|R\_CORE\_VERSION\_L|-|Yes|U8|005|a)|Minor core version|Deprecated|
+|R\_FW\_VERSION\_H|-|Yes|U8|006|a)|Major Firmware version of the application|Deprecated|
+|R\_FW\_VERSION\_L|-|Yes|U8|007|a)|Minor Firmware version of the application|Deprecated|
 |R\_TIMESTAMP\_SECOND|Yes|No|U32|008|0|System timestamp: seconds|Yes|
 |R\_TIMESTAMP\_MICRO|Yes|Yes|U16|009|0|System timestamp: microseconds|Optional|
 |R\_OPERATION\_CTRL|No|No|U8|010|b)|Configuration of the operation mode|c)|
 |R\_RESET\_DEV|No|No|U8|011|b)|Reset device and save non-volatile registers|Optional|
 |R\_DEVICE\_NAME|No|No|U8|012|b)|Name of the device given by the user|Optional|
-|R\_SERIAL\_NUMBER|No|No|U16|013|b)|Unique serial number of the device|Optional|
+|R\_SERIAL\_NUMBER|No|No|U16|013|b)|Unique serial number of the device|Deprecated|
 |R\_CLOCK\_CONFIG|No|No|U8|014|b)|Synchronization clock configuration|Optional|
 |R\_TIMESTAMP\_OFFSET|No|No|U8|015|b)|Adds an offset if user updates the Timestamp|Optional|
 |R\_UID|No|Yes|U8|016|b)|Stores a unique identifier (UID) |Optional|
@@ -73,8 +74,6 @@ Mermaid plots can be generated here: https://mermaid.live/
 #### **`R_WHO_AM_I` (U16) – Who Am I**
 
 Address: `000`
-
-Used to verify the identity of the device. A list of devices can be found at <https://github.com/harp-tech/protocol>. To reserve a range or certain IDs for your project or company, please follow the instructions in this repository. If the device doesn’t have a pre-allocated ID on the IDs list, this register should be set as 0.
 
 ```mermaid
 ---
@@ -96,6 +95,211 @@ gantt
     section Default
     0      :d1, 0, 2
 ```
+
+Used to verify the identity of the device. A list of devices can be found at <https://github.com/harp-tech/protocol>. To reserve a range or certain IDs for your project or company, please follow the instructions in this repository. If the device doesn’t have a pre-allocated ID on the IDs list, this register should be set as 0.
+
+#### **`R_HW_VERSION_H` (U8) – Major Hardware Version**
+
+Address: `001`
+
+```mermaid
+---
+displayMode: compact
+---
+
+gantt
+    title R_HW_VERSION_H (001) [U8]
+
+    dateFormat X
+    axisFormat %
+    tickInterval 0
+
+    section Bit
+    7-0      :byte0, 0, 1
+    section Id
+    HW_VERSION_H      :id1, 0, 1
+    section Default
+    -      :d1, 0, 1
+```
+
+Contains the major hardware version number. The value is persistent and it is not changeable by the user.
+
+> **Warning**
+>
+> This register is deprecated in favor of `R_VERSION`. The value of this register is expected to be equal to the major version of the `R_VERSION` **Hardware** version.
+
+#### **`R_HW_VERSION_L` (U8) – Minor Hardware Version**
+
+Address: `002`
+
+```mermaid
+---
+displayMode: compact
+---
+
+gantt
+    title R_HW_VERSION_L (002) [U8]
+
+    dateFormat X
+    axisFormat %
+    tickInterval 0
+
+    section Bit
+    7-0      :byte0, 0, 1
+    section Id
+    HW_VERSION_L      :id1, 0, 1
+    section Default
+    -      :d1, 0, 1
+```
+
+Contains the minor hardware version number. The value is persistent and it is not changeable by the user.
+
+> **Warning**
+>
+> This register is deprecated in favor of `R_VERSION`. The value of this register is expected to be equal to the minor version of the `R_VERSION` **Hardware** version.
+
+#### **`R_ASSEMBLY_VERSION` (U8) – Version of the Assembled Components**
+
+Address: `003`
+
+```mermaid
+---
+displayMode: compact
+---
+
+gantt
+    title R_ASSEMBLY_VERSION (003) [U8]
+
+    dateFormat X
+    axisFormat %
+    tickInterval 0
+
+    section Bit
+    7-0      :byte0, 0, 1
+    section Id
+    ASSEMBLY_VERSION      :id1, 0, 1
+    section Default
+    -      :d1, 0, 1
+```
+
+Contains the version number of the assembled components. The value is persistent and it is not changeable by the user. The register is optional and expected to have a default value of `0` (ZERO).
+
+#### **`R_CORE_VERSION_H` (U8) – Major Core Version**
+
+Address: `004`
+
+```mermaid
+---
+displayMode: compact
+---
+
+gantt
+    title R_CORE_VERSION_H (004) [U8]
+
+    dateFormat X
+    axisFormat %
+    tickInterval 0
+
+    section Bit
+    7-0      :byte0, 0, 1
+    section Id
+    CORE_VERSION_H      :id1, 0, 1
+    section Default
+    -      :d1, 0, 1
+```
+
+Contains the major version of the Harp Protocol specification. The value is persistent and it is not changeable by the user.
+
+> **Warning**
+>
+> This register is deprecated in favor of `R_VERSION`. The value of this register is expected to be equal to the major version of the `R_VERSION` **Protocol** version.
+
+#### **`R_CORE_VERSION_L` (U8) – Minor Core Version**
+
+Address: `005`
+
+```mermaid
+---
+displayMode: compact
+---
+
+gantt
+    title R_CORE_VERSION_L (005) [U8]
+
+    dateFormat X
+    axisFormat %
+    tickInterval 0
+
+    section Bit
+    7-0      :byte0, 0, 1
+    section Id
+    CORE_VERSION_L      :id1, 0, 1
+    section Default
+    -      :d1, 0, 1
+```
+
+Contains the minor version of the Harp Protocol specification. The value is persistent and it is not changeable by the user.
+
+> **Warning**
+>
+> This register is deprecated in favor of `R_VERSION`. The value of this register is expected to be equal to the minor version of the `R_VERSION` **Protocol** version.
+
+#### **`R_FW_VERSION_H` (U8) – Major Firmware Version**
+
+Address: `006`
+
+```mermaid
+---
+displayMode: compact
+---
+
+gantt
+    title R_FW_VERSION_H (006) [U8]
+
+    dateFormat X
+    axisFormat %
+    tickInterval 0
+
+    section Bit
+    7-0      :byte0, 0, 1
+    section Id
+    FW_VERSION_H      :id1, 0, 1
+    section Default
+    -      :d1, 0, 1
+```
+
+Contains the major firmware version number. The value is persistent and it is not changeable by the user.
+
+> **Warning**
+>
+> This register is deprecated in favor of `R_VERSION`. The value of this register is expected to be equal to the major version of the `R_VERSION` **Firmware** version.
+
+
+```mermaid
+---
+displayMode: compact
+---
+
+gantt
+    title R_FW_VERSION_L (007) [U8]
+
+    dateFormat X
+    axisFormat %
+    tickInterval 0
+
+    section Bit
+    7-0      :byte0, 0, 1
+    section Id
+    FW_VERSION_L      :id1, 0, 1
+    section Default
+    -      :d1, 0, 1
+```
+
+Contains the minor firmware version number. The value is persistent and it is not changeable by the user.
+
+> **Warning**
+>
+> This register is deprecated in favor of `R_VERSION`. The value of this register is expected to be equal to the minor version of the `R_VERSION` **Firmware** version.
 
 #### **`R_TIMESTAMP_SECOND` (U32) – System timestamp (seconds)**
 
@@ -131,7 +335,9 @@ gantt
 
 Address: `009`
 
-Contains the microseconds count within each second. Each LSB corresponds to 32 microseconds. The maximum value is 31249.
+Contains the microseconds count within each second. Each LSB corresponds to 32 microseconds. The maximum value is 31249. The default value is `0` (ZERO) if not implemented.
+
+While optional, this register is highly recommended to be implemented in order to provide sub-second timestamping precision.
 
 ```mermaid
 ---
@@ -297,6 +503,7 @@ gantt
 
 * **BOOT_EE [Bit 7]:** A read-only state bit that indicates whether the device booted with the register values saved on the EEPROM or not.
 
+The implementation of this register is optional.
 
 > **Note**
 >
@@ -309,6 +516,9 @@ Address: `012`
 
 An array of 25 bytes that should contain the device name. The last, and unused, bytes must be equal to 0.
 This register is non-volatile. The device will reset if this register is written to.
+
+The default value of this register, if not implemented, is `0` (ZERO).
+
 
 #### **`R_SERIAL_NUMBER` (U16) – Device's serial number**
 
@@ -339,11 +549,9 @@ gantt
 This number should be unique for each unit of the same Device ID.
 To write to this register a two-step write command is needed. First, write the value `0xFFFF`, and then the desired serial number (as a `U16`). The device will reset after the second write command is received.
 
-> **Note**
+> **Warning**
 >
-> This register is to be deprecated in the near future in favor of the `R_UID` register. Until then, we strongly encourage the value of this register to duplicate the first two bytes of `R_UID`. In this case, similarly to the harp protocol specification, the two bytes should be packed in little-endian order.
-
-
+> This register is deprecated in favor of `R_UID`. The register is expected to duplicate the first two bytes of `R_UID`. In this case, similarly to the Harp protocol specification, the two bytes should be packed in little-endian order.
 
 #### **`R_CLOCK_CONFIG` (U8) – Synchronization clock configuration**
 
@@ -400,12 +608,14 @@ gantt
 
 * **CLK_LOCK [Bit 7]:** If set to 1, the device will lock the current timestamp register counter (register `R_TIMESTAMP_SECOND`) and it will reject any new timestamp values. The bit is read as 1 if the timestamp register is locked.
 
+The implementation of this register is optional but highly recommend for devices that are expected to implement the Harp synchronization protocol.
+
 > **Note**
 >
 > The device always wakes up in the `unlock` state.
 
 
-#### **`R_TIMESTAMP_OFFSET` (U8) – Clock calibration offset**
+#### **`R_RESERVED` (U8) – RESERVED**
 
 Address: `015`
 
@@ -424,23 +634,71 @@ gantt
     section Bit
     7-0      :byte1, 0, 1
     section Id
-    UOFFSET      :id1, 0, 1
+    RESERVED      :id1, 0, 1
     section Default
     0      :d1, 0, 1
 ```
-When the value of this register is above 0 (zero), the device’s timestamp will be offset by this amount. The register is sensitive to 500 microsecond increments. This register is non-volatile.
+This register is reserved, read-only, and has a default value of `0` (ZERO).
 
 #### **`R_UID` (16 Bytes) – Unique Identifier**
 
 Address: `016`
 
+
+
+```mermaid
+---
+displayMode: compact
+---
+
+gantt
+    title R_UID (016) [16 Bytes]
+
+    dateFormat X
+    axisFormat %
+    tickInterval 0
+
+    section Bytes
+    15-0      :bytes, 0, 1
+    section Id
+    UID      :id1, 0, 1
+    section Default
+    -      :d1, 0, 1
+```
+
 An array of 16 bytes that should contain a (128bit) UID (Unique Identifier) of the current device. This register is non-volatile and should be read-only. The byte-order is little-endian.
+
+If not implemented, the device should return a default value of `0` (ZERO) for all bytes.
 
 #### **`R_TAG` (8 bytes) – Firmware tag**
 
 Address: `017`
 
-An array of 8 bytes that can be used to store a tag for a specific firmware version. For instance, it could be used to store the git hash of a specific release/commit. If not used, all bytes should be set to 0. The byte-order is little-endian.
+
+
+```mermaid
+---
+displayMode: compact
+---
+
+gantt
+    title R_TAG (017) [8 Bytes]
+
+    dateFormat X
+    axisFormat %
+    tickInterval 0
+
+    section Bytes
+    7-0      :bytes, 0, 1
+    section Id
+    TAG      :id1, 0, 1
+    section Default
+    0      :d1, 0, 1
+```
+
+An array of 8 bytes that can be used to store a tag for a specific firmware version. For instance, it could be used to store the git hash of a specific release/commit. If not used, all bytes should be set to 0. The byte-order is little-endian. This register is read-only.
+
+If not implemented, the device should return a default value of `0` (ZERO) for all bytes.
 
 #### **`R_HEARTBEAT` (U16) – Heartbeat register reporting the current status of the device**
 
