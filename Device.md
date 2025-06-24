@@ -14,6 +14,14 @@ The `Common Registers` are a set of registers that are common to all Harp Device
 
 All other registers pertaining to the operation of a specific device (`Application Registers`) should always take a register number equal, or greater, than 32. Moreoever, numbering and naming of these registers will be left to the developer, as they are specific to each device.
 
+### Optional registers
+
+Some registers are optional and may not be fully implemented in all devices. These registers are marked as `Optional` in the table below. All optional registers are still expected to implement `Read` commands and should return a default value. Moreoever, they should be included as part of the `R_OPERATION_CTRL` register dump.
+
+In most cases, the value of the register should default to "0". Other values are allowed, but should be explicitly documented and justified.
+
+For writable, optional, registers whose function is not implemented, the device is expected to return a `Write` reply with the `Error` status bit set. It is thus the responsibility of the client to handle such errors. The device should not crash or enter an undefined state when a write command is sent to an unimplemented register.
+
 ### Operation Modes
 
 A Harp Device is expected to implement the following `Operation Modes`:
