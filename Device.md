@@ -20,7 +20,7 @@ Some registers are marked as **Optional** in the table below and their functiona
 
 For any writeable optional registers whose function is not implemented, the device MUST always return a `Write` reply payload containing the register default value, to indicate the `Write` command had no effect. The device SHOULD NOT crash or enter an undefined state when a write command is sent to an optional unimplemented register.
 
-In most cases, the default value of an optional register SHOULD be `0`. Other values are allowed, but they MUST be explicitly documented and justified on a per-register basis.
+In most cases, the default value of an optional register SHOULD be `0` (Zero). Other values are allowed, but they MUST be explicitly documented and justified on a per-register basis.
 
 ## Operation Mode
 
@@ -38,9 +38,9 @@ As an application example, devices using USB as the transport layer MAY poll for
 
 ## Core Register Table
 
-|**Name**|**Volatile**|**Read Only**|**Type**|**Add.**|**Default**|**Brief Description**|**Mandatory**|
+|**Name**|**Volatile**|**Read Only**|**Type**|**Add.**|**Default**|**Brief Description**|**Necessity**|
 | :- | :-: | :-: | :-: | :-: | :-: | :- | :-: |
-|[`R_WHO_AM_I`](#r_who_am_i-u16--who-am-i)|-|Yes|U16|000|a)|Who am I|Yes|
+|[`R_WHO_AM_I`](#r_who_am_i-u16--who-am-i)|-|Yes|U16|000|a)|Who am I|Required|
 |[`R_HW_VERSION_H`](#r_hw_version_h-u8--major-hardware-version)|-|Yes|U8|001|a)|Major Hardware version|Deprecated|
 |[`R_HW_VERSION_L`](#r_hw_version_l-u8--minor-hardware-version)|-|Yes|U8|002|a)|Minor Hardware version|Deprecated|
 |[`R_ASSEMBLY_VERSION`](#r_assembly_version-u8--version-of-the-assembled-components)|-|Yes|U8|003|a)|Version of the assembled components|Deprecated|
@@ -48,9 +48,9 @@ As an application example, devices using USB as the transport layer MAY poll for
 |[`R_CORE_VERSION_L`](#r_core_version_l-u8--minor-core-version)|-|Yes|U8|005|a)|Minor core version|Deprecated|
 |[`R_FW_VERSION_H`](#r_fw_version_h-u8--major-firmware-version)|-|Yes|U8|006|a)|Major Firmware version of the application|Deprecated|
 |[`R_FW_VERSION_L`](#r_fw_version_l-u8--minor-firmware-version)|-|Yes|U8|007|a)|Minor Firmware version of the application|Deprecated|
-|[`R_TIMESTAMP_SECOND`](#r_timestamp_second-u32--system-timestamp-seconds)|Yes|No|U32|008|0|System timestamp: seconds|Yes|
-|[`R_TIMESTAMP_MICRO`](#r_timestamp_micro-u16--system-timestamp-microseconds)|Yes|Yes|U16|009|0|System timestamp: microseconds|Optional|
-|[`R_OPERATION_CTRL`](#r_operation_ctrl-u8--operation-mode-configuration)|No|No|U8|010|b)|Configuration of the operation mode|Yes|
+|[`R_TIMESTAMP_SECOND`](#r_timestamp_second-u32--system-timestamp-seconds)|Yes|No|U32|008|0|System timestamp: seconds|Required|
+|[`R_TIMESTAMP_MICRO`](#r_timestamp_micro-u16--system-timestamp-microseconds)|Yes|Yes|U16|009|0|System timestamp: microseconds|Required|
+|[`R_OPERATION_CTRL`](#r_operation_ctrl-u8--operation-mode-configuration)|No|No|U8|010|b)|Configuration of the operation mode|Required|
 |[`R_RESET_DEV`](#r_reset_dev-u8--reset-device-and-save-non-volatile-registers)|No|No|U8|011|b)|Reset device and save non-volatile registers|Optional|
 |[`R_DEVICE_NAME`](#r_device_name-25-bytes--devices-name)|No|No|U8|012|b)|Name of the device given by the user|Optional|
 |[`R_SERIAL_NUMBER`](#r_serial_number-u16--devices-serial-number)|No|No|U16|013|b)|Unique serial number of the device|Deprecated|
@@ -58,8 +58,8 @@ As an application example, devices using USB as the transport layer MAY poll for
 |[`R_RESERVED`](#r_reserved-u8--reserved)|No|No|U8|015|0|-|Reserved|
 |[`R_UID`](#r_uid-16-bytes--unique-identifier)|No|Yes|U8|016|b)|Stores a unique identifier (UID) |Optional|
 |[`R_TAG`](#r_tag-8-bytes--firmware-tag)|-|Yes|U8|017|b)|Firmware tag|Optional|
-|[`R_HEARTBEAT`](#r_heartbeat-u16--heartbeat-register-reporting-the-current-status-of-the-device)|Yes|Yes|U16|018|b)|Provides information about the state of the device|Yes|
-|[`R_VERSION`](#r_version-u8--semantic-version-information)|-|Yes|U8|019|a)|Semantic version information for the device|Yes|
+|[`R_HEARTBEAT`](#r_heartbeat-u16--heartbeat-register-reporting-the-current-status-of-the-device)|Yes|Yes|U16|018|b)|Provides information about the state of the device|Required|
+|[`R_VERSION`](#r_version-u8--semantic-version-information)|-|Yes|U8|019|a)|Semantic version information for the device|Required|
 
 ||a) These values MUST be stored during the firmware build process and are persistent, i.e. they SHALL NOT be changed by the user.<br>b) Check register notes on the specific register explanation |
 | :- | :- |
@@ -95,7 +95,7 @@ gantt
     0      :d1, 0, 2
 ```
 
-Specifies the product identifier of the device. The list of reserved device product identifiers can be found at [harp-tech/whoami](https://github.com/harp-tech/whoami). To reserve specific identifiers for your project or company, please follow the instructions in that repository. If the device does not have a pre-allocated identifier, this register MUST be set to its default value of `0`.
+Specifies the product identifier of the device. The list of reserved device product identifiers can be found at [harp-tech/whoami](https://github.com/harp-tech/whoami). To reserve specific identifiers for your project or company, please follow the instructions in that repository. If the device does not have a pre-allocated identifier, this register MUST be set to its default value of `0` (Zero).
 
 ### **`R_HW_VERSION_H` (U8) – Major Hardware Version**
 
@@ -181,7 +181,7 @@ gantt
     0      :d1, 0, 1
 ```
 
-Specifies the version number of the assembled components. The value of this register is persistent and MUST NOT be changeable by the user. If this register is not implemented, it MUST have the default value of `0`.
+Specifies the version number of the assembled components. The value of this register is persistent and MUST NOT be changeable by the user. If this register is not implemented, it MUST have the default value of `0` (Zero).
 
 ### **`R_CORE_VERSION_H` (U8) – Major Core Version**
 
@@ -305,7 +305,7 @@ Contains the minor firmware version number. The value of this register is persis
 
 Address: `008`
 
-Contains the current system timestamp in whole seconds. The default value is `0` and will increment one unit for each elapsed second.
+Contains the current system timestamp in whole seconds. The default value is `0` (Zero) and will increment one unit for each elapsed second.
 
 ```mermaid
 ---
@@ -334,7 +334,7 @@ gantt
 
 Address: `009`
 
-Contains the microseconds count within each second. Each LSB corresponds to 32 microseconds. The maximum value is 31249. The default value is `0`.
+Contains the microseconds count within each second. Each LSB corresponds to 32 microseconds. The maximum value is 31249. The default value is `0` (Zero).
 
 ```mermaid
 ---
@@ -398,7 +398,7 @@ gantt
     0      :d3, after bit4  , 5
     1      :d2, after bit3  , 6
     0      :d1, after d2  , 8
-    section Implementation
+    section Necessity
     a)            :i7, 0, 1
     Optional      :i6, after bit7  , 2
     Optional      :i5, after bit6  , 3
