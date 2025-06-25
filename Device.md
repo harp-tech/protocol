@@ -1,43 +1,42 @@
 ﻿<img src="./assets/HarpLogo.svg" width="200">
 
-# Common Registers and Operation (Device 1.2)
+# Device Registers and Operation
 
 ## Introduction
 
-This document defines the common set of standard functionality that new Harp `Device` hardware should aim to provide. The goal is to create a common ground for the development and operation of Harp devices, and to allow quick and easy integration of new devices into the existing ecosystem. While some registers and functionalities are not mandatory, it is strongly recommended that they are implemented or, at least, considered with compatibility in mind.
+This document defines the set of common functionality that every Harp device must provide. The goal is to establish a common ground for the development and operation of Harp hardware, and to allow quick and easy integration of new devices into the existing ecosystem. All registers and functionality specified below MUST be implemented for a device to be compliant.
 
-## Registers
+### Core registers
 
-### Common Registers
+All Harp devices must implement a set of common core registers. These reserved registers are used to identify the device, its version, and its operation mode. A summary description of each core register is in [the table below](#core-register-table).
 
-The `Common Registers` are a set of registers that are common to all Harp Devices. These registers are used to identify the device, its version, and its operation mode. The `Common Registers` are mandatory and should be implemented in all Harp Devices. Summary description of each register can be found in [this table](ref missing).
+### Application registers
 
-All other registers pertaining to the operation of a specific device (`Application Registers`) should always take a register number equal, or greater, than 32. Moreoever, numbering and naming of these registers will be left to the developer, as they are specific to each device.
-
+All other registers pertaining to the operation of a specific device are **Application Registers** and should always have a register address equal to, or greater than, 32. Numbering and naming of these registers will be left to the developer, as they are specific to each device.
 
 ### Optional registers
 
-Some registers are optional and may not be fully implemented in all devices. These registers are marked as `Optional` in the table below. All optional registers are still expected to implement `Read` commands and should return a default value. Moreoever, they should be included as part of the `R_OPERATION_CTRL` register dump.
+Some registers are marked as **Optional** in the table below and may not be fully implemented in all devices. All optional registers are still expected to implement `Read` commands and should return the specified default value. Moreover, they should be included as part of the `R_OPERATION_CTRL` register dump.
 
-In most cases, the value of the register should default to "0". Other values are allowed, but should be explicitly documented and justified.
+For any writeable optional registers whose function is not implemented, the device must always return a `Write` reply payload containing the register default value, to indicate the `Write` command had no effect. The device should not crash or enter an undefined state when a write command is sent to an optional unimplemented register.
 
-For writable, optional, registers whose function is not implemented, the device is expected to return a `Write` reply with the `Error` status bit set. It is thus the responsibility of the client to handle such errors. The device should not crash or enter an undefined state when a write command is sent to an unimplemented register.
+In most cases, the default value of an optional register in this specification will default to 0. Other values are allowed, but they should be explicitly documented and justified on a per register basis.
 
 ### Operation Modes
 
-A Harp Device is expected to implement the following `Operation Modes`:
+The following Harp device operation modes are specified:
 
-- **`Standby Mode:`**  Replies to host commands. Events are disabled and must not be sent.
-- **`Active Mode:`** Replies to host commands. Events are enabled and sent to host whenever the device deems it so.
-- *`Speed Mode:`* Allows the implementation of a different and specific communication protocol. On this mode, the Harp Binary Protocol is no longer used. The specific protocol designed must implement the possibility to exit this mode.
+- `Standby:` Replies to host commands. All `Event` messages are disabled and must not be sent.
+- `Active:` Replies to host commands. `Event` messages are enabled and can be sent to the host following the device specification.
+- `Speed:` Deprecated. Supports the implementation of a dedicated communication protocol. On this mode, the device does not reply to host commands, and only `Event` messages are sent to the host.
 
-The mandatory Operation Modes are the **`Standby Mode`** and **`Active Mode`**. The **`Speed Mode`** is optional and, in many of the applications, not needed.
-Harp Devices should continuously check if the communication with the host is active and healthy. This status check will be largely dependent on the transport layer implementing the harp protocol between host and device. Each implementation should clearly distinguish between `Connected` and `Not Connected` states, and it is up to the developer to decide how to implement this status check. When the device transitions to the `Not Connected` state, it should immediately enter `Standy Mode` and stop transmission of further event messages.
+The mandatory operation modes are `Standby` and `Active`. The `Speed` mode is now deprecated, and should therefore be avoided in any new applications. The device should reply with `Error` in case this operation mode is not supported.
 
-As an application example, devices using USB as the transport layer can poll for an active USB connection by checking that the state of the DTR pin is set to `HIGH`. Once this pin is set `LOW` it may be assumed that the host closed the connection and the device should enter `Standby Mode`. In this case, the host is responsible for setting the state of the DTR line when opening or closing a new connection.
+Harp Devices should continuously check if communication with the host is active and healthy. This status check will be largely dependent on the transport layer implementing the Harp protocol between host and device. Each implementation should clearly distinguish between `Connected` and `NotConnected` states, and it is up to the developer to decide how to implement this status check. When the device transitions to the `NotConnected` state, it should immediately enter `Standby` and stop transmission of further event messages.
 
+As an application example, devices using USB as the transport layer can poll for an active USB connection by checking that the state of the DTR pin is `HIGH`. Once the DTR pin is brought `LOW` it may be assumed that the host closed the connection and the device should enter `Standby`. In this case, the host is responsible for setting the state of the DTR line when opening or closing a new connection.
 
-### **Table - List of available Common Registers**
+### Core Register Table
 
 |**Name**|**Volatile**|**Read Only**|**Type**|**Add.**|**Default**|**Brief Description**|**Mandatory**|
 | :- | :-: | :-: | :-: | :-: | :-: | :- | :-: |
@@ -96,7 +95,7 @@ gantt
     0      :d1, 0, 2
 ```
 
-Used to verify the identity of the device. A list of devices can be found at <https://github.com/harp-tech/protocol>. To reserve a range or certain IDs for your project or company, please follow the instructions in this repository. If the device doesn’t have a pre-allocated ID on the IDs list, this register should be set as `0` (Zero).
+Used to verify the identity of the device. A list of devices can be found at [harp-tech/whoami](https://github.com/harp-tech/whoami). To reserve a range of IDs or specific IDs for your project or company, please follow the instructions in that repository. If the device doesn’t have a pre-allocated ID on the IDs list, this register should be set as `0` (Zero).
 
 #### **`R_HW_VERSION_H` (U8) – Major Hardware Version**
 
