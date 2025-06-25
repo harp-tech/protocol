@@ -2,39 +2,39 @@
 
 # Device Registers and Operation
 
-## Introduction
+This document defines the set of functionality that every Harp device is expected to provide. The goal is to establish a common interface for the development and operation of all Harp hardware, and to allow quick and easy integration of new devices into the existing ecosystem. All registers and functionality specified below MUST be implemented for a device to be compliant.
 
-This document defines the set of common functionality that every Harp device must provide. The goal is to establish a common interface for the development and operation of all Harp hardware, and to allow quick and easy integration of new devices into the existing ecosystem. All registers and functionality specified below MUST be implemented for a device to be compliant.
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED",  "MAY", and "OPTIONAL" in this document are to be interpreted as described in [RFC 2119](https://www.ietf.org/rfc/rfc2119.txt).
 
 ## Core registers
 
-All Harp devices must implement a set of common core registers. These reserved registers are used to identify the device, its version, and its operation modes. A summary description of each core register is in [the table below](#core-register-table).
+All Harp devices MUST implement the set of common core registers. These reserved registers are used to identify the device, the version of various components, and determine the current operation mode. A summary description of each core register is in [the table below](#core-register-table).
 
 ## Application registers
 
-All other registers pertaining to the operation of a specific device are **Application Registers** and should always have a register address equal to, or greater than, 32. Numbering and naming of these registers will be left to the developer, as they are specific to each device.
+All other registers pertaining to the operation of a specific device are **Application Registers**. Every application register MUST have an address equal to, or greater than, 32. Numbering and naming of these registers is left to the device developer, as it will always be specific to each device.
 
 ## Optional registers
 
-Some registers are marked as **Optional** in the table below and may not be fully implemented in all devices. All optional registers MUST implement `Read` commands by sending a reply to the host with the specified default value. Moreover, they should be included as part of the `R_OPERATION_CTRL` register dump.
+Some registers are marked as **Optional** in the table below and their functionality MAY not be fully implemented in all devices. However, all optional registers MUST implement `Read` commands by sending a reply to the host with the specified default value. Moreover, they MUST be included as part of the `R_OPERATION_CTRL` register dump.
 
-For any writeable optional registers whose function is not implemented, the device must always return a `Write` reply payload containing the register default value, to indicate the `Write` command had no effect. The device should not crash or enter an undefined state when a write command is sent to an optional unimplemented register.
+For any writeable optional registers whose function is not implemented, the device MUST always return a `Write` reply payload containing the register default value, to indicate the `Write` command had no effect. The device SHOULD NOT crash or enter an undefined state when a write command is sent to an optional unimplemented register.
 
-In most cases, the default value of an optional register in this specification will default to `0`. Other values are allowed, but they should be explicitly documented and justified on a per register basis.
+In most cases, the default value of an optional register SHOULD be `0`. Other values are allowed, but they MUST be explicitly documented and justified on a per-register basis.
 
 ## Operation Mode
 
 The following Harp device operation modes are specified:
 
-- `Standby:` Replies to host commands. All `Event` messages are disabled and must not be sent.
-- `Active:` Replies to host commands. `Event` messages are enabled and can be sent to the host following the device specification.
-- `Speed:` Deprecated. Supports the implementation of a dedicated communication protocol. When entering this mode, the device does not reply to host commands, and only to its specific `Speed` mode commands.
+- `Standby:` The device MUST reply to host commands. All `Event` messages are disabled and MUST NOT be sent to the host.
+- `Active:` The device MUST reply to host commands. All `Event` messages are enabled and SHOULD be sent to the host following the device specification.
+- `Speed:` Deprecated. Supports the implementation of a dedicated communication protocol. When entering this mode, the device SHOULD NOT reply to host commands, other than its specific `Speed` mode commands.
 
-The mandatory operation modes are `Standby` and `Active`. The `Speed` mode is now deprecated, and should therefore be avoided in any new applications. The device should reply with `Error` in case this operation mode is not supported.
+The required operation modes are `Standby` and `Active`. The `Speed` mode is now deprecated, and SHOULD NOT be implemented in any new applications. The device MUST reply with `Error` in case this operation mode is not supported.
 
-Harp devices should continuously check if communication with the host is active and healthy. This status check will be largely dependent on the transport layer implementing the Harp protocol between host and device. Each implementation should clearly distinguish between `Connected` and `NotConnected` states, and it is up to the developer to decide how to implement this status check. When the device transitions to the `NotConnected` state, it should immediately enter `Standby` and stop transmission of further event messages.
+Harp devices SHOULD continuously check if communication with the host is active and healthy. This status check will be largely dependent on the transport layer implementing the Harp protocol between host and device. Each implementation SHOULD clearly distinguish between `Connected` and `NotConnected` states, and it is up to the developer to decide how to implement this status check. When the device transitions to the `NotConnected` state, it MUST immediately enter `Standby` and stop transmission of further `Event` messages.
 
-As an application example, devices using USB as the transport layer can poll for an active USB connection by checking that the state of the DTR pin is `HIGH`. Once the DTR pin is brought `LOW` it may be assumed that the host closed the connection and the device should enter `Standby`. In this case, the host is responsible for setting the state of the DTR line when opening or closing a new connection.
+As an application example, devices using USB as the transport layer MAY poll for an active USB connection by checking that the state of the DTR pin is `HIGH`. Once the DTR pin is brought `LOW` it SHOULD be assumed that the host closed the connection and the device MUST enter `Standby`. In this case, the host is responsible for setting the state of the DTR line when opening or closing a new connection.
 
 ## Core Register Table
 
@@ -50,18 +50,18 @@ As an application example, devices using USB as the transport layer can poll for
 |R\_FW\_VERSION\_L|-|Yes|U8|007|a)|Minor Firmware version of the application|Deprecated|
 |R\_TIMESTAMP\_SECOND|Yes|No|U32|008|0|System timestamp: seconds|Yes|
 |R\_TIMESTAMP\_MICRO|Yes|Yes|U16|009|0|System timestamp: microseconds|Optional|
-|R\_OPERATION\_CTRL|No|No|U8|010|b)|Configuration of the operation mode|c)|
+|R\_OPERATION\_CTRL|No|No|U8|010|b)|Configuration of the operation mode|Yes|
 |R\_RESET\_DEV|No|No|U8|011|b)|Reset device and save non-volatile registers|Optional|
 |R\_DEVICE\_NAME|No|No|U8|012|b)|Name of the device given by the user|Optional|
 |R\_SERIAL\_NUMBER|No|No|U16|013|b)|Unique serial number of the device|Deprecated|
 |R\_CLOCK\_CONFIG|No|No|U8|014|b)|Synchronization clock configuration|Optional|
-|R\_TIMESTAMP\_OFFSET|No|No|U8|015|b)|Adds an offset if user updates the Timestamp|Optional|
+|R\_RESERVED|No|No|U8|015|b)|-|Reserved|
 |R\_UID|No|Yes|U8|016|b)|Stores a unique identifier (UID) |Optional|
 |R\_TAG|-|Yes|U8|017|b)|Firmware tag|Optional|
 |R\_HEARTBEAT|Yes|Yes|U16|018|b)|Provides information about the state of the device|Yes|
 |R\_VERSION|-|Yes|U8|019|a)|Semantic version information for the device|Yes|
 
-||a) These values are stored during factory process and are persistent, i.e., they cannot be changed by the user.<br>b) Check register notes on the specific register explanation<br>c) Only parts of the functionality is mandatory. Check register notes on the explanation.|
+||a) These values MUST be stored during the firmware build process and are persistent, i.e. they SHALL NOT be changed by the user.<br>b) Check register notes on the specific register explanation |
 | :- | :- |
 
 
@@ -95,7 +95,7 @@ gantt
     0      :d1, 0, 2
 ```
 
-Used to verify the identity of the device. A list of devices can be found at [harp-tech/whoami](https://github.com/harp-tech/whoami). To reserve a range of IDs or specific IDs for your project or company, please follow the instructions in that repository. If the device doesn’t have a pre-allocated ID on the IDs list, this register should be set as `0` (Zero).
+Specifies the product identifier of the device. The list of reserved device product identifiers can be found at [harp-tech/whoami](https://github.com/harp-tech/whoami). To reserve specific identifiers for your project or company, please follow the instructions in that repository. If the device does not have a pre-allocated identifier, this register MUST be set to its default value of `0`.
 
 ### **`R_HW_VERSION_H` (U8) – Major Hardware Version**
 
@@ -121,11 +121,11 @@ gantt
     -      :d1, 0, 1
 ```
 
-Contains the major hardware version number. The value is persistent and it is not changeable by the user.
+Specifies the major hardware version number. The value of this register is persistent and MUST NOT be changeable by the user.
 
-> **Warning**
+> [!WARNING]
 >
-> This register is deprecated in favor of `R_VERSION`. The value of this register is expected to be equal to the major version of the `R_VERSION` **Hardware** version.
+> This register is deprecated in favor of `R_VERSION`. The value of this register MUST be equal to the major `HARDWARE` version in `R_VERSION`.
 
 ### **`R_HW_VERSION_L` (U8) – Minor Hardware Version**
 
@@ -151,11 +151,11 @@ gantt
     -      :d1, 0, 1
 ```
 
-Contains the minor hardware version number. The value is persistent and it is not changeable by the user.
+Specifies the minor hardware version number. The value of this register is persistent and MUST NOT be changeable by the user.
 
-> **Warning**
+> [!WARNING]
 >
-> This register is deprecated in favor of `R_VERSION`. The value of this register is expected to be equal to the minor version of the `R_VERSION` **Hardware** version.
+> This register is deprecated in favor of `R_VERSION`. The value of this register MUST be equal to the minor `HARDWARE` version in `R_VERSION`.
 
 ### **`R_ASSEMBLY_VERSION` (U8) – Version of the Assembled Components**
 
@@ -178,10 +178,10 @@ gantt
     section Id
     ASSEMBLY_VERSION      :id1, 0, 1
     section Default
-    -      :d1, 0, 1
+    0      :d1, 0, 1
 ```
 
-Contains the version number of the assembled components. The value is persistent and it is not changeable by the user. The register is optional and expected to have a default value of `0` (ZERO).
+Specifies the version number of the assembled components. The value of this register is persistent and MUST NOT be changeable by the user. If this register is not implemented, it MUST have the default value of `0`.
 
 ### **`R_CORE_VERSION_H` (U8) – Major Core Version**
 
@@ -207,11 +207,11 @@ gantt
     -      :d1, 0, 1
 ```
 
-Contains the major version of the Harp Protocol specification. The value is persistent and it is not changeable by the user.
+Contains the major version of the Harp protocol specification. The value of this register is persistent and MUST NOT be changeable by the host.
 
-> **Warning**
+> [!WARNING]
 >
-> This register is deprecated in favor of `R_VERSION`. The value of this register is expected to be equal to the major version of the `R_VERSION` **Protocol** version.
+> This register is deprecated in favor of `R_VERSION`. The value of this register MUST be equal to the major `PROTOCOL` version in `R_VERSION`.
 
 ### **`R_CORE_VERSION_L` (U8) – Minor Core Version**
 
@@ -237,11 +237,11 @@ gantt
     -      :d1, 0, 1
 ```
 
-Contains the minor version of the Harp Protocol specification. The value is persistent and it is not changeable by the user.
+Contains the minor version of the Harp Protocol specification. The value of this register is persistent and MUST NOT be changeable by the host.
 
-> **Warning**
+> [!WARNING]
 >
-> This register is deprecated in favor of `R_VERSION`. The value of this register is expected to be equal to the minor version of the `R_VERSION` **Protocol** version.
+> This register is deprecated in favor of `R_VERSION`. The value of this register MUST be equal to the minor `PROTOCOL` version in `R_VERSION`.
 
 ### **`R_FW_VERSION_H` (U8) – Major Firmware Version**
 
@@ -267,12 +267,13 @@ gantt
     -      :d1, 0, 1
 ```
 
-Contains the major firmware version number. The value is persistent and it is not changeable by the user.
+Contains the major firmware version number. The value of this register is persistent and MUST NOT be changeable by the host.
 
-> **Warning**
+> [!WARNING]
 >
-> This register is deprecated in favor of `R_VERSION`. The value of this register is expected to be equal to the major version of the `R_VERSION` **Firmware** version.
+> This register is deprecated in favor of `R_VERSION`. The value of this register MUST be equal to the major `FIRMWARE` version in `R_VERSION`.
 
+### **`R_FW_VERSION_L` (U8) – Minor Firmware Version**
 
 ```mermaid
 ---
@@ -294,17 +295,17 @@ gantt
     -      :d1, 0, 1
 ```
 
-Contains the minor firmware version number. The value is persistent and it is not changeable by the user.
+Contains the minor firmware version number. The value of this register is persistent and MUST NOT be changeable by the host.
 
-> **Warning**
+> [!WARNING]
 >
-> This register is deprecated in favor of `R_VERSION`. The value of this register is expected to be equal to the minor version of the `R_VERSION` **Firmware** version.
+> This register is deprecated in favor of `R_VERSION`. The value of this register MUST be equal to the minor `FIRMWARE` version in `R_VERSION`.
 
 ### **`R_TIMESTAMP_SECOND` (U32) – System timestamp (seconds)**
 
 Address: `008`
 
-Contains the current system timestamp in whole seconds. The default value is `0` (Zero) and will increment one unit for each elapsed second.
+Contains the current system timestamp in whole seconds. The default value is `0` and will increment one unit for each elapsed second.
 
 ```mermaid
 ---
@@ -333,7 +334,7 @@ gantt
 
 Address: `009`
 
-Contains the microseconds count within each second. Each LSB corresponds to 32 microseconds. The maximum value is 31249. The default value is `0` (Zero) if not implemented.
+Contains the microseconds count within each second. Each LSB corresponds to 32 microseconds. The maximum value is 31249. The default value is `0`.
 
 ```mermaid
 ---
@@ -409,9 +410,9 @@ gantt
 
 ```
 
-a) The ALIVE_EN bit is deprecated and may be removed from future protocol versions.
+a) The `ALIVE_EN` bit is deprecated and may be removed from future protocol versions.
 
-b) Standby Mode and Active Mode are mandatory. Speed Mode is deprecated.
+b) `Standby` and `Active` modes are mandatory. `Speed` mode is deprecated.
 
 
 * **OP_MODE [Bits 1:0]:** These bits define the [Operation Mode](#operation-mode) of the device.
@@ -425,11 +426,11 @@ b) Standby Mode and Active Mode are mandatory. Speed Mode is deprecated.
 | 2            	| Reserved.              	|
 | 3            	| Speed Mode. Deprecated.	|
 
-* **HEARTBEAT_EN [Bit 2]:** When set to 1, the device sends an `Event` Message with the `R_HEARTBEAT` content each second. This allows the host to check the status of the device periodically. This is a required feature. If the `ALIVE_EN` bit is also set, this bit has precedence and the device should send `R_HEARTBEAT` periodically instead of `R_TIMESTAMP_SECOND`.
-* **DUMP [Bit 3]:** When set to 1, the device adds the content of all registers to the streaming buffer as `Read` messages. This bit is always read as 0.
-* **MUTE_RPL [Bit 4]:** If set to 1, the `Replies` to all the `Commands` are muted, i.e., they will not be sent by the device.
-* **VISUALEN [Bit 5]:** If set to 1, visual indications, typically LEDs, available on the device will operate. If equals to 0, all the visual indications should turn off.
-* **OPLEDEN [Bit 6]:** If set to 1, the LED present on the device will indicate the Operation Mode selected.
+* **HEARTBEAT_EN [Bit 2]:** If this bit is set, the device sends an `Event` Message with the `R_HEARTBEAT` content each second. This allows the host to check the status of the device periodically. This is a required feature. If the `ALIVE_EN` bit is also set, this bit has precedence and the device must send `R_HEARTBEAT` periodically instead of `R_TIMESTAMP_SECOND`.
+* **DUMP [Bit 3]:** If this bit is set, the device adds the content of all registers to the streaming buffer as `Read` messages. This bit is always read as 0.
+* **MUTE_RPL [Bit 4]:** If this bit is set, the `Replies` to all the `Commands` are muted, i.e., they will not be sent by the device.
+* **VISUALEN [Bit 5]:** If this bit is set, visual indications, typically LEDs, available on the device will be enabled. If equals to 0, all the visual indications must be turned off.
+* **OPLEDEN [Bit 6]:** If this bit is set, the LED present on the device will indicate the Operation Mode selected.
 
 **Table - Visual LED toggle feedback**
 
@@ -440,7 +441,7 @@ b) Standby Mode and Active Mode are mandatory. Speed Mode is deprecated.
 | 1          	| Speed Mode.                                                                                              	|
 | 0.1        	| A critical error occurred. Only a hardware reset or a new power up can remove the device from this Mode. 	|
 
-* **ALIVE_EN [Bit 7]:** If set to 1, the device sends an `Event` Message with the `R_TIMESTAMP_SECOND` content each second. This allows the host to check the status of the device periodically. This feature is deprecated and may be removed from future protocol versions.
+* **ALIVE_EN [Bit 7]:** If this bit is set, the device sends an `Event` Message with the `R_TIMESTAMP_SECOND` content each second. This allows the host to check the status of the device periodically. This feature is deprecated and may be removed from future protocol versions.
 
 
 
@@ -487,32 +488,30 @@ gantt
     0      :d0, after bit1  , 8
 ```
 
-* **RST_DEF [Bit 0]:** If set to 1, the device resets and, reboots with all the registers, both `Common` and `Application`, with the default values. EEPROM will be erased, and the default values will be restored as the permanent boot option. This bit is always read as 0.
+* **RST_DEF [Bit 0]:** If this bit is set, the device MUST reset and reboot with all core and application registers set to their default values. Any available non-volatile memory MUST be erased and all device default values MUST be restored as the permanent boot option. When sending a response to a `Read` command, the device MUST set this bit to 0 in the response payload.
 
-* **RST_EE [Bit 1]:** If set to 1, the device resets and reboots with all the registers, both `Common` and `Applicatin` registers, with the values saved on the non-volatile memory, usually an EEPROM. The EEPROM values will remain the permanent boot option. This bit is always read as 0.
+* **RST_EE [Bit 1]:** If this bit is set and non-volatile memory is available, the device MUST reset and reboot with all core and application registers set to the values saved in persistent storage, usually an EEPROM. Any currently stored values MUST remain the permanent boot option. If this bit is set and non-volatile memory is not available, the device MUST respond with an `Error` message. When sending a response to a `Read` command, the device MUST clear this bit in the response payload.
 
-* **SAVE [Bit 3]:** If set to 1, the device will save all the non-volatile registers (both `Common` and `Application`) to the internal non-volatile memory, and reboot. The non-volatile memory should be the permanent boot option.
+* **SAVE [Bit 3]:** If this bit is set and non-volatile memory is available, the device MUST save any non-volatile core and application registers to persistent storage, and reboot. The non-volatile memory should be configured as the permanent boot option. If this bit is set and non-volatile memory is not available, the device MUST respond with an `Error` message. When sending a response to a `Read` command, the device MUST clear this bit in the response payload.
 
-* **NAME_TO_DEFAULT [Bit 4]:** If set to 1, the device will reboot with the default name. This bit is always read as 0.
+* **NAME_TO_DEFAULT [Bit 4]:** If this bit is set, the device MUST reboot and restore the value of `R_DEVICE_NAME` to its default value. When sending a response to a `Read` command, the device MUST clear this bit in the response payload.
 
-* **BOOT_DEF [Bit 6]:** A read-only state bit that indicates whether the device booted with the default register values or not.
+* **BOOT_DEF [Bit 6]:** When sending a response to a `Read` command, the device MUST set this bit if the device booted with its default register values. If non-volatile memory is not available, the device MUST always set this bit when sending a response to a `Read` command. This bit is read-only state, so if this bit is set on a command message, the device MUST respond with an `Error` message.
 
-* **BOOT_EE [Bit 7]:** A read-only state bit that indicates whether the device booted with the register values saved on the EEPROM or not.
+* **BOOT_EE [Bit 7]:** When sending a response to a `Read` command, the device MUST set this bit if the device booted with register values recovered from persistent storage. If non-volatile memory is not available, the device MUST always clear this bit when sending a response to a `Read` command. This bit is read-only state, so if this bit is set on a command message, the device MUST respond with an `Error` message.
 
-The implementation of this register is optional.
-
-> **Note**
+> [!IMPORTANT]
 >
-> To avoid unexpected behaviors, only one bit at a time should be written to register `R_RESET_DEV`.
+> To avoid unexpected behavior, the host SHOULD set only one bit at a time when sending commands to `R_RESET_DEV`.
 
 
 ### **`R_DEVICE_NAME` (25 Bytes) – Device's name**
 
 Address: `012`
 
-An array of 25 bytes that should contain the device name. The last, and unused, bytes must be equal to `0` (Zero). This register is non-volatile. The device will reset if this register is written to.
+An array of 25 bytes specifying a human-readable device name. Any unused bytes MUST be set to `0` (Zero). This register is non-volatile. If a `Write` command to this register is received and non-volatile memory is available, the device MUST reset and save the new register value to persistent storage. Otherwise, if non-volatile memory is not available, the device MUST respond to any `Write` commands with the default register value.
 
-The default value of this register, if not implemented, is `0` (Zero).
+This register is optional. If not implemented, the default value of this register MUST be `0` (Zero).
 
 
 ### **`R_SERIAL_NUMBER` (U16) – Device's serial number**
@@ -541,12 +540,18 @@ gantt
     -      :d1, 0, 2
 ```
 
-This number should be unique for each unit of the same Device ID.
-To write to this register a two-step write command is needed. First, write the value `0xFFFF`, and then the desired serial number (as a `U16`). The device will reset after the second write command is received.
+Specifies a serial number for the device. This register is optional. If implemented, this number SHOULD be unique for each unit with the same device product identifier stored in `R_WHO_AM_I`.
 
-> **Warning**
+`Write` commands to this register are optional. If `Write` commands are supported, the following two-step write sequence MUST be implemented:
+  1. Receive a `Write` message with the value `0xFFFF`.
+  2. Receive a second `Write` message with the new serial number. The device MUST reset after the second `Write` message is received.
+
+Otherwise, if `Write` commands are not supported, the device MUST respond to any `Write` commands with the fixed device serial number.
+
+> [!WARNING]
 >
-> This register is deprecated in favor of `R_UID`. The register is expected to duplicate the first two bytes of `R_UID`. In this case, similarly to the Harp protocol specification, the two bytes should be packed in little-endian order.
+> If `R_UID` is implemented, this register MUST duplicate the first two bytes of `R_UID`, in little-endian order.
+
 
 ### **`R_CLOCK_CONFIG` (U8) – Synchronization clock configuration**
 
@@ -591,23 +596,23 @@ gantt
     -      :d0, after bit1  , 8
 ```
 
-* **CLK_REP [Bit 0]:** If set to 1, the device will repeat the Harp Synchronization Clock to the Clock Output connector, if available. It will act has a daisy-chain, by repeating the Clock Input to the Clock Output. Setting this bit, also unlocks the Harp Synchronization Clock.
+* **CLK_REP [Bit 0]:** If this bit is set, and a Clock Output connector is available on the device, the device MUST repeat the Harp Synchronization Clock messages on the Clock Output. This allows daisy-chaining by repeating the Clock Input on the Clock Output. Setting this bit also enables writing on the timestamp register.
 
-* **CLK_GEN [Bit 1]:** If set to 1, the device will generate Harp Synchronization Clock to the Clock Output connector, if available. The Clock Input will be ignored. The bit is read as 1 if the device is generating the Harp Synchronization Clock.
+* **CLK_GEN [Bit 1]:** If this bit is set, and a Clock Output connector is available on the device, the device MUST generate Harp Synchronization Clock messages on the Clock Output. Any messages arriving on the Clock Input MUST be ignored by the device.
 
-* **REP_ABLE [Bit 3]:** This is a read-only bit signaling if the device is able (1) to repeat the Harp Synchronization Clock timestamp.
+* **REP_ABLE [Bit 3]:** Read-only status bit. When sending a response to a `Read` command, the device MUST set this bit if it is able to repeat the Harp Synchronization Clock timestamp.
 
-* **GEN_ABLE [Bit 4]:** This is a read-only bit signaling if the device is able (1) to generate the Harp Synchronization Clock timestamp.
+* **GEN_ABLE [Bit 4]:** Read-only status bit. When sending a response to a `Read` command, the device MUST set this bit if it is able to generate the Harp Synchronization Clock timestamp.
 
-* **CLK_UNLOCK [Bit 6]:** If set to 1, the device will unlock the timestamp register counter (register `R_TIMESTAMP_SECOND`) and it will now accept new timestamp values. The bit is read as 1 if the timestamp register is unlocked.
+* **CLK_UNLOCK [Bit 6]:** If this bit is set, the device MUST enable writing on the timestamp register counter (`R_TIMESTAMP_SECOND`). When sending a response to a `Read` command, the device MUST set this bit if the timestamp register is unlocked.
 
-* **CLK_LOCK [Bit 7]:** If set to 1, the device will lock the current timestamp register counter (register `R_TIMESTAMP_SECOND`) and it will reject any new timestamp values. The bit is read as 1 if the timestamp register is locked.
+* **CLK_LOCK [Bit 7]:** If this bit is set, the device MUST disable writing on the timestamp register counter (`R_TIMESTAMP_SECOND`). When sending a response to a `Read` command, the device MUST set this bit if the timestamp register is locked.
 
 The implementation of this register is optional but highly recommend for devices that are expected to implement the Harp synchronization protocol.
 
-> **Note**
+> [!NOTE]
 >
-> The device always wakes up in the `unlock` state.
+> The device MUST always boot with the timestamp register in the unlocked state.
 
 
 ### **`R_RESERVED` (U8) – Reserved**
@@ -660,7 +665,7 @@ gantt
     0      :d1, 0, 1
 ```
 
-An array of 16 bytes that should contain a (128-bit) UID (Unique Identifier) of the current device. This register is non-volatile and should be read-only. The byte-order is little-endian. If not implemented, the device should return a default value of `0` (Zero) for all bytes.
+An array of 16 bytes specifying the (128-bit) UID (Unique Identifier) of the current device. This register is non-volatile and read-only. The byte-order is little-endian. If not implemented, the device MUST return a default value of `0` (Zero) for all bytes.
 
 ### **`R_TAG` (8 Bytes) – Firmware tag**
 
@@ -686,9 +691,9 @@ gantt
     0      :d1, 0, 1
 ```
 
-An array of 8 bytes that can be used to store a tag for a specific firmware version. For instance, it could be used to store the git hash of a specific release/commit. If not used, all bytes should be set to `0` (Zero). The byte-order is little-endian. This register is read-only.
+An array of 8 bytes that can be used to store a tag for a specific firmware version. For instance, it could be used to store the Git hash of a specific release/commit. The byte-order is little-endian. This register is read-only.
 
-If not implemented, the device should return a default value of `0` (Zero) for all bytes.
+If not implemented, the device MUST return a default value of `0` (Zero) for all bytes.
 
 ### **`R_HEARTBEAT` (U16) – Heartbeat register reporting the current status of the device**
 
@@ -719,17 +724,12 @@ gantt
     -      :d6, 2, 3
 ```
 
-> **Note**
->
-> This register is read-only and is used to provide status information about the device. The bits are set by the device and sent through a period event. If enabled (via `R_OPERATION_CTRL` bit `ALIVE_EN`), the event will be periodically emitted at a rate of 1Hz, triggered by updates to the `R_TIMESTAMP_SECOND` register.
+This register is read-only and used to provide status information about the device. Any changes to the below bits are controlled by the device and sent to the host through a periodic `Event` message. If periodic reporting is enabled by setting `R_OPERATION_CTRL` bit `HEARTBEAT_EN`, the event will be periodically emitted at a rate of 1 Hz, triggered by updates to the `R_TIMESTAMP_SECOND` register.
 
+* **IS_ACTIVE [Bit 0]:** If this bit is set, the device MUST be in `Active` mode. The bit must be cleared if the device is in any other mode (see [Operation Mode](#operation-mode) for information on available device modes).
 
-The status of the device is given by the following bits:
+* **IS_SYNCHRONIZED [Bit 1]:** If this bit is set, the device MUST be synchronized with an external Harp clock generator. If the device is itself a clock generator (see `R_CLOCK_CONFIG` bit `CLK_GEN`), this bit MUST always be set.
 
-
-* **IS_STANDBY [Bit 0]:** If 1, the device will be in Standby Mode. Any other modes will be coded as 0. (See `R_OPERATION_CTRL` bit `OP_MODE` for more information).
-
-* **IS_SYNCHRONIZED [Bit 1]:** If set to 1, the device is synchronized with an external Harp clock generator. If the device is itself a clock generator (see `R_CLOCK_CONFIG` bit `CLK_GEN`), by definition, this bit will always be set to 1.
 
 ### **`R_VERSION` (U8) – Semantic version information**
 
@@ -782,10 +782,10 @@ The bytes in this register specify the [semantic version](https://semver.org/) o
 
 * **SDK_ID:** The three-character code of the core microcontroller SDK used to implement the device.
 
-* **INTERFACE_HASH:** The SHA-1 hash value of the device interface schema file (`device.yml`). The byte-order is little-endian.
+* **INTERFACE_HASH:** The SHA-1 hash value of the device interface schema file (`device.yml`). The byte-order is little-endian. If the client SHOULD NOT perform any validation of its device interface schema, the device MUST set this value to `0` (Zero). 
 
 
-## Release notes:
+## Release notes
 
 - v0.2
     * First draft released.
@@ -847,4 +847,6 @@ The bytes in this register specify the [semantic version](https://semver.org/) o
   * Fix typo in `R_OPERATION_CTRL` register data type (U16 -> U8)
 
 - v1.13.0
-  * Add `R_VERSION` register.
+  * Add `R_VERSION` register
+  * Clarify meaning of optional registers
+  * Adopt requirement key words from RFC 2119
