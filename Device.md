@@ -51,7 +51,7 @@ As an application example, devices using USB as the transport layer can poll for
 |R\_UID|No|Yes|U8|016|b)|Stores a unique identifier (UID) |Optional|
 |R\_TAG|-|Yes|U8|017|b)|Firmware tag|Optional|
 |R\_HEARTBEAT|Yes|Yes|U16|018|b)|Provides information about the state of the device|Yes|
-|R\_VERSION|-|Yes|U8|018|a)|Semantic version information for the device|Yes|
+|R\_VERSION|-|Yes|U8|019|a)|Semantic version information for the device|Yes|
 
 ||a) These values are stored during factory process and are persistent, i.e., they cannot be changed by the user.<br>b) Check register notes on the specific register explanation<br>c) Only parts of the functionality is mandatory. Check register notes on the explanation.|
 | :- | :- |
@@ -489,45 +489,44 @@ gantt
     axisFormat %
 
     section Byte
-    0         :hw_major, 0, 1
-    1         :hw_minor, 1, 2
-    2         :hw_patch, 2, 3
-    3         :core_major, 3, 4
-    4         :core_minor, 4, 5
-    5         :core_patch, 5, 6
-    6         :fw_major, 6, 7
-    7         :fw_minor, 7, 8
-    8         :fw_patch, 8, 9
-    9         :prot_major, 9, 10
-    10        :prot_minor, 10, 11
-    11        :sdk, 11, 12
+    0         :prot_major, 0, 1
+    1         :prot_minor, 1, 2
+    2         :prot_patch, 2, 3
+    3         :fw_major, 3, 4
+    4         :fw_minor, 4, 5
+    5         :fw_patch, 5, 6
+    6         :hw_major, 6, 7
+    7         :hw_minor, 7, 8
+    8         :hw_patch, 8, 9
+    9-11      :sdk_id, 9, 12
+    12-31     :interface_hash, 12, 32
 
     section Id
-    HARDWARE        :hardware, 0, 3
-    CORE            :core, 3, 6
-    FIRMWARE        :firmware, 6, 9
-    PROTOCOL        :protocol, 9, 11
-    SDK             :architecture, 11, 12
+    PROTOCOL        :protocol, 0, 3
+    FIRMWARE        :firmware, 3, 6
+    HARDWARE        :hardware, 6, 9
+    SDK_ID          :sdk, 9, 12
+    INTERFACE_HASH  :protocol, 12, 32
 
     section Default
-    -      :dr, 0, 3
-    -      :d7, 3, 6
-    -      :d6, 6, 9
-    -      :d6, 9, 11
-    -      :d6, 11, 12
+    -      :d0, 0, 3
+    -      :d1, 3, 6
+    -      :d2, 6, 9
+    -      :d3, 9, 12
+    -      :d4, 12, 32
 ```
 
-The bytes in this register specify the [semantic version](https://semver.org/) of each of the device components. Each component is versioned following the order `major`, `minor`, `patch`, except for the `PROTOCOL` version where the last byte is replaced by the `SDK` byte used to identify the core microcontroller SDK.
+The bytes in this register specify the [semantic version](https://semver.org/) of different device components. Each component version is made up of three bytes, following the order `major`, `minor`, `patch`. The register also includes a unique identifier of the core microcontroller SDK and a hash digest of the interface schema file describing the device capabilities.
 
-* **HARDWARE:** The semantic version of the device hardware.
-
-* **CORE:** The semantic version of the core microcontroller SDK.
+* **PROTOCOL:** The semantic version of the Harp protocol implemented by the device.
 
 * **FIRMWARE:** The semantic version of the device firmware application.
 
-* **PROTOCOL:** The major and minor version of the communication protocol implemented by the device.
+* **HARDWARE:** The semantic version of the device hardware.
 
-* **SDK:** The identifier of the core microcontroller SDK targeted by the device.
+* **SDK_ID:** The three-character code of the core microcontroller SDK used to implement the device.
+
+* **INTERFACE_HASH:** The SHA-1 hash value of the device interface schema file (`device.yml`). The byte-order is little-endian.
 
 
 ## Release notes:
