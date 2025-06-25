@@ -4,11 +4,11 @@
 
 ## Introduction
 
-This document defines the set of common functionality that every Harp device must provide. The goal is to establish a common ground for the development and operation of Harp hardware, and to allow quick and easy integration of new devices into the existing ecosystem. All registers and functionality specified below MUST be implemented for a device to be compliant.
+This document defines the set of common functionality that every Harp device must provide. The goal is to establish a common interface for the development and operation of all Harp hardware, and to allow quick and easy integration of new devices into the existing ecosystem. All registers and functionality specified below MUST be implemented for a device to be compliant.
 
 ## Core registers
 
-All Harp devices must implement a set of common core registers. These reserved registers are used to identify the device, its version, and its operation mode. A summary description of each core register is in [the table below](#core-register-table).
+All Harp devices must implement a set of common core registers. These reserved registers are used to identify the device, its version, and its operation modes. A summary description of each core register is in [the table below](#core-register-table).
 
 ## Application registers
 
@@ -16,23 +16,23 @@ All other registers pertaining to the operation of a specific device are **Appli
 
 ## Optional registers
 
-Some registers are marked as **Optional** in the table below and may not be fully implemented in all devices. All optional registers are still expected to implement `Read` commands and should return the specified default value. Moreover, they should be included as part of the `R_OPERATION_CTRL` register dump.
+Some registers are marked as **Optional** in the table below and may not be fully implemented in all devices. All optional registers MUST implement `Read` commands by sending a reply to the host with the specified default value. Moreover, they should be included as part of the `R_OPERATION_CTRL` register dump.
 
 For any writeable optional registers whose function is not implemented, the device must always return a `Write` reply payload containing the register default value, to indicate the `Write` command had no effect. The device should not crash or enter an undefined state when a write command is sent to an optional unimplemented register.
 
-In most cases, the default value of an optional register in this specification will default to 0. Other values are allowed, but they should be explicitly documented and justified on a per register basis.
+In most cases, the default value of an optional register in this specification will default to `0`. Other values are allowed, but they should be explicitly documented and justified on a per register basis.
 
-## Operation Modes
+## Operation Mode
 
 The following Harp device operation modes are specified:
 
 - `Standby:` Replies to host commands. All `Event` messages are disabled and must not be sent.
 - `Active:` Replies to host commands. `Event` messages are enabled and can be sent to the host following the device specification.
-- `Speed:` Deprecated. Supports the implementation of a dedicated communication protocol. On this mode, the device does not reply to host commands, and only `Event` messages are sent to the host.
+- `Speed:` Deprecated. Supports the implementation of a dedicated communication protocol. When entering this mode, the device does not reply to host commands, and only to its specific `Speed` mode commands.
 
 The mandatory operation modes are `Standby` and `Active`. The `Speed` mode is now deprecated, and should therefore be avoided in any new applications. The device should reply with `Error` in case this operation mode is not supported.
 
-Harp Devices should continuously check if communication with the host is active and healthy. This status check will be largely dependent on the transport layer implementing the Harp protocol between host and device. Each implementation should clearly distinguish between `Connected` and `NotConnected` states, and it is up to the developer to decide how to implement this status check. When the device transitions to the `NotConnected` state, it should immediately enter `Standby` and stop transmission of further event messages.
+Harp devices should continuously check if communication with the host is active and healthy. This status check will be largely dependent on the transport layer implementing the Harp protocol between host and device. Each implementation should clearly distinguish between `Connected` and `NotConnected` states, and it is up to the developer to decide how to implement this status check. When the device transitions to the `NotConnected` state, it should immediately enter `Standby` and stop transmission of further event messages.
 
 As an application example, devices using USB as the transport layer can poll for an active USB connection by checking that the state of the DTR pin is `HIGH`. Once the DTR pin is brought `LOW` it may be assumed that the host closed the connection and the device should enter `Standby`. In this case, the host is responsible for setting the state of the DTR line when opening or closing a new connection.
 
@@ -414,16 +414,16 @@ a) The ALIVE_EN bit is deprecated and may be removed from future protocol versio
 b) Standby Mode and Active Mode are mandatory. Speed Mode is deprecated.
 
 
-* **OP_MODE [Bits 1:0]:** These bits define the operation mode of the device. Note that, in legacy core implementations, if Speed Mode is selected, the device will no longer reply to Harp commands, only to its specific Speed Mode commands.
+* **OP_MODE [Bits 1:0]:** These bits define the [Operation Mode](#operation-mode) of the device.
 
 **Table - Available Operation modes**
 
-| OP_MODE[1:0] 	| Configuration                                                                                          	|
-|--------------	|--------------------------------------------------------------------------------------------------------	|
-| 0            	| Standby Mode. The device has all the `Events` turned off.                                              	|
-| 1            	| Active Mode. The device turns ON the `Events` detection. Only the enabled Events will be operating.    	|
-| 2            	| Reserved.                                                                                              	|
-| 3            	| Deprecated. Speed Mode. The device enters Speed Mode.                                                              	|
+| OP_MODE[1:0] 	| Configuration          	|
+|--------------	|------------------------	|
+| 0            	| Standby Mode.           |
+| 1            	| Active Mode.    	      |
+| 2            	| Reserved.              	|
+| 3            	| Speed Mode. Deprecated.	|
 
 * **HEARTBEAT_EN [Bit 2]:** When set to 1, the device sends an `Event` Message with the `R_HEARTBEAT` content each second. This allows the host to check the status of the device periodically. This is a required feature. If the `ALIVE_EN` bit is also set, this bit has precedence and the device should send `R_HEARTBEAT` periodically instead of `R_TIMESTAMP_SECOND`.
 * **DUMP [Bit 3]:** When set to 1, the device adds the content of all registers to the streaming buffer as `Read` messages. This bit is always read as 0.
