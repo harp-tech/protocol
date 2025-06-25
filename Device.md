@@ -40,26 +40,26 @@ As an application example, devices using USB as the transport layer MAY poll for
 
 |**Name**|**Volatile**|**Read Only**|**Type**|**Add.**|**Default**|**Brief Description**|**Mandatory**|
 | :- | :-: | :-: | :-: | :-: | :-: | :- | :-: |
-|R\_WHO\_AM\_I|-|Yes|U16|000|a)|Who am I|Yes|
-|R\_HW\_VERSION\_H|-|Yes|U8|001|a)|Major Hardware version|Deprecated|
-|R\_HW\_VERSION\_L|-|Yes|U8|002|a)|Minor Hardware version|Deprecated|
-|R\_ASSEMBLY\_VERSION|-|Yes|U8|003|a)|Version of the assembled components|Deprecated|
-|R\_CORE\_VERSION\_H|-|Yes|U8|004|a)|Major core version|Deprecated|
-|R\_CORE\_VERSION\_L|-|Yes|U8|005|a)|Minor core version|Deprecated|
-|R\_FW\_VERSION\_H|-|Yes|U8|006|a)|Major Firmware version of the application|Deprecated|
-|R\_FW\_VERSION\_L|-|Yes|U8|007|a)|Minor Firmware version of the application|Deprecated|
-|R\_TIMESTAMP\_SECOND|Yes|No|U32|008|0|System timestamp: seconds|Yes|
-|R\_TIMESTAMP\_MICRO|Yes|Yes|U16|009|0|System timestamp: microseconds|Optional|
-|R\_OPERATION\_CTRL|No|No|U8|010|b)|Configuration of the operation mode|Yes|
-|R\_RESET\_DEV|No|No|U8|011|b)|Reset device and save non-volatile registers|Optional|
-|R\_DEVICE\_NAME|No|No|U8|012|b)|Name of the device given by the user|Optional|
-|R\_SERIAL\_NUMBER|No|No|U16|013|b)|Unique serial number of the device|Deprecated|
-|R\_CLOCK\_CONFIG|No|No|U8|014|b)|Synchronization clock configuration|Optional|
-|R\_RESERVED|No|No|U8|015|b)|-|Reserved|
-|R\_UID|No|Yes|U8|016|b)|Stores a unique identifier (UID) |Optional|
-|R\_TAG|-|Yes|U8|017|b)|Firmware tag|Optional|
-|R\_HEARTBEAT|Yes|Yes|U16|018|b)|Provides information about the state of the device|Yes|
-|R\_VERSION|-|Yes|U8|019|a)|Semantic version information for the device|Yes|
+|[`R_WHO_AM_I`](#r_who_am_i-u16--who-am-i)|-|Yes|U16|000|a)|Who am I|Yes|
+|[`R_HW_VERSION_H`](#r_hw_version_h-u8--major-hardware-version)|-|Yes|U8|001|a)|Major Hardware version|Deprecated|
+|[`R_HW_VERSION_L`](#r_hw_version_l-u8--minor-hardware-version)|-|Yes|U8|002|a)|Minor Hardware version|Deprecated|
+|[`R_ASSEMBLY_VERSION`](#r_assembly_version-u8--version-of-the-assembled-components)|-|Yes|U8|003|a)|Version of the assembled components|Deprecated|
+|[`R_CORE_VERSION_H`](#r_core_version_h-u8--major-core-version)|-|Yes|U8|004|a)|Major core version|Deprecated|
+|[`R_CORE_VERSION_L`](#r_core_version_l-u8--minor-core-version)|-|Yes|U8|005|a)|Minor core version|Deprecated|
+|[`R_FW_VERSION_H`](#r_fw_version_h-u8--major-firmware-version)|-|Yes|U8|006|a)|Major Firmware version of the application|Deprecated|
+|[`R_FW_VERSION_L`](#r_fw_version_l-u8--minor-firmware-version)|-|Yes|U8|007|a)|Minor Firmware version of the application|Deprecated|
+|[`R_TIMESTAMP_SECOND`](#r_timestamp_second-u32--system-timestamp-seconds)|Yes|No|U32|008|0|System timestamp: seconds|Yes|
+|[`R_TIMESTAMP_MICRO`](#r_timestamp_micro-u16--system-timestamp-microseconds)|Yes|Yes|U16|009|0|System timestamp: microseconds|Optional|
+|[`R_OPERATION_CTRL`](#r_operation_ctrl-u8--operation-mode-configuration)|No|No|U8|010|b)|Configuration of the operation mode|Yes|
+|[`R_RESET_DEV`](#r_reset_dev-u8--reset-device-and-save-non-volatile-registers)|No|No|U8|011|b)|Reset device and save non-volatile registers|Optional|
+|[`R_DEVICE_NAME`](#r_device_name-25-bytes--devices-name)|No|No|U8|012|b)|Name of the device given by the user|Optional|
+|[`R_SERIAL_NUMBER`](#r_serial_number-u16--devices-serial-number)|No|No|U16|013|b)|Unique serial number of the device|Deprecated|
+|[`R_CLOCK_CONFIG`](#r_clock_config-u8--synchronization-clock-configuration)|No|No|U8|014|b)|Synchronization clock configuration|Optional|
+|[`R_RESERVED`](#r_reserved-u8--reserved)|No|No|U8|015|0|-|Reserved|
+|[`R_UID`](#r_uid-16-bytes--unique-identifier)|No|Yes|U8|016|b)|Stores a unique identifier (UID) |Optional|
+|[`R_TAG`](#r_tag-8-bytes--firmware-tag)|-|Yes|U8|017|b)|Firmware tag|Optional|
+|[`R_HEARTBEAT`](#r_heartbeat-u16--heartbeat-register-reporting-the-current-status-of-the-device)|Yes|Yes|U16|018|b)|Provides information about the state of the device|Yes|
+|[`R_VERSION`](#r_version-u8--semantic-version-information)|-|Yes|U8|019|a)|Semantic version information for the device|Yes|
 
 ||a) These values MUST be stored during the firmware build process and are persistent, i.e. they SHALL NOT be changed by the user.<br>b) Check register notes on the specific register explanation |
 | :- | :- |
