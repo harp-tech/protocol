@@ -6,15 +6,15 @@
 
 This document defines the set of common functionality that every Harp device must provide. The goal is to establish a common ground for the development and operation of Harp hardware, and to allow quick and easy integration of new devices into the existing ecosystem. All registers and functionality specified below MUST be implemented for a device to be compliant.
 
-### Core registers
+## Core registers
 
 All Harp devices must implement a set of common core registers. These reserved registers are used to identify the device, its version, and its operation mode. A summary description of each core register is in [the table below](#core-register-table).
 
-### Application registers
+## Application registers
 
 All other registers pertaining to the operation of a specific device are **Application Registers** and should always have a register address equal to, or greater than, 32. Numbering and naming of these registers will be left to the developer, as they are specific to each device.
 
-### Optional registers
+## Optional registers
 
 Some registers are marked as **Optional** in the table below and may not be fully implemented in all devices. All optional registers are still expected to implement `Read` commands and should return the specified default value. Moreover, they should be included as part of the `R_OPERATION_CTRL` register dump.
 
@@ -22,7 +22,7 @@ For any writeable optional registers whose function is not implemented, the devi
 
 In most cases, the default value of an optional register in this specification will default to 0. Other values are allowed, but they should be explicitly documented and justified on a per register basis.
 
-### Operation Modes
+## Operation Modes
 
 The following Harp device operation modes are specified:
 
@@ -36,7 +36,7 @@ Harp Devices should continuously check if communication with the host is active 
 
 As an application example, devices using USB as the transport layer can poll for an active USB connection by checking that the state of the DTR pin is `HIGH`. Once the DTR pin is brought `LOW` it may be assumed that the host closed the connection and the device should enter `Standby`. In this case, the host is responsible for setting the state of the DTR line when opening or closing a new connection.
 
-### Core Register Table
+## Core Register Table
 
 |**Name**|**Volatile**|**Read Only**|**Type**|**Add.**|**Default**|**Brief Description**|**Mandatory**|
 | :- | :-: | :-: | :-: | :-: | :-: | :- | :-: |
@@ -70,7 +70,7 @@ Tables can be generated here https://www.tablesgenerator.com/html_tables
 Mermaid plots can be generated here: https://mermaid.live/
 --->
 
-#### **`R_WHO_AM_I` (U16) – Who Am I**
+### **`R_WHO_AM_I` (U16) – Who Am I**
 
 Address: `000`
 
@@ -97,7 +97,7 @@ gantt
 
 Used to verify the identity of the device. A list of devices can be found at [harp-tech/whoami](https://github.com/harp-tech/whoami). To reserve a range of IDs or specific IDs for your project or company, please follow the instructions in that repository. If the device doesn’t have a pre-allocated ID on the IDs list, this register should be set as `0` (Zero).
 
-#### **`R_HW_VERSION_H` (U8) – Major Hardware Version**
+### **`R_HW_VERSION_H` (U8) – Major Hardware Version**
 
 Address: `001`
 
@@ -127,7 +127,7 @@ Contains the major hardware version number. The value is persistent and it is no
 >
 > This register is deprecated in favor of `R_VERSION`. The value of this register is expected to be equal to the major version of the `R_VERSION` **Hardware** version.
 
-#### **`R_HW_VERSION_L` (U8) – Minor Hardware Version**
+### **`R_HW_VERSION_L` (U8) – Minor Hardware Version**
 
 Address: `002`
 
@@ -157,7 +157,7 @@ Contains the minor hardware version number. The value is persistent and it is no
 >
 > This register is deprecated in favor of `R_VERSION`. The value of this register is expected to be equal to the minor version of the `R_VERSION` **Hardware** version.
 
-#### **`R_ASSEMBLY_VERSION` (U8) – Version of the Assembled Components**
+### **`R_ASSEMBLY_VERSION` (U8) – Version of the Assembled Components**
 
 Address: `003`
 
@@ -183,7 +183,7 @@ gantt
 
 Contains the version number of the assembled components. The value is persistent and it is not changeable by the user. The register is optional and expected to have a default value of `0` (ZERO).
 
-#### **`R_CORE_VERSION_H` (U8) – Major Core Version**
+### **`R_CORE_VERSION_H` (U8) – Major Core Version**
 
 Address: `004`
 
@@ -213,7 +213,7 @@ Contains the major version of the Harp Protocol specification. The value is pers
 >
 > This register is deprecated in favor of `R_VERSION`. The value of this register is expected to be equal to the major version of the `R_VERSION` **Protocol** version.
 
-#### **`R_CORE_VERSION_L` (U8) – Minor Core Version**
+### **`R_CORE_VERSION_L` (U8) – Minor Core Version**
 
 Address: `005`
 
@@ -243,7 +243,7 @@ Contains the minor version of the Harp Protocol specification. The value is pers
 >
 > This register is deprecated in favor of `R_VERSION`. The value of this register is expected to be equal to the minor version of the `R_VERSION` **Protocol** version.
 
-#### **`R_FW_VERSION_H` (U8) – Major Firmware Version**
+### **`R_FW_VERSION_H` (U8) – Major Firmware Version**
 
 Address: `006`
 
@@ -300,7 +300,7 @@ Contains the minor firmware version number. The value is persistent and it is no
 >
 > This register is deprecated in favor of `R_VERSION`. The value of this register is expected to be equal to the minor version of the `R_VERSION` **Firmware** version.
 
-#### **`R_TIMESTAMP_SECOND` (U32) – System timestamp (seconds)**
+### **`R_TIMESTAMP_SECOND` (U32) – System timestamp (seconds)**
 
 Address: `008`
 
@@ -329,7 +329,7 @@ gantt
     0      :d1, 0, 4
 ```
 
-#### **`R_TIMESTAMP_MICRO` (U16) – System timestamp (microseconds)**
+### **`R_TIMESTAMP_MICRO` (U16) – System timestamp (microseconds)**
 
 Address: `009`
 
@@ -357,7 +357,7 @@ gantt
 ```
 
 
-#### **`R_OPERATION_CTRL` (U8) – Operation mode configuration**
+### **`R_OPERATION_CTRL` (U8) – Operation mode configuration**
 
 Address: `010`
 
@@ -444,7 +444,7 @@ b) Standby Mode and Active Mode are mandatory. Speed Mode is deprecated.
 
 
 
-#### **`R_RESET_DEV` (U8) – Reset device and save non-volatile registers**
+### **`R_RESET_DEV` (U8) – Reset device and save non-volatile registers**
 
 Address: `011`
 
@@ -506,7 +506,7 @@ The implementation of this register is optional.
 > To avoid unexpected behaviors, only one bit at a time should be written to register `R_RESET_DEV`.
 
 
-#### **`R_DEVICE_NAME` (25 Bytes) – Device's name**
+### **`R_DEVICE_NAME` (25 Bytes) – Device's name**
 
 Address: `012`
 
@@ -515,7 +515,7 @@ An array of 25 bytes that should contain the device name. The last, and unused, 
 The default value of this register, if not implemented, is `0` (Zero).
 
 
-#### **`R_SERIAL_NUMBER` (U16) – Device's serial number**
+### **`R_SERIAL_NUMBER` (U16) – Device's serial number**
 
 Address: `013`
 
@@ -548,7 +548,7 @@ To write to this register a two-step write command is needed. First, write the v
 >
 > This register is deprecated in favor of `R_UID`. The register is expected to duplicate the first two bytes of `R_UID`. In this case, similarly to the Harp protocol specification, the two bytes should be packed in little-endian order.
 
-#### **`R_CLOCK_CONFIG` (U8) – Synchronization clock configuration**
+### **`R_CLOCK_CONFIG` (U8) – Synchronization clock configuration**
 
 Address: `014`
 
@@ -610,7 +610,7 @@ The implementation of this register is optional but highly recommend for devices
 > The device always wakes up in the `unlock` state.
 
 
-#### **`R_RESERVED` (U8) – Reserved**
+### **`R_RESERVED` (U8) – Reserved**
 
 Address: `015`
 
@@ -636,11 +636,9 @@ gantt
 ```
 This register is reserved, read-only, and has a default value of `0` (Zero).
 
-#### **`R_UID` (16 Bytes) – Unique Identifier**
+### **`R_UID` (16 Bytes) – Unique Identifier**
 
 Address: `016`
-
-
 
 ```mermaid
 ---
@@ -664,11 +662,9 @@ gantt
 
 An array of 16 bytes that should contain a (128-bit) UID (Unique Identifier) of the current device. This register is non-volatile and should be read-only. The byte-order is little-endian. If not implemented, the device should return a default value of `0` (Zero) for all bytes.
 
-#### **`R_TAG` (8 Bytes) – Firmware tag**
+### **`R_TAG` (8 Bytes) – Firmware tag**
 
 Address: `017`
-
-
 
 ```mermaid
 ---
@@ -694,7 +690,7 @@ An array of 8 bytes that can be used to store a tag for a specific firmware vers
 
 If not implemented, the device should return a default value of `0` (Zero) for all bytes.
 
-#### **`R_HEARTBEAT` (U16) – Heartbeat register reporting the current status of the device**
+### **`R_HEARTBEAT` (U16) – Heartbeat register reporting the current status of the device**
 
 Address: `018`
 
@@ -735,7 +731,7 @@ The status of the device is given by the following bits:
 
 * **IS_SYNCHRONIZED [Bit 1]:** If set to 1, the device is synchronized with an external Harp clock generator. If the device is itself a clock generator (see `R_CLOCK_CONFIG` bit `CLK_GEN`), by definition, this bit will always be set to 1.
 
-#### **`R_VERSION` (U8) – Semantic version information**
+### **`R_VERSION` (U8) – Semantic version information**
 
 Address: `019`
 
