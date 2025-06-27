@@ -24,13 +24,10 @@ In most cases, the default value of an optional register SHOULD be `0` (Zero). O
 
 ## Operation Mode
 
-The following Harp device operation modes are specified:
+The following Harp device operation modes MUST be implemented:
 
 - `Standby:` The device MUST reply to host commands. All `Event` messages are disabled and MUST NOT be sent to the host.
 - `Active:` The device MUST reply to host commands. All `Event` messages are enabled and SHOULD be sent to the host following the device specification.
-- `Speed:` Deprecated. Supports the implementation of a dedicated communication protocol. When entering this mode, the device SHOULD NOT reply to host commands, other than its specific `Speed` mode commands.
-
-The required operation modes are `Standby` and `Active`. The `Speed` mode is now deprecated, and SHOULD NOT be implemented in any new applications. The device MUST reply with `Error` in case this operation mode is not supported.
 
 Harp devices SHOULD continuously check if communication with the host is active and healthy. This status check will be largely dependent on the transport layer implementing the Harp protocol between host and device. Each implementation SHOULD clearly distinguish between `Connected` and `NotConnected` states, and it is up to the developer to decide how to implement this status check. When the device transitions to the `NotConnected` state, it MUST immediately enter `Standby` and stop transmission of further `Event` messages.
 
@@ -221,6 +218,12 @@ b) `Standby` and `Active` modes are mandatory. `Speed` mode is deprecated.
 | 1            	| Active Mode.    	      |
 | 2            	| Reserved.              	|
 | 3            	| Speed Mode. Deprecated.	|
+
+> [!WARNING]
+>
+> `Speed` mode is now deprecated, and SHOULD NOT be implemented in any new devices. This mode was used to support the implementation of dedicated communication protocols. When entering `Speed` mode, the device SHOULD NOT reply to host commands, other than its specific `Speed` mode commands.
+> 
+> The device MUST reply with `Error` in case this operation mode is not supported.
 
 * **HEARTBEAT_EN [Bit 2]:** If this bit is set, the device sends an `Event` message every second with the contents of [`R_HEARTBEAT`](#r_heartbeat-u16--heartbeat-register-reporting-the-current-status-of-the-device). This allows the host to check the status of the device periodically. If the `ALIVE_EN` bit is also set, this bit has precedence and the device must send `R_HEARTBEAT` periodically instead of `R_TIMESTAMP_SECOND`.
 * **DUMP [Bit 3]:** If this bit is set, the device adds the content of all registers to the streaming buffer as `Read` messages. This bit is always read as 0.
