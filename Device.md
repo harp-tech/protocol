@@ -55,7 +55,7 @@ As an application example, devices using USB as the transport layer MAY poll for
 |[`R_DEVICE_NAME`](#r_device_name-25-bytes--devices-name)|No|No|U8|012|b)|Human-readable name of the device|Optional|
 |[`R_SERIAL_NUMBER`](#r_serial_number-u16--devices-serial-number)|No|No|U16|013|b)|Unique serial number of the device|Deprecated|
 |[`R_CLOCK_CONFIG`](#r_clock_config-u8--synchronization-clock-configuration)|No|No|U8|014|b)|Synchronization clock configuration|Optional|
-|[`R_RESERVED`](#r_reserved-u8--reserved)|No|No|U8|015|0|-|Reserved|
+|[`R_TIMESTAMP_OFFSET`](#r_timestamp_offset-u8--clock-calibration-offset)|No|No|U8|015|0|b)|Deprecated|
 |[`R_UID`](#r_uid-16-bytes--unique-identifier)|No|Yes|U8|016|b)|Stores a unique identifier (UID) |Optional|
 |[`R_TAG`](#r_tag-8-bytes--firmware-tag)|-|Yes|U8|017|b)|Firmware tag|Optional|
 |[`R_HEARTBEAT`](#r_heartbeat-u16--heartbeat-register-reporting-the-current-status-of-the-device)|Yes|Yes|U16|018|b)|Provides information about the state of the device|Required|
@@ -96,210 +96,6 @@ gantt
 ```
 
 Specifies the product identifier of the device. The list of reserved device product identifiers can be found at [harp-tech/whoami](https://github.com/harp-tech/whoami). To reserve specific identifiers for your project or company, please follow the instructions in that repository. If the device does not have a pre-allocated identifier, this register MUST be set to its default value of `0` (Zero).
-
-### **`R_HW_VERSION_H` (U8) – Major Hardware Version**
-
-Address: `001`
-
-```mermaid
----
-displayMode: compact
----
-
-gantt
-    title R_HW_VERSION_H (001) [U8]
-
-    dateFormat X
-    axisFormat %
-    tickInterval 0
-
-    section Bit
-    7-0      :byte0, 0, 1
-    section Id
-    HW_VERSION_H      :id1, 0, 1
-    section Default
-    -      :d1, 0, 1
-```
-
-Specifies the major hardware version number. The value of this register is persistent and MUST NOT be changeable by the host.
-
-> [!WARNING]
->
-> This register is deprecated in favor of `R_VERSION`. The value of this register MUST be equal to the major `HARDWARE` version in `R_VERSION`.
-
-### **`R_HW_VERSION_L` (U8) – Minor Hardware Version**
-
-Address: `002`
-
-```mermaid
----
-displayMode: compact
----
-
-gantt
-    title R_HW_VERSION_L (002) [U8]
-
-    dateFormat X
-    axisFormat %
-    tickInterval 0
-
-    section Bit
-    7-0      :byte0, 0, 1
-    section Id
-    HW_VERSION_L      :id1, 0, 1
-    section Default
-    -      :d1, 0, 1
-```
-
-Specifies the minor hardware version number. The value of this register is persistent and MUST NOT be changeable by the host.
-
-> [!WARNING]
->
-> This register is deprecated in favor of `R_VERSION`. The value of this register MUST be equal to the minor `HARDWARE` version in `R_VERSION`.
-
-### **`R_ASSEMBLY_VERSION` (U8) – Version of the Assembled Components**
-
-Address: `003`
-
-```mermaid
----
-displayMode: compact
----
-
-gantt
-    title R_ASSEMBLY_VERSION (003) [U8]
-
-    dateFormat X
-    axisFormat %
-    tickInterval 0
-
-    section Bit
-    7-0      :byte0, 0, 1
-    section Id
-    ASSEMBLY_VERSION      :id1, 0, 1
-    section Default
-    0      :d1, 0, 1
-```
-
-Specifies the version number of the assembled components. The value of this register is persistent and MUST NOT be changeable by the host. If this register is not implemented, it MUST have the default value of `0` (Zero).
-
-### **`R_CORE_VERSION_H` (U8) – Major Core Version**
-
-Address: `004`
-
-```mermaid
----
-displayMode: compact
----
-
-gantt
-    title R_CORE_VERSION_H (004) [U8]
-
-    dateFormat X
-    axisFormat %
-    tickInterval 0
-
-    section Bit
-    7-0      :byte0, 0, 1
-    section Id
-    CORE_VERSION_H      :id1, 0, 1
-    section Default
-    -      :d1, 0, 1
-```
-
-Contains the major version of the Harp protocol specification. The value of this register is persistent and MUST NOT be changeable by the host.
-
-> [!WARNING]
->
-> This register is deprecated in favor of `R_VERSION`. The value of this register MUST be equal to the major `PROTOCOL` version in `R_VERSION`.
-
-### **`R_CORE_VERSION_L` (U8) – Minor Core Version**
-
-Address: `005`
-
-```mermaid
----
-displayMode: compact
----
-
-gantt
-    title R_CORE_VERSION_L (005) [U8]
-
-    dateFormat X
-    axisFormat %
-    tickInterval 0
-
-    section Bit
-    7-0      :byte0, 0, 1
-    section Id
-    CORE_VERSION_L      :id1, 0, 1
-    section Default
-    -      :d1, 0, 1
-```
-
-Contains the minor version of the Harp Protocol specification. The value of this register is persistent and MUST NOT be changeable by the host.
-
-> [!WARNING]
->
-> This register is deprecated in favor of `R_VERSION`. The value of this register MUST be equal to the minor `PROTOCOL` version in `R_VERSION`.
-
-### **`R_FW_VERSION_H` (U8) – Major Firmware Version**
-
-Address: `006`
-
-```mermaid
----
-displayMode: compact
----
-
-gantt
-    title R_FW_VERSION_H (006) [U8]
-
-    dateFormat X
-    axisFormat %
-    tickInterval 0
-
-    section Bit
-    7-0      :byte0, 0, 1
-    section Id
-    FW_VERSION_H      :id1, 0, 1
-    section Default
-    -      :d1, 0, 1
-```
-
-Contains the major firmware version number. The value of this register is persistent and MUST NOT be changeable by the host.
-
-> [!WARNING]
->
-> This register is deprecated in favor of `R_VERSION`. The value of this register MUST be equal to the major `FIRMWARE` version in `R_VERSION`.
-
-### **`R_FW_VERSION_L` (U8) – Minor Firmware Version**
-
-```mermaid
----
-displayMode: compact
----
-
-gantt
-    title R_FW_VERSION_L (007) [U8]
-
-    dateFormat X
-    axisFormat %
-    tickInterval 0
-
-    section Bit
-    7-0      :byte0, 0, 1
-    section Id
-    FW_VERSION_L      :id1, 0, 1
-    section Default
-    -      :d1, 0, 1
-```
-
-Contains the minor firmware version number. The value of this register is persistent and MUST NOT be changeable by the host.
-
-> [!WARNING]
->
-> This register is deprecated in favor of `R_VERSION`. The value of this register MUST be equal to the minor `FIRMWARE` version in `R_VERSION`.
 
 ### **`R_TIMESTAMP_SECOND` (U32) – System timestamp (seconds)**
 
@@ -426,7 +222,7 @@ b) `Standby` and `Active` modes are mandatory. `Speed` mode is deprecated.
 | 2            	| Reserved.              	|
 | 3            	| Speed Mode. Deprecated.	|
 
-* **HEARTBEAT_EN [Bit 2]:** If this bit is set, the device sends an `Event` Message with the `R_HEARTBEAT` content each second. This allows the host to check the status of the device periodically. This is a required feature. If the `ALIVE_EN` bit is also set, this bit has precedence and the device must send `R_HEARTBEAT` periodically instead of `R_TIMESTAMP_SECOND`.
+* **HEARTBEAT_EN [Bit 2]:** If this bit is set, the device sends an `Event` message every second with the contents of [`R_HEARTBEAT`](#r_heartbeat-u16--heartbeat-register-reporting-the-current-status-of-the-device). This allows the host to check the status of the device periodically. If the `ALIVE_EN` bit is also set, this bit has precedence and the device must send `R_HEARTBEAT` periodically instead of `R_TIMESTAMP_SECOND`.
 * **DUMP [Bit 3]:** If this bit is set, the device adds the content of all registers to the streaming buffer as `Read` messages. This bit is always read as 0.
 * **MUTE_RPL [Bit 4]:** If this bit is set, the `Replies` to all the `Commands` are muted, i.e., they will not be sent by the device.
 * **VISUALEN [Bit 5]:** If this bit is set, visual indications, typically LEDs, available on the device will be enabled. If equals to 0, all the visual indications must be turned off.
@@ -441,8 +237,7 @@ b) `Standby` and `Active` modes are mandatory. `Speed` mode is deprecated.
 | 1          	| Speed Mode.                                                                                              	|
 | 0.1        	| A critical error occurred. Only a hardware reset or a new power up can remove the device from this Mode. 	|
 
-* **ALIVE_EN [Bit 7]:** If this bit is set, the device sends an `Event` Message with the `R_TIMESTAMP_SECOND` content each second. This allows the host to check the status of the device periodically. This feature is deprecated and may be removed from future protocol versions.
-
+* **ALIVE_EN [Bit 7]:** If this bit is set, the device sends an `Event` message every second with the contents of [`R_TIMESTAMP_SECOND`](#r_timestamp_second-u32--system-timestamp-seconds). This allows the host to check the status of the device periodically. This feature is deprecated and may be removed from future protocol versions.
 
 
 ### **`R_RESET_DEV` (U8) – Reset device and save non-volatile registers**
@@ -494,7 +289,7 @@ gantt
 
 * **SAVE [Bit 3]:** If this bit is set and non-volatile memory is available, the device MUST save any non-volatile core and application registers to persistent storage, and reboot. The non-volatile memory should be configured as the permanent boot option. If this bit is set and non-volatile memory is not available, the device MUST respond with an `Error` message. When sending a response to a `Read` command, the device MUST clear this bit in the response payload.
 
-* **NAME_TO_DEFAULT [Bit 4]:** If this bit is set, the device MUST reboot and restore the value of `R_DEVICE_NAME` to its default value. When sending a response to a `Read` command, the device MUST clear this bit in the response payload.
+* **NAME_TO_DEFAULT [Bit 4]:** If this bit is set, the device MUST reboot and restore the value of [`R_DEVICE_NAME`](#r_device_name-25-bytes--devices-name) to its default value. When sending a response to a `Read` command, the device MUST clear this bit in the response payload.
 
 * **BOOT_DEF [Bit 6]:** When sending a response to a `Read` command, the device MUST set this bit if the device booted with its default register values. If non-volatile memory is not available, the device MUST always set this bit when sending a response to a `Read` command. This bit is read-only state, so if this bit is set on a command message, the device MUST respond with an `Error` message.
 
@@ -512,45 +307,6 @@ Address: `012`
 An array of 25 bytes specifying a human-readable device name. Any unused bytes MUST be set to `0` (Zero). This register is non-volatile. If a `Write` command to this register is received and non-volatile memory is available, the device MUST reset and save the new register value to persistent storage. Otherwise, if non-volatile memory is not available, the device MUST respond to any `Write` commands with the default register value.
 
 This register is optional. If not implemented, the default value of this register MUST be `0` (Zero).
-
-
-### **`R_SERIAL_NUMBER` (U16) – Device's serial number**
-
-Address: `013`
-
-
-```mermaid
----
-displayMode: compact
----
-
-gantt
-    title R_SERIAL_NUMBER (013) [U16]
-
-    dateFormat X
-    axisFormat %
-    tickInterval 0
-
-    section Bit
-    15-8      :byte1, 0, 1
-    7-0      :byte0, after byte1  , 2
-    section Id
-    SERIAL_NUMBER      :id1, 0, 2
-    section Default
-    -      :d1, 0, 2
-```
-
-Specifies a serial number for the device. This register is optional. If implemented, this number SHOULD be unique for each unit with the same device product identifier stored in `R_WHO_AM_I`.
-
-`Write` commands to this register are optional. If `Write` commands are supported, the following two-step write sequence MUST be implemented:
-  1. Receive a `Write` message with the value `0xFFFF`.
-  2. Receive a second `Write` message with the new serial number. The device MUST reset after the second `Write` message is received.
-
-Otherwise, if `Write` commands are not supported, the device MUST respond to any `Write` commands with the fixed device serial number.
-
-> [!WARNING]
->
-> If `R_UID` is implemented, this register MUST duplicate the first two bytes of `R_UID`, in little-endian order.
 
 
 ### **`R_CLOCK_CONFIG` (U8) – Synchronization clock configuration**
@@ -604,9 +360,9 @@ gantt
 
 * **GEN_ABLE [Bit 4]:** Read-only status bit. When sending a response to a `Read` command, the device MUST set this bit if it is able to generate the Harp Synchronization Clock timestamp.
 
-* **CLK_UNLOCK [Bit 6]:** If this bit is set, the device MUST enable writing on the timestamp register counter (`R_TIMESTAMP_SECOND`). When sending a response to a `Read` command, the device MUST set this bit if the timestamp register is unlocked.
+* **CLK_UNLOCK [Bit 6]:** If this bit is set, the device MUST enable writing on [`R_TIMESTAMP_SECOND`](#r_timestamp_second-u32--system-timestamp-seconds). When sending a response to a `Read` command, the device MUST set this bit if the timestamp register is unlocked.
 
-* **CLK_LOCK [Bit 7]:** If this bit is set, the device MUST disable writing on the timestamp register counter (`R_TIMESTAMP_SECOND`). When sending a response to a `Read` command, the device MUST set this bit if the timestamp register is locked.
+* **CLK_LOCK [Bit 7]:** If this bit is set, the device MUST disable writing on [`R_TIMESTAMP_SECOND`](#r_timestamp_second-u32--system-timestamp-seconds). When sending a response to a `Read` command, the device MUST set this bit if the timestamp register is locked.
 
 The implementation of this register is optional but highly recommend for devices that are expected to implement the Harp synchronization protocol.
 
@@ -614,32 +370,6 @@ The implementation of this register is optional but highly recommend for devices
 >
 > The device MUST always boot with the timestamp register in the unlocked state.
 
-
-### **`R_RESERVED` (U8) – Reserved**
-
-Address: `015`
-
-
-```mermaid
----
-displayMode: compact
----
-
-gantt
-    title R_RESERVED (015) [U8]
-
-    dateFormat X
-    axisFormat %
-    tickInterval 0
-
-    section Bit
-    7-0      :byte1, 0, 1
-    section Id
-    RESERVED      :id1, 0, 1
-    section Default
-    0      :d1, 0, 1
-```
-This register is reserved, read-only, and has a default value of `0` (Zero).
 
 ### **`R_UID` (16 Bytes) – Unique Identifier**
 
@@ -724,11 +454,11 @@ gantt
     -      :d6, 2, 3
 ```
 
-This register is read-only and used to provide status information about the device. Any changes to the below bits are controlled by the device and sent to the host through a periodic `Event` message. If periodic reporting is enabled by setting `R_OPERATION_CTRL` bit `HEARTBEAT_EN`, the event will be periodically emitted at a rate of 1 Hz, triggered by updates to the `R_TIMESTAMP_SECOND` register.
+This register is read-only and used to provide status information about the device. Any changes to the below bits are controlled by the device and sent to the host through a periodic `Event` message. If periodic reporting is enabled by setting [`R_OPERATION_CTRL`](#r_operation_ctrl-u8--operation-mode-configuration) bit `HEARTBEAT_EN`, the event will be periodically emitted at a rate of 1 Hz, in sync with updates to the [`R_TIMESTAMP_SECOND`](#r_timestamp_second-u32--system-timestamp-seconds) register.
 
 * **IS_ACTIVE [Bit 0]:** If this bit is set, the device MUST be in `Active` mode. The bit must be cleared if the device is in any other mode (see [Operation Mode](#operation-mode) for information on available device modes).
 
-* **IS_SYNCHRONIZED [Bit 1]:** If this bit is set, the device MUST be synchronized with an external Harp clock generator. If the device is itself a clock generator (see `R_CLOCK_CONFIG` bit `CLK_GEN`), this bit MUST always be set.
+* **IS_SYNCHRONIZED [Bit 1]:** If this bit is set, the device MUST be synchronized with an external Harp clock generator. If the device is itself a clock generator (see [`R_CLOCK_CONFIG`](#r_clock_config-u8--synchronization-clock-configuration) bit `CLK_GEN`), this bit MUST always be set.
 
 
 ### **`R_VERSION` (U8) – Semantic version information**
@@ -784,6 +514,287 @@ The bytes in this register specify the [semantic version](https://semver.org/) o
 
 * **INTERFACE_HASH:** The SHA-1 hash value of the device interface schema file (`device.yml`). The byte-order is little-endian. If the client SHOULD NOT perform any validation of its device interface schema, the device MUST set this value to `0` (Zero). 
 
+## Deprecated registers
+
+### **`R_HW_VERSION_H` (U8) – Major Hardware Version**
+
+> [!WARNING]
+>
+> This register is deprecated in favor of [`R_VERSION`](#r_version-u8--semantic-version-information). The value of this register MUST be equal to the major `HARDWARE` version in `R_VERSION`.
+
+Address: `001`
+
+```mermaid
+---
+displayMode: compact
+---
+
+gantt
+    title R_HW_VERSION_H (001) [U8]
+
+    dateFormat X
+    axisFormat %
+    tickInterval 0
+
+    section Bit
+    7-0      :byte0, 0, 1
+    section Id
+    HW_VERSION_H      :id1, 0, 1
+    section Default
+    -      :d1, 0, 1
+```
+
+Specifies the major hardware version number. The value of this register is persistent and MUST NOT be changeable by the host.
+
+### **`R_HW_VERSION_L` (U8) – Minor Hardware Version**
+
+> [!WARNING]
+>
+> This register is deprecated in favor of [`R_VERSION`](#r_version-u8--semantic-version-information). The value of this register MUST be equal to the minor `HARDWARE` version in `R_VERSION`.
+
+Address: `002`
+
+```mermaid
+---
+displayMode: compact
+---
+
+gantt
+    title R_HW_VERSION_L (002) [U8]
+
+    dateFormat X
+    axisFormat %
+    tickInterval 0
+
+    section Bit
+    7-0      :byte0, 0, 1
+    section Id
+    HW_VERSION_L      :id1, 0, 1
+    section Default
+    -      :d1, 0, 1
+```
+
+Specifies the minor hardware version number. The value of this register is persistent and MUST NOT be changeable by the host.
+
+### **`R_ASSEMBLY_VERSION` (U8) – Version of the Assembled Components**
+
+> [!WARNING]
+>
+> This register is deprecated as we do not require tracking the version of assembled components directly in the device firmware.
+
+Address: `003`
+
+```mermaid
+---
+displayMode: compact
+---
+
+gantt
+    title R_ASSEMBLY_VERSION (003) [U8]
+
+    dateFormat X
+    axisFormat %
+    tickInterval 0
+
+    section Bit
+    7-0      :byte0, 0, 1
+    section Id
+    ASSEMBLY_VERSION      :id1, 0, 1
+    section Default
+    0      :d1, 0, 1
+```
+
+Specifies the version number of the assembled components. The value of this register is persistent and MUST NOT be changeable by the host. If this register is not implemented, it MUST have the default value of `0` (Zero).
+
+### **`R_CORE_VERSION_H` (U8) – Major Core Version**
+
+> [!WARNING]
+>
+> This register is deprecated in favor of [`R_VERSION`](#r_version-u8--semantic-version-information). The value of this register MUST be equal to the major `PROTOCOL` version in `R_VERSION`.
+
+Address: `004`
+
+```mermaid
+---
+displayMode: compact
+---
+
+gantt
+    title R_CORE_VERSION_H (004) [U8]
+
+    dateFormat X
+    axisFormat %
+    tickInterval 0
+
+    section Bit
+    7-0      :byte0, 0, 1
+    section Id
+    CORE_VERSION_H      :id1, 0, 1
+    section Default
+    -      :d1, 0, 1
+```
+
+Contains the major version of the Harp protocol specification. The value of this register is persistent and MUST NOT be changeable by the host.
+
+### **`R_CORE_VERSION_L` (U8) – Minor Core Version**
+
+> [!WARNING]
+>
+> This register is deprecated in favor of [`R_VERSION`](#r_version-u8--semantic-version-information). The value of this register MUST be equal to the minor `PROTOCOL` version in `R_VERSION`.
+
+Address: `005`
+
+```mermaid
+---
+displayMode: compact
+---
+
+gantt
+    title R_CORE_VERSION_L (005) [U8]
+
+    dateFormat X
+    axisFormat %
+    tickInterval 0
+
+    section Bit
+    7-0      :byte0, 0, 1
+    section Id
+    CORE_VERSION_L      :id1, 0, 1
+    section Default
+    -      :d1, 0, 1
+```
+
+Contains the minor version of the Harp Protocol specification. The value of this register is persistent and MUST NOT be changeable by the host.
+
+### **`R_FW_VERSION_H` (U8) – Major Firmware Version**
+
+> [!WARNING]
+>
+> This register is deprecated in favor of [`R_VERSION`](#r_version-u8--semantic-version-information). The value of this register MUST be equal to the major `FIRMWARE` version in `R_VERSION`.
+
+Address: `006`
+
+```mermaid
+---
+displayMode: compact
+---
+
+gantt
+    title R_FW_VERSION_H (006) [U8]
+
+    dateFormat X
+    axisFormat %
+    tickInterval 0
+
+    section Bit
+    7-0      :byte0, 0, 1
+    section Id
+    FW_VERSION_H      :id1, 0, 1
+    section Default
+    -      :d1, 0, 1
+```
+
+Contains the major firmware version number. The value of this register is persistent and MUST NOT be changeable by the host.
+
+### **`R_FW_VERSION_L` (U8) – Minor Firmware Version**
+
+> [!WARNING]
+>
+> This register is deprecated in favor of [`R_VERSION`](#r_version-u8--semantic-version-information). The value of this register MUST be equal to the minor `FIRMWARE` version in `R_VERSION`.
+
+```mermaid
+---
+displayMode: compact
+---
+
+gantt
+    title R_FW_VERSION_L (007) [U8]
+
+    dateFormat X
+    axisFormat %
+    tickInterval 0
+
+    section Bit
+    7-0      :byte0, 0, 1
+    section Id
+    FW_VERSION_L      :id1, 0, 1
+    section Default
+    -      :d1, 0, 1
+```
+
+Contains the minor firmware version number. The value of this register is persistent and MUST NOT be changeable by the host.
+
+
+### **`R_SERIAL_NUMBER` (U16) – Device's serial number**
+
+> [!WARNING]
+>
+> This register is deprecated in favor of [`R_UID`](#r_uid-16-bytes--unique-identifier). The value of this register MUST duplicate the first two bytes of `R_UID`, in little-endian order.
+
+Address: `013`
+
+
+```mermaid
+---
+displayMode: compact
+---
+
+gantt
+    title R_SERIAL_NUMBER (013) [U16]
+
+    dateFormat X
+    axisFormat %
+    tickInterval 0
+
+    section Bit
+    15-8      :byte1, 0, 1
+    7-0      :byte0, after byte1  , 2
+    section Id
+    SERIAL_NUMBER      :id1, 0, 2
+    section Default
+    -      :d1, 0, 2
+```
+
+Specifies a serial number for the device. This register is optional. If implemented, this number SHOULD be unique for each unit with the same device product identifier stored in `R_WHO_AM_I`.
+
+`Write` commands to this register are optional. If `Write` commands are supported, the following two-step write sequence MUST be implemented:
+  1. Receive a `Write` message with the value `0xFFFF`.
+  2. Receive a second `Write` message with the new serial number. The device MUST reset after the second `Write` message is received.
+
+Otherwise, if `Write` commands are not supported, the device MUST respond to any `Write` commands with the fixed device serial number.
+
+
+### **`R_TIMESTAMP_OFFSET` (U8) – Clock calibration offset**
+
+> [!WARNING]
+>
+> This register is deprecated and MUST NOT be implemented on any new devices.
+
+Address: `015`
+
+
+```mermaid
+---
+displayMode: compact
+---
+
+gantt
+    title R_TIMESTAMP_OFFSET (015) [U8]
+
+    dateFormat X
+    axisFormat %
+    tickInterval 0
+
+    section Bit
+    7-0      :byte1, 0, 1
+    section Id
+    RESERVED      :id1, 0, 1
+    section Default
+    0      :d1, 0, 1
+```
+
+When the value of this register is greater than `0` (Zero), the device’s timestamp will be offset by this amount. The register is sensitive to 500 microsecond increments. This register is non-volatile.
+
 
 ## Release notes
 
@@ -792,35 +803,35 @@ The bytes in this register specify the [semantic version](https://semver.org/) o
 
 - v1.0
 
-    * R_RESET_DEV and R_DEVICE_NAME are now optional.
+    * `R_RESET_DEV` and `R_DEVICE_NAME` are now optional.
     * Changed Normal Mode to Standby Mode.
-    * Added bit ALIVE_EN to register R_OPERATION_CTRL. This is an important feature.
+    * Added bit `ALIVE_EN` to register `R_OPERATION_CTRL`.
     * Major release.
 
 - v1.1
-  * Added bit MUTE_RPL to register R_OPERATION_CTRL.
+  * Added bit `MUTE_RPL` to register `R_OPERATION_CTRL`.
 
 - v1.2
   * Corrected some wrong names.
 
 - v1.3
-  * Added the bit NAME_TO_DEFAULT.
+  * Added the bit `NAME_TO_DEFAULT`.
 
 - v1.4
-  * Added the register R_SERIAL_NUMBER.
+  * Added the register `R_SERIAL_NUMBER`.
 
 - v1.5
-  * Added the register R_CLOCK_CONFIG.
+  * Added the register `R_CLOCK_CONFIG`.
 
 - v1.6
   * Changed device naming to Controller and Peripheral.
 
 - v1.7
   * Raised version to 1.2 since all the foreseen features are included at this point.
-  * Added the register R_TIMESTAMP_OFFSET.
+  * Added the register `R_TIMESTAMP_OFFSET`.
 
 - v1.8
-  * Replaced HARP_VERSION with CORE_VERSION.
+  * Replaced `HARP_VERSION` with `CORE_VERSION`.
 
 - v1.9.0
   * Refactor documentation to markdown format.
@@ -848,5 +859,6 @@ The bytes in this register specify the [semantic version](https://semver.org/) o
 
 - v1.13.0
   * Add `R_VERSION` register
+  * Deprecate legacy version registers and `R_TIMESTAMP_OFFSET`
   * Clarify meaning of optional registers
   * Adopt requirement key words from RFC 2119
