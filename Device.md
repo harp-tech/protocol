@@ -43,7 +43,7 @@ As an application example, devices using USB as the transport layer MAY poll for
 
 ## Core Registers
 
-All Harp devices MUST implement the below set of common core registers. These reserved registers are used to identify the device, the version of various components, determine the current operation mode, and other common operations.
+All Harp devices MUST implement the set of common core registers below. These reserved registers are used to identify the device, the version of various components, determine the current operation mode, and other common operations.
 
 |**Name**|**Volatile**|**Read Only**|**Type**|**Add.**|**Default**|**Brief Description**|**Necessity**|
 | :- | :-: | :-: | :-: | :-: | :-: | :- | :-: |
@@ -108,7 +108,6 @@ Specifies the product identifier of the device. The list of reserved device prod
 
 Address: `008`
 
-Contains the current system timestamp in whole seconds. The default value is `0` (Zero) and will increment one unit for each elapsed second.
 
 ```mermaid
 ---
@@ -132,12 +131,12 @@ gantt
     section Default
     0      :d1, 0, 4
 ```
+Contains the current system timestamp in whole seconds. The default value is `0` (Zero) and will increment one unit for each elapsed second.
 
 ### **`R_TIMESTAMP_MICRO` (U16) – System timestamp (microseconds)**
 
 Address: `009`
 
-Contains the microseconds count within each second. Each LSB corresponds to 32 microseconds. The maximum value is 31249. The default value is `0` (Zero).
 
 ```mermaid
 ---
@@ -434,7 +433,7 @@ gantt
     0      :d1, 0, 1
 ```
 
-An array of 8 bytes that can be used to store a tag for a specific firmware version. For instance, it could be used to store the Git hash of a specific release/commit. The byte-order is little-endian. This register is read-only.
+An array of 8 bytes that can be used to store a tag for a specific firmware build. For instance, it could be used to store the Git hash of a specific release/commit. The byte-order is little-endian. This register is read-only.
 
 If not implemented, the device MUST return a default value of `0` (Zero) for all bytes.
 
