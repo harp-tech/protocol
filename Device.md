@@ -2,25 +2,33 @@
 
 # Device Registers and Operation
 
-This document defines the set of functionality that every Harp device is expected to provide. The goal is to establish a common interface for the development and operation of all Harp hardware, and to allow quick and easy integration of new devices into the existing ecosystem. All registers and functionality specified below MUST be implemented for a device to be compliant.
+This document defines the set of functionality that every Harp device is expected to provide. The goal is to establish a common interface for the development and operation of all Harp hardware, and to allow quick and easy integration of new devices into the existing ecosystem.
+
+## Requirements Language
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED",  "MAY", and "OPTIONAL" in this document are to be interpreted as described in [RFC 2119](https://www.ietf.org/rfc/rfc2119.txt).
 
-## Core registers
+## Device Interface
 
-All Harp devices MUST implement the set of common core registers. These reserved registers are used to identify the device, the version of various components, and determine the current operation mode. A summary description of each core register is in [the table below](#core-register-table).
+All device functionality provided to the host under the Harp protocol, including device configuration, is specified using a standardized device interface. The device interface is composed of a collection of hardware registers. Each register is defined by a unique memory location, which can be accessed for reading and writing, and some special hardware-related functionality associated with the data stored in the register.
 
-## Application registers
+For example, a register can be used to configure device properties such as sampling frequency, operation mode, input / output routing, and other device-specific parameters. A register can also be used to control specific functionality, such as toggling digital output lines, starting and stopping pulse trains, or moving a motor.
 
-All other registers pertaining to the operation of a specific device are **Application Registers**. Every application register MUST have an address equal to, or greater than, 32. Numbering and naming of these registers is left to the device developer, as it will always be specific to each device.
+Each register in the device interface is assigned a unique zero-based address, and a payload type describing the format of the data stored in the register. Registers can be read-only or allow both reading and writing.
 
-## Optional registers
+Except for [Optional or Deprecated registers](#optional-or-deprecated-registers), whose behavior is clarified below, all registers and functionality specified in the device interface MUST be implemented for a device to be declared compliant with that interface.
 
-Some registers are marked as **Optional** in the table below and their functionality MAY not be fully implemented in all devices. However, all optional registers MUST implement `Read` commands by sending a reply to the host with the specified default value. Moreover, they MUST be included as part of the `R_OPERATION_CTRL` register dump.
+## Application Registers
 
-For any writeable optional registers whose function is not implemented, the device MUST always return a `Write` reply payload containing the register default value, to indicate the `Write` command had no effect. The device SHOULD NOT crash or enter an undefined state when a write command is sent to an optional unimplemented register.
+All registers pertaining to the hardware-specific operation of a device are application registers. Every application register MUST have an address equal to, or greater than, 32. The address, payload type, and naming of application registers is left to the device developer, as it will always be specific to each device.
 
-In most cases, the default value of an optional register SHOULD be `0` (Zero). Other values are allowed, but they MUST be explicitly documented and justified on a per-register basis.
+## Optional and Deprecated Registers
+
+Some registers are marked as **Optional** or **Deprecated** in the table below, and their functionality MAY not be fully implemented in all devices. However, all optional or deprecated registers MUST implement `Read` commands by sending a reply to the host with the specified default value. Moreover, they MUST be included as part of the `R_OPERATION_CTRL` register dump.
+
+For any writeable optional or deprecated registers whose function is not implemented, the device MUST always return a `Write` reply payload containing the register default value, to indicate the `Write` command had no effect. The device SHOULD NOT crash or enter an undefined state when a write command is sent to an optional or deprecated unimplemented register.
+
+In most cases, the default value of an optional or deprecated register SHOULD be `0` (Zero). Other values MAY be allowed, in which case they MUST be explicitly documented and justified on a per-register basis.
 
 ## Operation Mode
 
@@ -33,7 +41,9 @@ Harp devices SHOULD continuously check if communication with the host is active 
 
 As an application example, devices using USB as the transport layer MAY poll for an active USB connection by checking that the state of the DTR pin is `HIGH`. Once the DTR pin is brought `LOW` it SHOULD be assumed that the host closed the connection and the device MUST enter `Standby`. In this case, the host is responsible for setting the state of the DTR line when opening or closing a new connection.
 
-## Core Register Table
+## Core Registers
+
+All Harp devices MUST implement the below set of common core registers. These reserved registers are used to identify the device, the version of various components, determine the current operation mode, and other common operations.
 
 |**Name**|**Volatile**|**Read Only**|**Type**|**Add.**|**Default**|**Brief Description**|**Necessity**|
 | :- | :-: | :-: | :-: | :-: | :-: | :- | :-: |
@@ -517,7 +527,7 @@ The bytes in this register specify the [semantic version](https://semver.org/) o
 
 * **INTERFACE_HASH:** The SHA-1 hash value of the device interface schema file (`device.yml`). The byte-order is little-endian. If the client SHOULD NOT perform any validation of its device interface schema, the device MUST set this value to `0` (Zero). 
 
-## Deprecated registers
+## Deprecated Core Registers
 
 ### **`R_HW_VERSION_H` (U8) – Major Hardware Version**
 
@@ -799,7 +809,7 @@ gantt
 When the value of this register is greater than `0` (Zero), the device’s timestamp will be offset by this amount. The register is sensitive to 500 microsecond increments. This register is non-volatile.
 
 
-## Release notes
+## Release Notes
 
 - v0.2
     * First draft released.
