@@ -16,7 +16,7 @@ For example, a register can be used to configure device properties such as sampl
 
 Each register in the device interface is assigned a unique zero-based address, and a payload type describing the format of the data stored in the register. Registers can be read-only or allow both reading and writing.
 
-Except for [Optional or Deprecated registers](#optional-or-deprecated-registers), whose behavior is clarified below, all registers and functionality specified in the device interface MUST be implemented for a device to be declared compliant with that interface.
+Except for [Optional or Deprecated registers](#optional-or-deprecated-registers), whose behavior is clarified below, all registers and functionality specified in this document MUST be implemented for a device to be declared compliant with that interface.
 
 ## Application Registers
 
