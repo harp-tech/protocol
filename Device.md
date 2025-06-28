@@ -71,7 +71,6 @@ All Harp devices MUST implement the set of common core registers below. These re
 ||a) These values MUST be stored during the firmware build process and are persistent, i.e. they SHALL NOT be changeable by the host.<br>b) Check register notes on the specific register explanation |
 | :- | :- |
 
-
 <!---
 Tables can be generated here https://www.tablesgenerator.com/html_tables
 Mermaid plots can be generated here: https://mermaid.live/
@@ -108,7 +107,6 @@ Specifies the product identifier of the device. The list of reserved device prod
 
 Address: `008`
 
-
 ```mermaid
 ---
 displayMode: compact
@@ -131,12 +129,12 @@ gantt
     section Default
     0      :d1, 0, 4
 ```
+
 Contains the current system timestamp in whole seconds. The default value is `0` (Zero) and will increment one unit for each elapsed second.
 
 ### **`R_TIMESTAMP_MICRO` (U16) – System timestamp (microseconds)**
 
 Address: `009`
-
 
 ```mermaid
 ---
@@ -158,7 +156,6 @@ gantt
     section Default
     0      :d1, 0, 2
 ```
-
 
 ### **`R_OPERATION_CTRL` (U8) – Operation mode configuration**
 
@@ -231,7 +228,7 @@ b) `Standby` and `Active` modes are mandatory. `Speed` mode is deprecated.
 > [!WARNING]
 >
 > `Speed` mode is now deprecated, and SHOULD NOT be implemented in any new devices. This mode was used to support the implementation of dedicated communication protocols. When entering `Speed` mode, the device SHOULD NOT reply to host commands, other than its specific `Speed` mode commands.
-> 
+>
 > The device MUST reply with `Error` in case this operation mode is not supported.
 
 * **HEARTBEAT_EN [Bit 2]:** If this bit is set, the device sends an `Event` message every second with the contents of [`R_HEARTBEAT`](#r_heartbeat-u16--heartbeat-register-reporting-the-current-status-of-the-device). This allows the host to check the status of the device periodically. If the `ALIVE_EN` bit is also set, this bit has precedence and the device must send `R_HEARTBEAT` periodically instead of `R_TIMESTAMP_SECOND`.
@@ -250,7 +247,6 @@ b) `Standby` and `Active` modes are mandatory. `Speed` mode is deprecated.
 | 0.1        	| A critical error occurred. Only a hardware reset or a new power up can remove the device from this Mode. 	|
 
 * **ALIVE_EN [Bit 7]:** If this bit is set, the device sends an `Event` message every second with the contents of [`R_TIMESTAMP_SECOND`](#r_timestamp_second-u32--system-timestamp-seconds). This allows the host to check the status of the device periodically. This feature is deprecated and may be removed from future protocol versions.
-
 
 ### **`R_RESET_DEV` (U8) – Reset device and save non-volatile registers**
 
@@ -311,7 +307,6 @@ gantt
 >
 > To avoid unexpected behavior, the host SHOULD set only one bit at a time when sending commands to `R_RESET_DEV`.
 
-
 ### **`R_DEVICE_NAME` (25 Bytes) – Human-readable device name**
 
 Address: `012`
@@ -319,7 +314,6 @@ Address: `012`
 An array of 25 bytes specifying a human-readable device name. Any unused bytes MUST be set to `0` (Zero). This register is non-volatile. If a `Write` command to this register is received and non-volatile memory is available, the device MUST reset and save the new register value to persistent storage. Otherwise, if non-volatile memory is not available, the device MUST respond to any `Write` commands with the default register value.
 
 This register is optional. If not implemented, the default value of this register MUST be `0` (Zero).
-
 
 ### **`R_CLOCK_CONFIG` (U8) – Synchronization clock configuration**
 
@@ -381,7 +375,6 @@ The implementation of this register is optional but highly recommend for devices
 > [!NOTE]
 >
 > The device MUST always boot with the timestamp register in the unlocked state.
-
 
 ### **`R_UID` (16 Bytes) – Unique Identifier**
 
@@ -472,7 +465,6 @@ This register is read-only and used to provide status information about the devi
 
 * **IS_SYNCHRONIZED [Bit 1]:** If this bit is set, the device MUST be synchronized with an external Harp clock generator. If the device is itself a clock generator (see [`R_CLOCK_CONFIG`](#r_clock_config-u8--synchronization-clock-configuration) bit `CLK_GEN`), this bit MUST always be set.
 
-
 ### **`R_VERSION` (U8) – Semantic version information**
 
 Address: `019`
@@ -529,7 +521,6 @@ The bytes in this register specify the [semantic version](https://semver.org/) o
 ## Deprecated Core Registers
 
 The following registers are deprecated and their functionality SHOULD NOT be implemented in new devices. They MUST still exist as read-only registers, and included in the [`R_OPERATION_CTRL`](#r_operation_ctrl-u8--operation-mode-configuration) register dump. They are kept for backward compatibility with older devices and may be removed in future protocol versions.
-
 
 ### **`R_HW_VERSION_H` (U8) – Major Hardware Version**
 
@@ -739,7 +730,6 @@ gantt
 
 Contains the minor firmware version number. The value of this register is persistent and MUST NOT be changeable by the host.
 
-
 ### **`R_SERIAL_NUMBER` (U16) – Device serial number**
 
 > [!WARNING]
@@ -747,7 +737,6 @@ Contains the minor firmware version number. The value of this register is persis
 > This register is deprecated in favor of [`R_UID`](#r_uid-16-bytes--unique-identifier). The value of this register MUST duplicate the first two bytes of `R_UID`, in little-endian order.
 
 Address: `013`
-
 
 ```mermaid
 ---
@@ -773,11 +762,11 @@ gantt
 Specifies a serial number for the device. This register is optional. If implemented, this number SHOULD be unique for each unit with the same device product identifier stored in `R_WHO_AM_I`.
 
 `Write` commands to this register are optional. If `Write` commands are supported, the following two-step write sequence MUST be implemented:
+
   1. Receive a `Write` message with the value `0xFFFF`.
   2. Receive a second `Write` message with the new serial number. The device MUST reset after the second `Write` message is received.
 
 Otherwise, if `Write` commands are not supported, the device MUST respond to any `Write` commands with the fixed device serial number.
-
 
 ### **`R_TIMESTAMP_OFFSET` (U8) – Clock calibration offset**
 
@@ -786,7 +775,6 @@ Otherwise, if `Write` commands are not supported, the device MUST respond to any
 > This register is deprecated and MUST NOT be implemented on any new devices.
 
 Address: `015`
-
 
 ```mermaid
 ---
