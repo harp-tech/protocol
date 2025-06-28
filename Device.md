@@ -59,13 +59,13 @@ All Harp devices MUST implement the below set of common core registers. These re
 |[`R_TIMESTAMP_MICRO`](#r_timestamp_micro-u16--system-timestamp-microseconds)|Yes|Yes|U16|009|0|System timestamp: microseconds|Required|
 |[`R_OPERATION_CTRL`](#r_operation_ctrl-u8--operation-mode-configuration)|No|No|U8|010|b)|Configuration of the operation mode|Required|
 |[`R_RESET_DEV`](#r_reset_dev-u8--reset-device-and-save-non-volatile-registers)|No|No|U8|011|b)|Reset device and save non-volatile registers|Optional|
-|[`R_DEVICE_NAME`](#r_device_name-25-bytes--devices-name)|No|No|U8|012|b)|Human-readable name of the device|Optional|
-|[`R_SERIAL_NUMBER`](#r_serial_number-u16--devices-serial-number)|No|No|U16|013|b)|Unique serial number of the device|Deprecated|
+|[`R_DEVICE_NAME`](#r_device_name-25-bytes--human-readable-device-name)|No|No|U8|012|b)|Human-readable name of the device|Optional|
+|[`R_SERIAL_NUMBER`](#r_serial_number-u16--device-serial-number)|No|No|U16|013|b)|Unique serial number of the device|Deprecated|
 |[`R_CLOCK_CONFIG`](#r_clock_config-u8--synchronization-clock-configuration)|No|No|U8|014|b)|Synchronization clock configuration|Optional|
 |[`R_TIMESTAMP_OFFSET`](#r_timestamp_offset-u8--clock-calibration-offset)|No|No|U8|015|b)|Configures an offset for Timestamp updates|Deprecated|
 |[`R_UID`](#r_uid-16-bytes--unique-identifier)|No|Yes|U8|016|b)|Stores a unique identifier (UID) |Optional|
 |[`R_TAG`](#r_tag-8-bytes--firmware-tag)|-|Yes|U8|017|b)|Firmware tag|Optional|
-|[`R_HEARTBEAT`](#r_heartbeat-u16--heartbeat-register-reporting-the-current-status-of-the-device)|Yes|Yes|U16|018|b)|Provides information about the state of the device|Required|
+|[`R_HEARTBEAT`](#r_heartbeat-u16--heartbeat-register-reporting-the-current-status-of-the-device)|Yes|Yes|U16|018|b)|Monitors the state of the device|Required|
 |[`R_VERSION`](#r_version-u8--semantic-version-information)|-|Yes|U8|019|a)|Semantic version information for the device|Required|
 
 ||a) These values MUST be stored during the firmware build process and are persistent, i.e. they SHALL NOT be changeable by the host.<br>b) Check register notes on the specific register explanation |
@@ -313,7 +313,7 @@ gantt
 > To avoid unexpected behavior, the host SHOULD set only one bit at a time when sending commands to `R_RESET_DEV`.
 
 
-### **`R_DEVICE_NAME` (25 Bytes) – Device's name**
+### **`R_DEVICE_NAME` (25 Bytes) – Human-readable device name**
 
 Address: `012`
 
@@ -738,7 +738,7 @@ gantt
 Contains the minor firmware version number. The value of this register is persistent and MUST NOT be changeable by the host.
 
 
-### **`R_SERIAL_NUMBER` (U16) – Device's serial number**
+### **`R_SERIAL_NUMBER` (U16) – Device serial number**
 
 > [!WARNING]
 >
