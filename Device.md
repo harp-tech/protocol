@@ -62,7 +62,7 @@ All Harp devices MUST implement the below set of common core registers. These re
 |[`R_DEVICE_NAME`](#r_device_name-25-bytes--devices-name)|No|No|U8|012|b)|Human-readable name of the device|Optional|
 |[`R_SERIAL_NUMBER`](#r_serial_number-u16--devices-serial-number)|No|No|U16|013|b)|Unique serial number of the device|Deprecated|
 |[`R_CLOCK_CONFIG`](#r_clock_config-u8--synchronization-clock-configuration)|No|No|U8|014|b)|Synchronization clock configuration|Optional|
-|[`R_TIMESTAMP_OFFSET`](#r_timestamp_offset-u8--clock-calibration-offset)|No|No|U8|015|0|b)|Deprecated|
+|[`R_TIMESTAMP_OFFSET`](#r_timestamp_offset-u8--clock-calibration-offset)|No|No|U8|015|b)|Configures an offset for Timestamp updates|Deprecated|
 |[`R_UID`](#r_uid-16-bytes--unique-identifier)|No|Yes|U8|016|b)|Stores a unique identifier (UID) |Optional|
 |[`R_TAG`](#r_tag-8-bytes--firmware-tag)|-|Yes|U8|017|b)|Firmware tag|Optional|
 |[`R_HEARTBEAT`](#r_heartbeat-u16--heartbeat-register-reporting-the-current-status-of-the-device)|Yes|Yes|U16|018|b)|Provides information about the state of the device|Required|
@@ -874,4 +874,5 @@ When the value of this register is greater than `0` (Zero), the device’s times
   * Add `R_VERSION` register
   * Deprecate legacy version registers and `R_TIMESTAMP_OFFSET`
   * Clarify meaning of optional registers
+  * Add device interface clarifications
   * Adopt requirement key words from RFC 2119
