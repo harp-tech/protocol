@@ -127,7 +127,7 @@ This field is optional. In order to indicate that this field is available, the b
 > **Note**
 >
 > The full timestamp information can thus be retrieved using the formula:
-> Timestamp(s) = [`Seconds`] + [`Microseconds`] * 32 * 10-6
+> Timestamp(s) = [`Seconds`] + [`Microseconds`] * 32 * 10⁻⁶
 
 ### Checksum (1 byte)
 
