@@ -522,7 +522,7 @@ The bytes in this register specify the [semantic version](https://semver.org/) o
 
 ## Deprecated Core Registers
 
-The following registers are deprecated and their functionality SHOULD NOT be implemented in new devices. They MUST still exist as read-only registers, and included in the [`R_OPERATION_CTRL`](#r_operation_ctrl-u8--operation-mode-configuration) register dump. They are kept for backward compatibility with older devices and may be removed in future protocol versions.
+The following registers are deprecated and their functionality SHOULD NOT be implemented in new devices. They MUST still exist as read-only registers, and included in the [`R_OPERATION_CTRL`](#r_operation_ctrl-u8--operation-mode-configuration) register dump. They are kept for backward compatibility with older hosts and may be removed in future protocol versions.
 
 ### **`R_HW_VERSION_H` (U8) – Major Hardware Version**
 
