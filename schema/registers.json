@@ -168,6 +168,10 @@
                     "type": "string",
                     "enum": ["public", "private"]
                 },
+                "deprecated": {
+                    "description": "Specifies whether the register function is deprecated.",
+                    "type": "boolean"
+                },
                 "volatile": {
                     "description": "Specifies whether register values can be saved in non-volatile memory.",
                     "type": "boolean"
