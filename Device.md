@@ -157,6 +157,8 @@ gantt
     0      :d1, 0, 2
 ```
 
+Contains the microseconds count within each second. Each LSB corresponds to 32 microseconds. The maximum value is 31249. The default value is `0` (Zero).
+
 ### **`R_OPERATION_CTRL` (U8) – Operation mode configuration**
 
 Address: `010`
