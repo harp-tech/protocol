@@ -10,7 +10,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 ## Device Interface
 
-All device functionality provided to the host under the Harp protocol, including device configuration, is specified using a standardized device interface. The device interface is composed of a collection of hardware registers. Each register is defined by a unique memory location, which can be accessed for reading and writing, and potentially provide access to hardware-related functionality.
+All device functionality provided to the host under the Harp protocol, including device configuration, is specified using a standardized device interface. The device interface is composed of a collection of hardware registers. Each register is defined by a unique memory location, which can be accessed for reading and writing. These memory locations can be tied to hardware-related functionality, such that changing the value of the register can directly change the operation of the device.
 
 For example, a register can be used to configure device properties such as sampling frequency, operation mode, input / output routing, and other device-specific parameters. A register can also be used to control specific functionality, such as toggling digital output lines, starting and stopping pulse trains, or moving a motor.
 
