@@ -51,6 +51,7 @@ As an application example, devices using USB as the transport layer can poll for
 |R\_UID|No|Yes|U8|016|b)|Stores a unique identifier (UID) |Optional|
 |R\_TAG|-|Yes|U8|017|b)|Firmware tag|Optional|
 |R\_HEARTBEAT|Yes|Yes|U16|018|b)|Provides information about the state of the device|Yes|
+|R\_VERSION|-|Yes|U8|019|a)|Semantic version information for the device|Yes|
 
 ||a) These values are stored during factory process and are persistent, i.e., they cannot be changed by the user.<br>b) Check register notes on the specific register explanation<br>c) Only parts of the functionality is mandatory. Check register notes on the explanation.|
 | :- | :- |
@@ -474,6 +475,59 @@ The status of the device is given by the following bits:
 
 * **IS_SYNCHRONIZED [Bit 1]:** If set to 1, the device is synchronized with an external Harp clock generator. If the device is itself a clock generator (see `R_CLOCK_CONFIG` bit `CLK_GEN`), by definition, this bit will always be set to 1.
 
+#### **`R_VERSION` (U8) – Semantic version information**
+
+Address: `019`
+
+```mermaid
+---
+displayMode: compact
+---
+gantt
+    title R_VERSION (019)
+    dateFormat X
+    axisFormat %
+
+    section Byte
+    0         :prot_major, 0, 1
+    1         :prot_minor, 1, 2
+    2         :prot_patch, 2, 3
+    3         :fw_major, 3, 4
+    4         :fw_minor, 4, 5
+    5         :fw_patch, 5, 6
+    6         :hw_major, 6, 7
+    7         :hw_minor, 7, 8
+    8         :hw_patch, 8, 9
+    9-11      :sdk_id, 9, 12
+    12-31     :interface_hash, 12, 32
+
+    section Id
+    PROTOCOL        :protocol, 0, 3
+    FIRMWARE        :firmware, 3, 6
+    HARDWARE        :hardware, 6, 9
+    SDK_ID          :sdk, 9, 12
+    INTERFACE_HASH  :protocol, 12, 32
+
+    section Default
+    -      :d0, 0, 3
+    -      :d1, 3, 6
+    -      :d2, 6, 9
+    -      :d3, 9, 12
+    -      :d4, 12, 32
+```
+
+The bytes in this register specify the [semantic version](https://semver.org/) of different device components. Each component version is made up of three bytes, following the order `major`, `minor`, `patch`. The register also includes a unique identifier of the core microcontroller SDK and a hash digest of the interface schema file describing the device capabilities.
+
+* **PROTOCOL:** The semantic version of the Harp protocol implemented by the device.
+
+* **FIRMWARE:** The semantic version of the device firmware application.
+
+* **HARDWARE:** The semantic version of the device hardware.
+
+* **SDK_ID:** The three-character code of the core microcontroller SDK used to implement the device.
+
+* **INTERFACE_HASH:** The SHA-1 hash value of the device interface schema file (`device.yml`). The byte-order is little-endian.
+
 
 ## Release notes:
 
@@ -526,12 +580,15 @@ The status of the device is given by the following bits:
   * Clarify `Connected` behavior between host and device and add application examples.
 
 - v1.10.0
-  * Add `UID` register
+  * Add `R_UID` register
   * Add future deprecation warning to `R_SERIAL_NUMBER` register.
 
 - v1.11.0
-  * Add new `Tag` register.
+  * Add new `R_TAG` register.
 
 - v1.12.0
   * Add heartbeat register providing status information
-  * Fix typo in `OPERATION_CTRL` register data type (U16 -> U8)
+  * Fix typo in `R_OPERATION_CTRL` register data type (U16 -> U8)
+
+- v1.13.0
+  * Add `R_VERSION` register.
