@@ -16,7 +16,7 @@ For example, a register can be used to configure device properties such as sampl
 
 Each register in the device interface is assigned a unique zero-based address, and a payload type describing the format of the data stored in the register. Registers can be read-only or allow both reading and writing.
 
-Except for [Optional or Deprecated registers](#optional-or-deprecated-registers), whose behavior is clarified below, all registers and functionality specified in this document MUST be implemented for a device to be declared compliant with that interface.
+Except for [Optional or Deprecated registers](#optional-or-deprecated-registers), whose behavior is clarified below, all registers and functionality specified in this document MUST be implemented for a device to be declared compliant with this specification.
 
 ## Application Registers
 
@@ -24,7 +24,7 @@ All registers pertaining to the hardware-specific operation of a device are appl
 
 ## Optional and Deprecated Registers
 
-Some registers are marked as **Optional** or **Deprecated** in the [Core Registers](#core-registers) table, and their functionality MAY not be fully implemented in all devices. However, all optional or deprecated registers MUST implement `Read` commands by sending a reply to the host with the specified default value. Moreover, they MUST be included as part of the [`R_OPERATION_CTRL`](#r_operation_ctrl-u8--operation-mode-configuration) register dump.
+Some registers are marked as **Optional** or **Deprecated** in the table below ([Core Registers](#core-registers)), and their functionality MAY not be fully implemented in all devices. However, all optional or deprecated registers MUST implement `Read` commands by sending a reply to the host with the specified default value. Moreover, they MUST be included as part of the [`R_OPERATION_CTRL`](#r_operation_ctrl-u8--operation-mode-configuration) register dump.
 
 For any writeable optional or deprecated registers whose function is not implemented, the device MUST always return a `Write` reply payload containing the register default value, to indicate the `Write` command had no effect. The device SHOULD NOT crash or enter an undefined state when a write command is sent to an optional or deprecated unimplemented register.
 
