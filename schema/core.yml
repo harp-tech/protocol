@@ -121,8 +121,8 @@ groupMasks:
   LedState:
     description: Specifies the state of an LED on the device.
     values:
-      Off: {value: 0, description: Specifies that the LED is off.}
-      On: {value: 1, description: Specifies that the LED is on.}
+      "Off": {value: 0, description: Specifies that the LED is off.}
+      "On": {value: 1, description: Specifies that the LED is on.}
 bitMasks:
   ResetFlags:
     description: Specifies the behavior of the non-volatile registers when resetting the device.
