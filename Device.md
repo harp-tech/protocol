@@ -447,18 +447,18 @@ gantt
 
     section Bit
     15-2      :reserved, 0, 1
-    1         :bit1, 1, 2
-    0         :bit0, 2, 3
+    1         :bit1, after reserved, 2
+    0         :bit0, after bit1, 3
 
     section Id
     -               :idr, 0, 1
-    IS_ACTIVE       :id0, 1, 2
-    IS_SYNCHRONIZED :id1, 2, 3
+    IS_ACTIVE       :id0, after reserved, 2
+    IS_SYNCHRONIZED :id1, after bit1, 3
 
     section Default
     -      :dr, 0, 1
-    -      :d7, 1, 2
-    -      :d6, 2, 3
+    -      :d7, after reserved, 2
+    -      :d6, after bit1, 3
 ```
 
 This register is read-only and used to provide status information about the device. Any changes to the below bits are controlled by the device and sent to the host through a periodic `Event` message. If periodic reporting is enabled by setting [`R_OPERATION_CTRL`](#r_operation_ctrl-u8--operation-mode-configuration) bit `HEARTBEAT_EN`, the event will be periodically emitted at a rate of 1 Hz, in sync with updates to the [`R_TIMESTAMP_SECOND`](#r_timestamp_second-u32--system-timestamp-seconds) register.
@@ -482,30 +482,30 @@ gantt
 
     section Byte
     0         :prot_major, 0, 1
-    1         :prot_minor, 1, 2
-    2         :prot_patch, 2, 3
-    3         :fw_major, 3, 4
-    4         :fw_minor, 4, 5
-    5         :fw_patch, 5, 6
-    6         :hw_major, 6, 7
-    7         :hw_minor, 7, 8
-    8         :hw_patch, 8, 9
-    9-11      :sdk_id, 9, 12
-    12-31     :interface_hash, 12, 32
+    1         :prot_minor, after prot_major, 2
+    2         :prot_patch, after prot_minor, 3
+    3         :fw_major, after prot_patch, 4
+    4         :fw_minor, after fw_major, 5
+    5         :fw_patch, after fw_minor, 6
+    6         :hw_major, after fw_patch, 7
+    7         :hw_minor, after hw_major, 8
+    8         :hw_patch, after hw_minor, 9
+    9-11      :sdk_id, after hw_patch, 12
+    12-31     :interface_hash, after sdk_id, 32
 
     section Id
     PROTOCOL        :protocol, 0, 3
-    FIRMWARE        :firmware, 3, 6
-    HARDWARE        :hardware, 6, 9
-    SDK_ID          :sdk, 9, 12
-    INTERFACE_HASH  :protocol, 12, 32
+    FIRMWARE        :firmware, after prot_patch, 6
+    HARDWARE        :hardware, after fw_patch, 9
+    SDK_ID          :sdk, after hw_patch, 12
+    INTERFACE_HASH  :protocol, after sdk_id, 32
 
     section Default
     -      :d0, 0, 3
-    -      :d1, 3, 6
-    -      :d2, 6, 9
-    -      :d3, 9, 12
-    -      :d4, 12, 32
+    -      :d1, after prot_patch, 6
+    -      :d2, after fw_patch, 9
+    -      :d3, after hw_patch, 12
+    -      :d4, after sdk_id, 32
 ```
 
 The bytes in this register specify the [semantic version](https://semver.org/) of different device components. Each component version is made up of three bytes, following the order `major`, `minor`, `patch`. The register also includes a unique identifier of the core microcontroller SDK and a hash digest of the interface schema file describing the device capabilities.
