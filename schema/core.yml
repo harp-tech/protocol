@@ -11,36 +11,43 @@ registers:
     type: U8
     access: Read
     description: Specifies the major hardware version of the device.
+    deprecated: true
   HardwareVersionLow:
     address: 2
     type: U8
     access: Read
     description: Specifies the minor hardware version of the device.
+    deprecated: true
   AssemblyVersion:
     address: 3
     type: U8
     access: Read
     description: Specifies the version of the assembled components in the device.
+    deprecated: true
   CoreVersionHigh:
     address: 4
     type: U8
     access: Read
     description: Specifies the major version of the Harp core implemented by the device.
+    deprecated: true
   CoreVersionLow:
     address: 5
     type: U8
     access: Read
     description: Specifies the minor version of the Harp core implemented by the device.
+    deprecated: true
   FirmwareVersionHigh:
     address: 6
     type: U8
     access: Read
     description: Specifies the major version of the Harp core implemented by the device.
+    deprecated: true
   FirmwareVersionLow:
     address: 7
     type: U8
     access: Read
     description: Specifies the minor version of the Harp core implemented by the device.
+    deprecated: true
   TimestampSeconds:
     address: 8
     type: U32
@@ -100,6 +107,7 @@ registers:
     type: U16
     access: Write
     description: Specifies the unique serial number of the device.
+    deprecated: true
   ClockConfiguration:
     address: 14
     type: U8
