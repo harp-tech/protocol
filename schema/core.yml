@@ -114,6 +114,72 @@ registers:
     access: Write
     maskType: ClockConfigurationFlags
     description: Specifies the configuration for the device synchronization clock.
+  TimestampOffset:
+    address: 15
+    type: U8
+    access: Write
+    description: Offsets the device timestamp.
+    deprecated: true
+  UID:
+    address: 16
+    type: U8
+    access: Read
+    length: 16
+    description: Specifies the unique identifier of the device.
+  Tag:
+    address: 17
+    type: U8
+    access: Write
+    length: 8
+    description: Stores a user-defined tag for the device.
+  Heartbeat:
+    address: 18
+    type: U16
+    access: Event
+    maskType: HeartbeatFlags
+    description: Stores the number of seconds since the device was last reset.
+  Version:
+    address: 19
+    type: U8
+    access: Read
+    length: 32
+    description: Specifies the semantic version of the different device components.
+    payloadSpec:
+      ProtocolMajor:
+        offset: 0
+        description: Specifies the major version of the Harp protocol implementation.
+      ProtocolMinor:
+        offset: 1
+        description: Specifies the minor version of the Harp protocol implementation.
+      ProtocolPatch:
+        offset: 2
+        description: Specifies the patch version of the Harp protocol implementation.
+      FirmwareMajor:
+        offset: 3
+        description: Specifies the major version of the firmware.
+      FirmwareMinor:
+        offset: 4
+        description: Specifies the minor version of the firmware.
+      FirmwarePatch:
+        offset: 5
+        description: Specifies the patch version of the firmware.
+      HardwareMajor:
+        offset: 6
+        description: Specifies the major version of the hardware.
+      HardwareMinor:
+        offset: 7
+        description: Specifies the minor version of the hardware.
+      HardwarePatch:
+        offset: 8
+        description: Specifies the patch version of the hardware.
+      SdkId:
+        offset: 9
+        description: Specifies the microcontroller SDK used to implement the device.
+        mask: 0xFFFFFF
+      InterfaceHash:
+        offset: 12
+        description: Specifies the SHA-1 hash value of the device interface contract.
+        mask: 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
 groupMasks:
   OperationMode:
     description: Specifies the operation mode of the device.
@@ -152,3 +218,8 @@ bitMasks:
       GeneratorCapability: {value: 0x10, description: Specifies the device has the capability to generate the clock synchronization signal to the clock output connector.}
       ClockUnlock: {value: 0x40, description: The device will unlock the timestamp register counter and will accept commands to set new timestamp values.}
       ClockLock: {value: 0x80, description: The device will lock the timestamp register counter and will not accept commands to set new timestamp values.}
+  HeartbeatFlags:
+    description: Specifies configuration flags for the device heartbeat event.
+    bits:
+      IsActive: {value: 0x1, description: "The device is in Active mode."}
+      IsSynchronized: {value: 0x2, description: "The device is synchronized to an external Harp clock generator. The value is 1 if the device is itself a clock generator."}
