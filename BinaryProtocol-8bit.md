@@ -355,12 +355,12 @@ Finally, if the register is a fixed-length register, the same message length MUS
 >   - Description: Sets the frequency of the camera in Hz.
 >```
 >
-> ❌ DO NOT return the frequency in U16 for a `Read` command and the frequency in U8 for a `Write` command. (i.e. share the same data type.)
-> ❌ DO NOT return the frequency in Hz for a `Read` command and the period in seconds for a `Write` command. (i.e. share the same function/meaning.)
+> ❌ DO NOT return the frequency in U16 for a `Read` command and the frequency in U8 for a `Write` command.  
+> ❌ DO NOT return the frequency in Hz for a `Read` command and the period in seconds for a `Write` command.  
 >
-> ✅ DO return the frequency in U8 for both a `Read` and `Write` command.
-> ✅ DO return the frequency in Hz for both a `Read` and a `Write` command.
-> ✅ DO allow writing a value of `101` to set the frequency even if both `Read` and `Write` replies will only return the frequency of 100Hz. This behavior is perfectly acceptable as the device might not be able to set the frequency to the exact value requested by the controller, and instead returns the value that was set.
+> ✅ DO return the frequency in U8 for both a `Read` and `Write` command.  
+> ✅ DO return the frequency in Hz for both a `Read` and a `Write` command.  
+> ✅ DO allow writing a value of `101` to set the frequency even if both `Read` and `Write` replies will only return the frequency of 100Hz. This behavior is perfectly acceptable as the device might not be able to set the frequency to the exact value requested by the controller, and instead returns the value that was effectively set.
 
 ---
 
