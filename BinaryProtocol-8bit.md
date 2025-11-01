@@ -71,9 +71,9 @@ Specifies the type of the Harp message.
 
 |   Value   |  Description  |
 | :-------  |  ----------- |
-| 1 (`Read`)  |  Read the contents of the register with the specified [`Address`]  |
-| 2 (`Write`) |   Write the contents to the register with the specified [`Address`]     |
-| 3 (`Event`) |   Send the contents of the register with the specified [`Address`]     |
+| 1 (`Read`)  |  Read the contents of the register with the specified [`Address`](#address-1-byte)  |
+| 2 (`Write`) |   Write the contents to the register with the specified [`Address`](#address-1-byte)     |
+| 3 (`Event`) |   Send the contents of the register with the specified [`Address`](#address-1-byte)     |
 
 #### Error flag (1 bit)
 
@@ -85,7 +85,7 @@ Specifies the number of bytes (`U8`) after this field that are still available a
 
 ### ExtendedLength (2 bytes, OPTIONAL)
 
-Specifies the number of bytes (`U16`) after this field that are still available and need to be read to complete the Harp message. This field is OPTIONAL. If this field is used, the [`Length`] field MUST be set to 255.
+Specifies the number of bytes (`U16`) after this field that are still available and need to be read to complete the Harp message. This field is OPTIONAL. If this field is used, the [`Length`](#length-1-byte) field MUST be set to 255.
 
 ### Address (1 byte)
 
@@ -97,7 +97,7 @@ Specifies the origin or destination Device of a Harp message, to be used when a 
 
 ### PayloadType (1 byte)
 
-Indicates the type of data available in the [`Payload`]. The structure of this byte MUST follow the below specification:
+Indicates the type of data available in [`Payload`](#payload--bytes). The structure of this byte MUST follow the below specification:
 
 <table>
 <tr>
@@ -121,7 +121,7 @@ Indicates the type of data available in the [`Payload`]. The structure of this b
 
 #### Size (4 bits)
 
-Specifies the size of each word in the [`Payload`].
+Specifies the size of each word in [`Payload`](#payload--bytes).
 
 |  Value  |  Description  |
 | :-----: |  -----------: |
@@ -132,15 +132,15 @@ Specifies the size of each word in the [`Payload`].
 
 #### HasTimestamp (1 bit)
 
-If the Harp message contains a timestamp, this bit MUST be set. In this case the fields [`Seconds`] and [`Microseconds`] MUST be included in the message.
+If the Harp message contains a timestamp, this bit MUST be set. In this case the fields [`Seconds`](#seconds-4-bytes) and [`Microseconds`](#microseconds-2-bytes) MUST be included in the message.
 
 #### IsFloat (1 bit)
 
-This bit indicates whether the [`Payload`] represents fractional values. If the bit is not set, the payload contains integers.
+This bit indicates whether [`Payload`](#payload--bytes) encodes fractional values. If the bit is not set, the payload contains integers.
 
 #### IsSigned (1 bit)
 
-If this bit is set, indicates that the [`Payload`] contains integers with signal.
+This bit indicates whether [`Payload`](#payload--bytes) encodes integers with signal. If the bit is not set, the payload contains unsigned integers.
 
 > [!NOTE]
 >
@@ -148,7 +148,7 @@ If this bit is set, indicates that the [`Payload`] contains integers with signal
 
 ### Timestamp (6 bytes, OPTIONAL)
 
-Specifies the value of the Device Harp clock. This field is OPTIONAL. If the [`HasTimestamp`] flag is set, the following fields MUST be present before the message payload.
+Specifies the value of the Device Harp clock. This field is OPTIONAL. If the [`HasTimestamp`](#hastimestamp-1-bit) flag is set, the following fields MUST be present before the message payload.
 
 #### Seconds (4 bytes)
 
@@ -177,7 +177,7 @@ The sum of all bytes (`U8`) contained in the other fields of the Harp message st
 
 ### Request-Reply
 
-A Device that implements this Harp Protocol MAY receive `Write` and `Read` requests from the Controller at any point. For each request arriving from the Controller, a reply message with the same message type, register address, and register type MUST be returned from the Device.
+A Device that implements this protocol MAY receive `Write` and `Read` requests from the Controller at any point. For each request arriving from the Controller, a reply message with the same message type, register address, and register type MUST be returned from the Device.
 
 All reply messages sent by the Device MUST be timestamped with the Harp clock time at which the request was processed.
 
@@ -191,9 +191,9 @@ The Device SHOULD NOT send more than a single reply message. The only supported 
 
 ### Event Stream
 
-A Device MAY send to the Controller `Event` messages reporting the contents of specific registers at any time . Sending of events depends on both the current device configuration and [Operation Mode](Device.md#operation-mode). A Device SHOULD NOT send `Event` messages when in the `Standby` operation mode.
+A Device MAY send to the Controller `Event` messages reporting the contents of specific registers at any time. Sending of events depends on both the current device configuration and [Operation Mode](Device.md#operation-mode). A Device SHOULD NOT send `Event` messages when in the `Standby` operation mode.
 
-When the Device is in `Active` mode, device-specific registers can be used by the Controller to further restrict the seding of events. The documentation of each device interface should be consulted to understand the operation of such registers.
+When the Device is in `Active` mode, device-specific registers can be used by the Controller to further restrict the sending of events. The documentation of each device interface should be consulted to understand the operation of such registers.
 
 All `Event` messages sent by the Device SHOULD be timestamped with the Harp clock time as early as possible following the event trigger.
 
@@ -209,23 +209,23 @@ We will use the following abbreviations:
 
 #### Write Message
 
-- [REQ] **Controller**:       `2`  `Length` `Address` `Port` `PayloadType` `T` `Checksum`
-- [REP] **Device**: `2`  `Length` `Address` `Port` `PayloadType` `Timestamp<T>` `Checksum`       OK
-- [REP] **Device**: `10` `Length` `Address` `Port` `PayloadType` `Timestamp<T>` `Checksum`       ERROR
+- [REQ] **Controller**:       `2`  `Length` `Address` `Port` `PayloadType` `Payload` `Checksum`
+- [REP] **Device**: `2`  `Length` `Address` `Port` `PayloadType` `Timestamp` `Payload` `Checksum`       OK
+- [REP] **Device**: `10` `Length` `Address` `Port` `PayloadType` `Timestamp` `Payload` `Checksum`       ERROR
 
 The timestamp information in [REP] represents the time when the register contents were updated.
 
 #### Read Message
 
 - [REQ] **Controller**: `1` `4`      `Address` `Port` `PayloadType` `Checksum`
-- [REP] **Device**: `1` `Length` `Address` `Port` `PayloadType` `Timestamp<T>` `Checksum`       OK
-- [REP] **Device**: `9` `10`     `Address` `Port` `PayloadType` `Timestamp<T>` `Checksum`        ERROR
+- [REP] **Device**: `1` `Length` `Address` `Port` `PayloadType` `Timestamp` `Payload` `Checksum`       OK
+- [REP] **Device**: `9` `10`     `Address` `Port` `PayloadType` `Timestamp` `Payload` `Checksum`       ERROR
 
 The timestamp information in [REP] represents the time when the register contents were read.
 
 #### Event message
 
-- [EVT] **Device**: `3` `Length` `Address` `Port` `PayloadType` `Timestamp<T>` `Checksum`      OK
+- [EVT] **Device**: `3` `Length` `Address` `Port` `PayloadType` `Timestamp` `Payload` `Checksum`      OK
 
 The timestamp information in [EVT] represents the time when the register contents were read.
 
@@ -237,11 +237,11 @@ Below we present technical notes and reference implementation examples for some 
 
 ### MessageType and ErrorFlag
 
-The `Error` flag in the [`MessageType`] field can be sent by the Device at any time. However, since information included in error messages is limited, we RECOMMEND restricting error messages to the following cases:
+The [`Error`](#error-flag-1-bit) flag in the [`MessageType`](#messagetype-1-byte) field can be sent by the Device at any time. However, since information included in error messages is limited, we RECOMMEND restricting error messages to the following cases:
 
   1. The Controller tries to read from a register that does not exist on the Device;
   2. The Controller tries to write data which is invalid for the specific Device register;
-  3. The message [`PayloadType`] does not match the Device register specification.
+  3. The message [`PayloadType`](#payloadtype-1-byte) does not match the Device register specification.
 
 A simple code in C to check for error will be:
 
@@ -256,7 +256,7 @@ A simple code in C to check for error will be:
 
 ### Parsing PayloadType
 
-The following pseudo-code snippet illustrates how all possible `PayloadType` values are defined.
+The following pseudo-code snippet illustrates how all possible [`PayloadType`](#payloadtype-1-byte) values are defined.
 
 ```C#
   int isUnsigned = 0x00;
@@ -314,7 +314,7 @@ for (; i < Length + 1; i++)
 
 ### Parsing [Payload] with Arrays
 
-The [`Payload`] element can contain a single value, or an array of values of the same type. The first step to parse these payloads is to first find the number of values contained in the [`Payload`] element. The following code example demonstrates how to calculate the array length for both timestamped and non-timestamped payloads:
+The [`Payload`](#payload--bytes) field can contain a single value, or an array of values of the same type. The first step to parse these payloads is to first find the number of values contained in the [`Payload`](#payload--bytes) field. The following code example demonstrates how to calculate the array length for both timestamped and non-timestamped payloads:
 
 ```C
 int arrayLength;
