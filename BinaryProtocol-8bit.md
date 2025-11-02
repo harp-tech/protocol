@@ -138,6 +138,10 @@ If the Harp message contains a timestamp, this bit MUST be set. In this case the
 
 This bit indicates whether [`Payload`](#payload--bytes) encodes fractional values. If the bit is not set, the payload contains integers.
 
+> [!NOTE]
+>
+> The bit [`IsFloat`] MUST NOT be set with 8-bit or 16-bit sized payloads.
+
 #### IsSigned (1 bit)
 
 This bit indicates whether [`Payload`](#payload--bytes) encodes integers with signal. If the bit is not set, the payload contains unsigned integers.
