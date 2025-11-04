@@ -181,7 +181,7 @@ The sum of all bytes (`U8`) contained in the other fields of the Harp message st
 
 ### Request-Reply
 
-A Device that implements this protocol MAY receive `Write` and `Read` requests from the Controller at any point. For each request arriving from the Controller, a reply message with the same message type, register address, and register type MUST be returned from the Device.
+A Device that implements this protocol MAY receive `Write` and `Read` requests from the Controller at any point. For each request arriving from the Controller, a reply message with the same message type, register address, and register type MUST be returned by the Device.
 
 All reply messages sent by the Device MUST be timestamped with the Harp clock time at which the request was processed.
 
