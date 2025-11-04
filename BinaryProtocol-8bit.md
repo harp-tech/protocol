@@ -164,8 +164,8 @@ Specifies the fractional part of the Harp Timestamp (`U16`) encoded as the numbe
 
 > [!NOTE]
 >
-> The full timestamp information can be retrieved using the formula:
-> Timestamp = Seconds + Microseconds * 32e-6
+> The full timestamp information, in seconds, can be retrieved using the formula:  
+> `Timestamp = Seconds + Microseconds * 32e-6`
 
 ### Payload (? bytes)
 
