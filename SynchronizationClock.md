@@ -70,7 +70,7 @@ Example of a microcontroller C++ code for converting the four received encoded b
     uint64_t curr_us = ((static_cast<uint64_t>(encoded_sec) + 1) * 1e6) - HARP_SYNC_OFFSET_US;
 ````
 
-A full example demonstrating a state machine receiving the 6-byte sequence can be found in the [Pico Core](https://github.com/AllenNeuralDynamics/harp.core.rp2040/blob/main/firmware/src/harp_synchronizer.cpp).
+A full example demonstrating a state machine receiving the 6-byte sequence can be found in the [Pico Core](https://github.com/harp-tech/harp.core.pico/blob/main/firmware/src/harp_synchronizer.cpp).
 
 ---
 
