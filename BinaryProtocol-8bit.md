@@ -58,8 +58,8 @@ Specifies the type and other operation flags of the Harp message. The structure 
     <td align="center">0</td>
     <td align="center">0</td>
     <td align="center">0</td>
-    <td align="center">Error</td>
     <td align="center">0</td>
+    <td align="center">Error</td>
     <td align="center">0</td>
     <td align="center" colspan="2">Type</td>
 </tr>
