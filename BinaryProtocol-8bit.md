@@ -191,11 +191,11 @@ All reply messages sent by the Device MUST be timestamped with the Harp clock ti
 
 The payload of the reply message SHOULD represent the up-to-date state of the register targeted by the request, after the request is processed. If a `Write` request is sent, the payload of the reply MAY be different from the payload of the original request, e.g. if the Device needs to transform or adjust the actual value written on the register ([see "Register Polymorphism" section below](#register-polymorphism)).
 
-The Device SHOULD NOT send more than a single reply message. The only supported exception is the operation of the [`R_OPERATION_CTRL`](Device.md#r_operation_ctrl-u8--operation-mode-configuration) register, which allows the controller to request a dump of all registers in the device. In this case, the Device replies with a single `Write` message from `R_OPERATION_CTRL`, in accordance with the above specification. However, if **DUMP [Bit 3]** is set, the Device will additionally emit a sequence of `Read` messages back-to-back, containing the state of each register in the Device.
+The Device SHOULD NOT send more than a single reply message. The only supported exception is the operation of the [`R_OPERATION_CTRL`](Device.md#r_operation_ctrl-u8--operation-mode-configuration) register, which allows the Controller to request a dump of all registers in the Device. In this case, the Device replies with a single `Write` message from `R_OPERATION_CTRL`, in accordance with the above specification. However, if **DUMP [Bit 3]** is set, the Device will additionally emit a sequence of `Read` messages back-to-back, containing the state of each register in the Device.
 
 ### Event Stream
 
-A Device MAY send to the Controller `Event` messages reporting the contents of specific registers at any time. Sending of events depends on both the current device configuration and [Operation Mode](Device.md#operation-mode). A Device SHOULD NOT send `Event` messages when in the `Standby` operation mode.
+A Device MAY send to the Controller `Event` messages reporting the contents of specific registers at any time. Sending of events depends on both the current Device configuration and [Operation Mode](Device.md#operation-mode). A Device SHOULD NOT send `Event` messages when in the `Standby` operation mode.
 
 When the Device is in `Active` mode, device-specific registers can be used by the Controller to further restrict the sending of events. The documentation of each device interface should be consulted to understand the operation of such registers.
 
@@ -203,7 +203,7 @@ All `Event` messages sent by the Device SHOULD be timestamped with the Harp cloc
 
 ### Message Exchange Examples
 
-Some Harp message exchanges are shown below to demonstrate the typical usage of the protocol between a device and a controller. Note that timestamp information is usually omitted in messages sent from the controller to the device, since actions are expected to run as soon as possible.
+Some Harp message exchanges are shown below to demonstrate the typical usage of the protocol between a Device and a Controller. Note that timestamp information is usually omitted in messages sent from the Controller to the Device, since actions are expected to run as soon as possible.
 
 We will use the following abbreviations:
 
