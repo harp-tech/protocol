@@ -77,7 +77,7 @@ Specifies the type of the Harp message.
 
 #### Error flag (1 bit)
 
-When this bit is set, the message represents an error sent from the Device to the Controller. This bit SHOULD NOT be set in any messages sent from the Controller to the Device.
+When this bit is set, the message represents an error sent from the Device to the Controller. This bit SHOULD only be set on messages representing a reply by the Device to a request from the Controller. This bit SHOULD NOT be set in any messages sent from the Controller to the Device.
 
 ### Length (1 byte)
 
@@ -241,7 +241,7 @@ Below we present technical notes and reference implementation examples for some 
 
 ### MessageType and ErrorFlag
 
-The [`Error`](#error-flag-1-bit) flag in the [`MessageType`](#messagetype-1-byte) field can be sent by the Device at any time. However, since information included in error messages is limited, we RECOMMEND restricting error messages to the following cases:
+The [`Error`](#error-flag-1-bit) flag in the [`MessageType`](#messagetype-1-byte) field is set by the Device only on messages representing a reply to a request from the Controller. However, since information included in error messages is limited, we RECOMMEND restricting error messages to the following cases:
 
   1. The Controller tries to read from a register that does not exist on the Device;
   2. The Controller tries to write data which is invalid for the specific Device register;
