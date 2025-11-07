@@ -27,17 +27,21 @@ Best practices and guidelines on implementing these patterns are described in th
 
 All Harp messages MUST follow the structure below, specifying the minimal amount of information for a well-defined exchange of data.
 
-| Harp Message   |
-| -------------- |
-| MessageType    |
-| Length         |
-| ExtendedLength |
-| Address        |
-| Port           |
-| PayloadType    |
-| Timestamp      |
-| Payload        |
-| Checksum       |
+| Harp Message    |
+| --------------- |
+| MessageType     |
+| Length          |
+| ExtendedLength* |
+| Address         |
+| Port            |
+| PayloadType     |
+| Timestamp*      |
+| Payload         |
+| Checksum        |
+
+> [!NOTE]
+> 
+> Fields marked with * can be included or omitted under specific conditions. Check the corresponding section for details.
 
 ### MessageType (1 byte)
 
@@ -83,9 +87,9 @@ When this bit is set, the message represents an error sent from the Device to th
 
 Specifies the number of bytes (`U8`) after this field that are still available and need to be read to complete the Harp message. If one byte is not enough to express the length of the message, the `Length` field MUST be set to 255. In this case the [`ExtendedLength`](#extendedlength-2-bytes) field MUST be included.
 
-### ExtendedLength (2 bytes, OPTIONAL)
+### ExtendedLength (2 bytes)
 
-Specifies the number of bytes (`U16`) after this field that are still available and need to be read to complete the Harp message. This field is OPTIONAL. If this field is used, the [`Length`](#length-1-byte) field MUST be set to 255.
+Specifies the number of bytes (`U16`) after this field that are still available and need to be read to complete the Harp message. If this field is used, the [`Length`](#length-1-byte) field MUST be set to 255.
 
 ### Address (1 byte)
 
@@ -150,9 +154,9 @@ This bit indicates whether [`Payload`](#payload--bytes) encodes integers with si
 >
 > The bits [`IsFloat`] and [`IsSigned`] MUST NOT be set simultaneously.
 
-### Timestamp (6 bytes, OPTIONAL)
+### Timestamp (6 bytes)
 
-Specifies the value of the Device Harp clock. This field is OPTIONAL. If the [`HasTimestamp`](#hastimestamp-1-bit) flag is set, the following fields MUST be present before the message payload.
+Specifies the value of the Device Harp clock. If the [`HasTimestamp`](#hastimestamp-1-bit) flag is set, the following fields MUST be present before the message payload.
 
 #### Seconds (4 bytes)
 
