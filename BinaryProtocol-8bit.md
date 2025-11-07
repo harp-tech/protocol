@@ -27,17 +27,17 @@ Best practices and guidelines on implementing these patterns are described in th
 
 All Harp messages MUST follow the structure below, specifying the minimal amount of information for a well-defined exchange of data.
 
-| Harp Message    |
-| --------------- |
-| MessageType     |
-| Length          |
-| ExtendedLength* |
-| Address         |
-| Port            |
-| PayloadType     |
-| Timestamp*      |
-| Payload         |
-| Checksum        |
+| Harp Message                               |
+| ------------------------------------------ |
+| [MessageType](#messagetype-1-byte)         |
+| [Length](#length-1-byte)                   |
+| [ExtendedLength](#extendedlength-2-bytes)* |
+| [Address](#address-1-byte)                 |
+| [Port](#port-1-byte)                       |
+| [PayloadType](#payloadtype-1-byte)         |
+| [Timestamp](#timestamp-6-bytes)*           |
+| [Payload](#payload--bytes)                 |
+| [Checksum](#checksum-1-byte)               |
 
 > [!NOTE]
 > 
