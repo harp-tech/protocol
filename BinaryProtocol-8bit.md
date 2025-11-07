@@ -244,8 +244,9 @@ Below we present technical notes and reference implementation examples for some 
 The [`Error`](#error-flag-1-bit) flag in the [`MessageType`](#messagetype-1-byte) field is set by the Device only on messages representing a reply to a request from the Controller. However, since information included in error messages is limited, we RECOMMEND restricting error messages to the following cases:
 
   1. The Controller tries to read from a register that does not exist on the Device;
-  2. The Controller tries to write data which is invalid for the specific Device register;
-  3. The message [`PayloadType`](#payloadtype-1-byte) does not match the Device register specification.
+  2. The Controller tries to write on a read-only register;
+  3. The Controller tries to write data which is invalid for the specific Device register;
+  4. The message [`PayloadType`](#payloadtype-1-byte) does not match the Device register specification.
 
 A simple code in C to check for error will be:
 
