@@ -80,11 +80,11 @@ registers:
         mask: 0x10
       VisualIndicators:
         description: Specifies the state of all visual indicators on the device.
-        maskType: LedState
+        maskType: EnableFlag
         mask: 0x20
       OperationLed:
         description: Specifies whether the device state LED should report the operation mode of the device.
-        maskType: LedState
+        maskType: EnableFlag
         mask: 0x40
       Heartbeat:
         description: Specifies whether the device should report the content of the seconds register each second.
@@ -126,11 +126,6 @@ groupMasks:
     values:
       Disabled: {value: 0, description: Specifies that the flag is disabled.}
       Enabled: {value: 1, description: Specifies that the flag is enabled.}
-  LedState:
-    description: Specifies the state of an LED on the device.
-    values:
-      Off: {value: 0, description: Specifies that the LED is off.}
-      On: {value: 1, description: Specifies that the LED is on.}
 bitMasks:
   ResetFlags:
     description: Specifies the behavior of the non-volatile registers when resetting the device.
