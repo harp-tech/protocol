@@ -132,7 +132,7 @@ bitMasks:
       RestoreEeprom: {value: 0x2, description: The device will boot and restore all the registers to the values stored in non-volatile memory.}
       Save: {value: 0x4, description: The device will boot and save all the current register values to non-volatile memory.}
       RestoreName: {value: 0x8, description: The device will boot with the default device name.}
-      FirmwareUpdate: {value: 0x20, description: The device will trigger firmware update mode.}
+      UpdateFirmware: {value: 0x20, description: The device will enter firmware update mode.}
       BootFromDefault: {value: 0x40, description: Specifies that the device has booted from default factory values.}
       BootFromEeprom: {value: 0x80, description: Specifies that the device has booted from non-volatile values stored in EEPROM.}
   ClockConfigurationFlags:
