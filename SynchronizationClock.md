@@ -114,10 +114,7 @@ The connector pinout for a device *receiving* the timestamp is shown below:
 
 !["SynchReceiverSchematic](./assets/HarpClockSyncReceiver.png)
 
-A TVS diode is RECOMMENDED for ESD protection.
-
-> [!IMPORTANT]
-> The device receiving the timestamp MUST provide 3.3V-5V (~10 mA) on the audio jack **R** pin.
+The device receiving the timestamp MUST provide 3.3V-5V (~10 mA) on the connector **R** pin. A TVS diode is RECOMMENDED for ESD protection.
 
 The schematic snippet for a device *sending* the timestamp is shown below:
 
