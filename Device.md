@@ -301,7 +301,7 @@ gantt
 
 * **NAME_TO_DEFAULT [Bit 3]:** If this bit is set, the device MUST reboot and restore the value of [`R_DEVICE_NAME`](#r_device_name-25-bytes--devices-name) to its default value. When sending a response to a `Read` command, the device MUST clear this bit in the response payload.
 
-* **UPDATE_FIRMWARE [Bit 5]:** If this bit is set, the device MUST enter firmware update mode. In this mode the device MAY NOT respond to any commands until the update completes. Once completed, the device MUST reset. A `Read` from this register should always return 0.
+* **UPDATE_FIRMWARE [Bit 5]:** If this bit is set, the device MUST enter firmware update mode. In this mode the device MAY NOT respond to any commands until the update completes. Once completed, the device MUST reset. When sending a response to a `Read` command, the device MUST clear this bit in the response payload.
 
 * **BOOT_DEF [Bit 6]:** When sending a response to a `Read` command, the device MUST set this bit if the device booted with its default register values. If non-volatile memory is not available, the device MUST always set this bit when sending a response to a `Read` command. This bit is read-only state, so if this bit is set on a command message, the device MUST respond with an `Error` message.
 
