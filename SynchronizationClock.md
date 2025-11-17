@@ -1,27 +1,60 @@
 <img src="./assets/HarpLogo.svg" width="200">
 
-# Synchronization Clock Protocol (1.0)
+# Synchronization Clock Protocol
 
-## Introduction
-The Harp Synchronization Clock is a dedicated bus that disseminates the current time to/across Harp devices. It is a serial communication protocol that relays time information. The last byte in each message can be used as a trigger, and allows a Device to align itself with the current Harp time.
+This document provides the specification for the Harp Synchronization Clock, a dedicated bus used to synchronize the current time across Harp devices with sub-millisecond accuracy.
 
-## Serial configuration
+## Requirements Language
 
-* The Baud rate used is 100kbps;
-* The last byte starts *exactly* 672 us before the elapse of the current second (e.g.:)
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED",  "MAY", and "OPTIONAL" in this document are to be interpreted as described in [RFC 2119](https://www.ietf.org/rfc/rfc2119.txt).
 
-    !["SynchClockOscilloscope](./assets/SynchClockOscilloscope.png)
+## Serial Interface
 
-* The packet is composed of 6 bytes (`header[2]` and `timestamp_s[4]`):
-  - `header[2] = {0xAA, 0xAF)`
-  - `timestamp_s` is of type U32, little-endian, and contains the previous elapsed second.
+The Harp Synchronization Clock is a serial communication protocol for relaying time information over RS-232. Each message transmits the current timestamp, in whole seconds. The transmission of the last byte in each message is used as a synchronization signal, allowing Harp devices to align their clocks with sub-millisecond accuracy.
 
-A sample logic trace is shown below:
-    !["SynchClockLogicAnalyzer](./assets/SyncLogicTrace.png)
+### Baud Rate
+
+The baud rate for all transmitted data MUST be 100 kbps.
+
+### Transmission Packet (6 bytes)
+
+All Harp Synchronization Clock messages MUST use Little-Endian byte ordering and follow the structure below:
+
+<table>
+<tr>
+    <th align="center">0</th>
+    <th align="center">1</th>
+    <th align="center">2</th>
+    <th align="center">3</th>
+    <th align="center">4</th>
+    <th align="center">5</th>
+</tr>
+<tr>
+    <td align="center">0xAA</td>
+    <td align="center">0xAF</td>
+    <td align="center" colspan="4">U32</td>
+</tr>
+<tr>
+    <td align="center" colspan="2">Header</td>
+    <td align="center" colspan="4">Previous Elapsed Second</td>
+</tr>
+</table>
+
+### Transmission Timing
+
+Transmission of the last byte MUST start exactly 672 μs before the current second lapses.
+
+## Example Logic Trace
+
+Example traces of the transmission signals are shown below from both a logic analyzer and an oscilloscope:
+
+  !["SynchClockLogicAnalyzer](./assets/SyncLogicTrace.png)
+
+  !["SynchClockOscilloscope](./assets/SynchClockOscilloscope.png)
 
 ## Example code
 
-Example of a microcontroller C code dispatching the serialized data:
+Example microcontroller C code dispatching the serialized data:
 
 ```C
 
@@ -56,7 +89,8 @@ ISR(TCD0_OVF_vect, ISR_NAKED)
     }
 ```
 
-Example of a microcontroller C++ code for converting the four received encoded bytes to the timestamp:
+Example of microcontroller C++ code for converting the four received encoded bytes to the timestamp:
+
 ````C
     #define HARP_SYNC_OFFSET_US (672)
 
@@ -72,28 +106,25 @@ Example of a microcontroller C++ code for converting the four received encoded b
 
 A full example demonstrating a state machine receiving the 6-byte sequence can be found in the [Pico Core](https://github.com/harp-tech/core.pico/blob/main/firmware/src/harp_synchronizer.cpp).
 
----
+## Physical Connection
 
-
-## Physical connection
-
-The physical connection is made by a simple 3.5mm audio cable.
+The physical connection for transmission of the Harp Synchronization Clock SHOULD be made by a 3.5 mm audio cable.
 
 The connector pinout for a device *receiving* the timestamp is shown below:
 
 !["SynchReceiverSchematic](./assets/HarpClockSyncReceiver.png)
 
-A TVS diode is also suggested for ESD protection.
+A TVS diode is RECOMMENDED for ESD protection.
 
 > [!IMPORTANT]
-> The device receiving the timestamp must provide 3.3-5V (~10mA) on the audio jack **R** pin.
+> The device receiving the timestamp MUST provide 3.3V-5V (~10 mA) on the audio jack **R** pin.
 
 The schematic snippet for a device *sending* the timestamp is shown below:
 
 !["SynchSenderSchematic](./assets/HarpClockSyncSender.png)
 
 > [!NOTE]
-> The device *sending* the timestamp isolates each clock output port, preventing ground loops from forming when connecting the audio jack between sender and receiver.
+> The device *sending* the timestamp SHOULD isolate each clock output port, preventing ground loops from forming when connecting the audio jack between sender and receiver.
 
 A supplementary PDF [example](./assets/PhysicalConnector.pdf) of the sender and the receiver is also available.
 The connector used is from `Switchcraft Inc.` with PartNo. `35RASMT2BHNTRX`.
