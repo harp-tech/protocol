@@ -215,11 +215,15 @@ The [`Error`](#error-flag-1-bit) flag in the [`MessageType`](#messagetype-1-byte
   4. The length of the payload does not match the register specification;
   5. The Controller tries to write data which is outside the allowable range of register values.
 
-Requests which require prior configuration of multiple registers (e.g. starting a pulse train, moving a motor), or requests which are invalid due to particular combinations of other register values, SHOULD NOT be handled by sending an error reply.
+Requests which require prior configuration of multiple registers (e.g. starting a pulse train, moving a motor), or requests which are invalid due to particular combinations of other register values, SHOULD NOT be handled by sending an error reply to a write request from the Controller.
 
-Instead, such cases MAY be handled by sending an event message from a different register. Alternatively, an allowed value MAY be inferred and set, in which case the reply to the request MUST contain the actual register value which was set.
+Instead, such cases MAY be handled by sending an event message from a different register. Alternatively, an allowed value MAY be set by the Device, in which case the reply to the request MUST contain the actual register value which was set.
 
-If an event message is sent from a register in response to a request sent to a different register, the documentation for the event register SHOULD clearly indicate which cases will raise the event, including specific combinations of values leading to error.
+> [!NOTE]
+>
+> A Device MAY reject a change to the register value. In this case, a reply to the write request MUST still be sent, containing the current register value.
+
+If an event message is sent from a register in response to a write request sent to a different register, the documentation for the register sending the event SHOULD clearly indicate which cases will raise the event, including specific combinations of values leading to error.
 
 ### Message Exchange Examples
 
