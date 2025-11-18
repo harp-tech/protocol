@@ -234,7 +234,7 @@ b) `Standby` and `Active` modes are mandatory. `Speed` mode is deprecated.
 > The Device MUST reply with `Error` in case this operation mode is not supported.
 
 * **HEARTBEAT_EN [Bit 2]:** If this bit is set, the Device MUST send an `Event` message every second with the contents of [`R_HEARTBEAT`](#r_heartbeat-u16--heartbeat-register-reporting-the-current-status-of-the-device). This allows the Controller to check the status of the Device periodically. If the `ALIVE_EN` bit is also set, this bit has precedence and the Device must send `R_HEARTBEAT` periodically instead of `R_TIMESTAMP_SECOND`.
-* **DUMP [Bit 3]:** If this bit is set, the Device adds the content of all registers to the streaming buffer as `Read` messages. This bit is always read as 0.
+* **DUMP [Bit 3]:** If this bit is set on a `Write` request, the Device SHALL send a sequence of `Read` messages to the Controller, one per register, with the current contents of all core and application registers. These messages MUST be sent following the `Write` reply to the request from the Controller. When sending a reply to a `Read` request, the Device MUST clear this bit in the message payload.
 * **MUTE_RPL [Bit 4]:** If this bit is set, the Device SHALL NOT send any messages in reply to a request from the Controller.
 * **VISUAL_EN [Bit 5]:** If this bit is set, any visual indicators, typically LEDs, available on the Device SHOULD be enabled. Otherwise, if the bit is cleared, all visual indicators SHOULD be turned off.
 * **OPLED_EN [Bit 6]:** If this bit is set, the LED present on the Device SHOULD indicate the current Operation Mode.
