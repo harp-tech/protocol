@@ -313,7 +313,7 @@ This register is used to reboot the Device, optionally save or restore non-volat
 >
 > To avoid unexpected behavior, the Controller SHOULD set only one bit at a time when sending a `Write` request to `R_RESET_DEV`.
 
-### **`R_DEVICE_NAME` (25 Bytes) – Human-readable device name**
+### **`R_DEVICE_NAME` (U8 Array) – Human-readable device name**
 
 Address: `012`
 
