@@ -47,26 +47,26 @@ The following set of Device core registers MUST be implemented. These reserved r
 
 |**Name**|**Volatile**|**Read Only**|**Type**|**Add.**|**Default**|**Brief Description**|**Necessity**|
 | :- | :-: | :-: | :-: | :-: | :-: | :- | :-: |
-|[`R_WHO_AM_I`](#r_who_am_i-u16--who-am-i)|-|Yes|U16|000|a)|Who am I|Required|
+|[`R_WHO_AM_I`](#r_who_am_i-u16--product-identifier)|-|Yes|U16|000|a)|Product identifier|Required|
 |[`R_HW_VERSION_H`](#r_hw_version_h-u8--major-hardware-version)|-|Yes|U8|001|a)|Major Hardware version|Deprecated|
 |[`R_HW_VERSION_L`](#r_hw_version_l-u8--minor-hardware-version)|-|Yes|U8|002|a)|Minor Hardware version|Deprecated|
-|[`R_ASSEMBLY_VERSION`](#r_assembly_version-u8--version-of-the-assembled-components)|-|Yes|U8|003|a)|Version of the assembled components|Deprecated|
+|[`R_ASSEMBLY_VERSION`](#r_assembly_version-u8--version-of-assembled-components)|-|Yes|U8|003|a)|Version of assembled components|Deprecated|
 |[`R_CORE_VERSION_H`](#r_core_version_h-u8--major-core-version)|-|Yes|U8|004|a)|Major core version|Deprecated|
 |[`R_CORE_VERSION_L`](#r_core_version_l-u8--minor-core-version)|-|Yes|U8|005|a)|Minor core version|Deprecated|
 |[`R_FW_VERSION_H`](#r_fw_version_h-u8--major-firmware-version)|-|Yes|U8|006|a)|Major Firmware version of the application|Deprecated|
 |[`R_FW_VERSION_L`](#r_fw_version_l-u8--minor-firmware-version)|-|Yes|U8|007|a)|Minor Firmware version of the application|Deprecated|
 |[`R_TIMESTAMP_SECOND`](#r_timestamp_second-u32--system-timestamp-seconds)|Yes|No|U32|008|0|System timestamp: seconds|Required|
 |[`R_TIMESTAMP_MICRO`](#r_timestamp_micro-u16--system-timestamp-microseconds)|Yes|Yes|U16|009|0|System timestamp: microseconds|Required|
-|[`R_OPERATION_CTRL`](#r_operation_ctrl-u8--operation-mode-configuration)|No|No|U8|010|b)|Configuration of the operation mode|Required|
+|[`R_OPERATION_CTRL`](#r_operation_ctrl-u8--operation-mode-configuration)|No|No|U8|010|b)|Configuration of the device operation mode|Required|
 |[`R_RESET_DEV`](#r_reset_dev-u8--reset-device-and-save-non-volatile-registers)|No|No|U8|011|b)|Reset device and save non-volatile registers|Optional|
-|[`R_DEVICE_NAME`](#r_device_name-25-bytes--human-readable-device-name)|No|No|U8|012|b)|Human-readable device name|Optional|
-|[`R_SERIAL_NUMBER`](#r_serial_number-u16--device-serial-number)|No|No|U16|013|b)|Unique serial number of the Device|Deprecated|
+|[`R_DEVICE_NAME`](#r_device_name-u8-array--human-readable-device-name)|No|No|U8|012|b)|Human-readable device name|Optional|
+|[`R_SERIAL_NUMBER`](#r_serial_number-u16--device-serial-number)|No|No|U16|013|b)|Unique serial number of the device|Deprecated|
 |[`R_CLOCK_CONFIG`](#r_clock_config-u8--synchronization-clock-configuration)|No|No|U8|014|b)|Synchronization clock configuration|Optional|
 |[`R_TIMESTAMP_OFFSET`](#r_timestamp_offset-u8--clock-calibration-offset)|No|No|U8|015|b)|Configures an offset for Timestamp updates|Deprecated|
 |[`R_UID`](#r_uid-16-bytes--unique-identifier)|No|Yes|U8|016|b)|Stores a unique identifier (UID) |Optional|
 |[`R_TAG`](#r_tag-8-bytes--firmware-tag)|-|Yes|U8|017|b)|Firmware tag|Optional|
-|[`R_HEARTBEAT`](#r_heartbeat-u16--heartbeat-register-reporting-the-current-status-of-the-device)|Yes|Yes|U16|018|b)|Monitors the state of the Device|Required|
-|[`R_VERSION`](#r_version-u8--semantic-version-information)|-|Yes|U8|019|a)|Semantic version information for the Device|Required|
+|[`R_HEARTBEAT`](#r_heartbeat-u16--device-status-information)|Yes|Yes|U16|018|b)|Monitors device status|Required|
+|[`R_VERSION`](#r_version-u8--device-version-information)|-|Yes|U8|019|a)|Device version information|Required|
 
 ||a) These values MUST be stored during the firmware build process and are persistent, i.e. they SHALL NOT be changeable by the Controller.<br>b) Check register notes on the specific register explanation |
 | :- | :- |
@@ -76,7 +76,7 @@ Tables can be generated here https://www.tablesgenerator.com/html_tables
 Mermaid plots can be generated here: https://mermaid.live/
 --->
 
-### **`R_WHO_AM_I` (U16) – Who Am I**
+### **`R_WHO_AM_I` (U16) – Product identifier**
 
 Address: `000`
 
@@ -233,7 +233,7 @@ b) `Standby` and `Active` modes are mandatory. `Speed` mode is deprecated.
 >
 > The Device MUST reply with `Error` in case this operation mode is not supported.
 
-* **HEARTBEAT_EN [Bit 2]:** If this bit is set, the Device MUST send an `Event` message every second with the contents of [`R_HEARTBEAT`](#r_heartbeat-u16--heartbeat-register-reporting-the-current-status-of-the-device). This allows the Controller to check the status of the Device periodically. If the `ALIVE_EN` bit is also set, this bit has precedence and the Device must send `R_HEARTBEAT` periodically instead of `R_TIMESTAMP_SECOND`.
+* **HEARTBEAT_EN [Bit 2]:** If this bit is set, the Device MUST send an `Event` message every second with the contents of [`R_HEARTBEAT`](#r_heartbeat-u16--device-status-information). This allows the Controller to check the status of the Device periodically. If the `ALIVE_EN` bit is also set, this bit has precedence and the Device must send `R_HEARTBEAT` periodically instead of `R_TIMESTAMP_SECOND`.
 * **DUMP [Bit 3]:** If this bit is set on a `Write` request, the Device SHALL send a sequence of `Read` messages to the Controller, one per register, with the current contents of all core and application registers. These messages MUST be sent following the `Write` reply to the request from the Controller. When sending a reply to a `Read` request, the Device MUST clear this bit in the message payload.
 * **MUTE_RPL [Bit 4]:** If this bit is set, the Device SHALL NOT send any messages in reply to a request from the Controller.
 * **VISUAL_EN [Bit 5]:** If this bit is set, any visual indicators, typically LEDs, available on the Device SHOULD be enabled. Otherwise, if the bit is cleared, all visual indicators SHOULD be turned off.
@@ -436,7 +436,7 @@ An array of 8 bytes that can be used to store a tag for a specific firmware buil
 
 If not implemented, the Device MUST return a default value of `0` (Zero) for all bytes.
 
-### **`R_HEARTBEAT` (U16) – Heartbeat register reporting the current status of the device**
+### **`R_HEARTBEAT` (U16) – Device status information**
 
 Address: `018`
 
@@ -471,7 +471,7 @@ This register is read-only and used to provide status information about the Devi
 
 * **IS_SYNCHRONIZED [Bit 1]:** If this bit is set, the Device MUST be synchronized with an external Harp clock generator. If the Device is itself a clock generator (see [`R_CLOCK_CONFIG`](#r_clock_config-u8--synchronization-clock-configuration) bit `CLK_GEN`), this bit MUST always be set.
 
-### **`R_VERSION` (U8) – Semantic version information**
+### **`R_VERSION` (U8) – Device version information**
 
 Address: `019`
 
@@ -512,7 +512,7 @@ gantt
     -      :d4, after sdk_id, 32
 ```
 
-The bytes in this register specify the [semantic version](https://semver.org/) of different Device components. Each component version is made up of three bytes, following the order `major`, `minor`, `patch`. The register also includes a unique identifier of the core microcontroller SDK and a hash digest of the interface schema file describing the Device Interface.
+The bytes in this register specify the [semantic version](https://semver.org/) of the components making up the Device. Each component version is made up of three bytes, following the order `major`, `minor`, `patch`. The register also includes a unique identifier of the core microcontroller SDK and a hash digest of the interface schema file describing the Device Interface.
 
 * **PROTOCOL:** The semantic version of the Harp protocol implemented by the Device.
 
@@ -532,7 +532,7 @@ The following registers are deprecated and their functionality SHOULD NOT be imp
 
 > [!WARNING]
 >
-> This register is deprecated in favor of [`R_VERSION`](#r_version-u8--semantic-version-information). The value of this register MUST be equal to the major `HARDWARE` version in `R_VERSION`.
+> This register is deprecated in favor of [`R_VERSION`](#r_version-u8--device-version-information). The value of this register MUST be equal to the major `HARDWARE` version in `R_VERSION`.
 
 Address: `001`
 
@@ -562,7 +562,7 @@ Specifies the major hardware version number. The value of this register is persi
 
 > [!WARNING]
 >
-> This register is deprecated in favor of [`R_VERSION`](#r_version-u8--semantic-version-information). The value of this register MUST be equal to the minor `HARDWARE` version in `R_VERSION`.
+> This register is deprecated in favor of [`R_VERSION`](#r_version-u8--device-version-information). The value of this register MUST be equal to the minor `HARDWARE` version in `R_VERSION`.
 
 Address: `002`
 
@@ -588,7 +588,7 @@ gantt
 
 Specifies the minor hardware version number. The value of this register is persistent and MUST NOT be changeable by the Controller.
 
-### **`R_ASSEMBLY_VERSION` (U8) – Version of the Assembled Components**
+### **`R_ASSEMBLY_VERSION` (U8) – Version of Assembled Components**
 
 > [!WARNING]
 >
@@ -622,7 +622,7 @@ Specifies the version number of the assembled components. The value of this regi
 
 > [!WARNING]
 >
-> This register is deprecated in favor of [`R_VERSION`](#r_version-u8--semantic-version-information). The value of this register MUST be equal to the major `PROTOCOL` version in `R_VERSION`.
+> This register is deprecated in favor of [`R_VERSION`](#r_version-u8--device-version-information). The value of this register MUST be equal to the major `PROTOCOL` version in `R_VERSION`.
 
 Address: `004`
 
@@ -652,7 +652,7 @@ Contains the major version of the Harp protocol specification. The value of this
 
 > [!WARNING]
 >
-> This register is deprecated in favor of [`R_VERSION`](#r_version-u8--semantic-version-information). The value of this register MUST be equal to the minor `PROTOCOL` version in `R_VERSION`.
+> This register is deprecated in favor of [`R_VERSION`](#r_version-u8--device-version-information). The value of this register MUST be equal to the minor `PROTOCOL` version in `R_VERSION`.
 
 Address: `005`
 
@@ -682,7 +682,7 @@ Contains the minor version of the Harp Protocol specification. The value of this
 
 > [!WARNING]
 >
-> This register is deprecated in favor of [`R_VERSION`](#r_version-u8--semantic-version-information). The value of this register MUST be equal to the major `FIRMWARE` version in `R_VERSION`.
+> This register is deprecated in favor of [`R_VERSION`](#r_version-u8--device-version-information). The value of this register MUST be equal to the major `FIRMWARE` version in `R_VERSION`.
 
 Address: `006`
 
@@ -712,7 +712,7 @@ Contains the major firmware version number. The value of this register is persis
 
 > [!WARNING]
 >
-> This register is deprecated in favor of [`R_VERSION`](#r_version-u8--semantic-version-information). The value of this register MUST be equal to the minor `FIRMWARE` version in `R_VERSION`.
+> This register is deprecated in favor of [`R_VERSION`](#r_version-u8--device-version-information). The value of this register MUST be equal to the minor `FIRMWARE` version in `R_VERSION`.
 
 ```mermaid
 ---
