@@ -1,6 +1,6 @@
 <img src="./assets/HarpLogo.svg" width="200">
 
-# Binary Protocol 8-bit (harp-1.0)
+# Binary Protocol 8-bit
 
 This document defines the binary communication protocol used to facilitate and unify the interaction between different Harp devices, and between computers or other controllers and Harp devices. It was designed with efficiency and ease of parsing in mind.
 
