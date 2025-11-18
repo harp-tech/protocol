@@ -293,6 +293,8 @@ gantt
     0      :d0, after bit1  , 8
 ```
 
+This register is used to reboot the Device, optionally save or restore non-volatile registers, or enter firmware update mode. The Device MUST send a reply to a `Write` request from the Controller before rebooting.
+
 * **RST_DEF [Bit 0]:** If this bit is set, the Device MUST reset and reboot with all core and application registers set to their default values. Any available non-volatile memory MUST be erased and all Device default values MUST be restored as the permanent boot option. When sending a reply to a `Read` request, the Device MUST clear this bit in the message payload.
 
 * **RST_EE [Bit 1]:** If this bit is set and non-volatile memory is available, the Device MUST reset and reboot with all core and application registers set to the values saved in persistent storage, usually an EEPROM. Any currently stored values MUST remain the permanent boot option. If this bit is set and non-volatile memory is not available, the Device MUST reply with an `Error` message. When sending a reply to a `Read` request, the Device MUST clear this bit in the message payload.
@@ -301,7 +303,7 @@ gantt
 
 * **NAME_TO_DEFAULT [Bit 3]:** If this bit is set, the Device MUST reboot and restore the value of [`R_DEVICE_NAME`](#r_device_name-25-bytes--devices-name) to its default value. When sending a reply to a `Read` request, the Device MUST clear this bit in the message payload.
 
-* **UPDATE_FIRMWARE [Bit 5]:** If this bit is set, the Device MUST enter firmware update mode. In this mode the Device MAY NOT reply to any requests until the update completes. Once completed, the Device MUST reset. When sending a reply to a `Read` request, the Device MUST clear this bit in the message payload.
+* **UPDATE_FIRMWARE [Bit 5]:** If this bit is set, the Device MUST enter firmware update mode. In this mode the Device MAY NOT reply to any requests until the update completes. Once completed, the Device MUST reboot. When sending a reply to a `Read` request, the Device MUST clear this bit in the message payload.
 
 * **BOOT_DEF [Bit 6]:** When sending a reply to a `Read` request, the Device MUST set this bit if it booted with the default register values. If non-volatile memory is not available, the Device MUST always set this bit when sending a reply to a `Read` request. This bit is read-only state, so if this bit is set on a request message, the Device MUST reply with an `Error` message.
 
