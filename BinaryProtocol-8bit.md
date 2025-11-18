@@ -81,7 +81,7 @@ Specifies the type of the Harp message.
 
 #### Error flag (1 bit)
 
-When this bit is set, the message represents an error sent from the Device to the Controller. This bit SHOULD only be set on messages representing a reply by the Device to a request from the Controller. This bit SHOULD NOT be set in any messages sent from the Controller to the Device.
+When this flag is set, the message represents an error reply sent from the Device to a request from the Controller. This flag SHALL NOT be set in any other messages. This flag SHALL NOT be set in any messages sent from the Controller to the Device.
 
 ### Length (1 byte)
 
@@ -205,6 +205,22 @@ When the Device is in `Active` mode, device-specific registers can be used by th
 
 All `Event` messages sent by the Device SHOULD be timestamped with the Harp clock time as early as possible following the event trigger.
 
+### Error Handling
+
+The [`Error`](#error-flag-1-bit) flag in the [`MessageType`](#messagetype-1-byte) field is set by the Device on messages representing an error reply to a request from the Controller. Since information included in error messages is limited, we RECOMMEND restricting error replies to the following cases:
+
+  1. The Controller tries to read from (or write to) a register that does not exist on the Device;
+  2. The Controller tries to write on a read-only register;
+  3. The message [`PayloadType`](#payloadtype-1-byte) does not match the register specification;
+  4. The length of the payload does not match the register specification;
+  5. The Controller tries to write data which is outside the allowable range of register values.
+
+Requests which require prior configuration of multiple registers (e.g. starting a pulse train, moving a motor), or requests which are invalid due to particular combinations of other register values, SHOULD NOT be handled by sending an error reply.
+
+Instead, such cases MAY be handled by sending an event message from a different register. Alternatively, an allowed value MAY be inferred and set, in which case the reply to the request MUST contain the actual register value which was set.
+
+If an event message is sent from a register in response to a request sent to a different register, the documentation for the event register SHOULD clearly indicate which cases will raise the event, including specific combinations of values leading to error.
+
 ### Message Exchange Examples
 
 Some Harp message exchanges are shown below to demonstrate the typical usage of the protocol between a Device and a Controller. Note that timestamp information is usually omitted in messages sent from the Controller to the Device, since actions are expected to run as soon as possible.
@@ -245,21 +261,14 @@ Below we present technical notes and reference implementation examples for some 
 
 ### MessageType and ErrorFlag
 
-The [`Error`](#error-flag-1-bit) flag in the [`MessageType`](#messagetype-1-byte) field is set by the Device only on messages representing a reply to a request from the Controller. However, since information included in error messages is limited, we RECOMMEND restricting error messages to the following cases:
+The following pseudo-code snippet illustrates how to check for the [`Error`](#error-flag-1-bit) flag in the [`MessageType`](#messagetype-1-byte) field:
 
-  1. The Controller tries to read from a register that does not exist on the Device;
-  2. The Controller tries to write on a read-only register;
-  3. The Controller tries to write data which is invalid for the specific Device register;
-  4. The message [`PayloadType`](#payloadtype-1-byte) does not match the Device register specification.
-
-A simple code in C to check for error will be:
-
-```C
+```C#
     int errorMask = 0x08;
 
-    if (Command & errorMask)
+    if (MessageType & errorMask)
     {
-    printf(“Error detected.\n”);
+        printf(“Error detected.\n”);
     }
 ```
 
