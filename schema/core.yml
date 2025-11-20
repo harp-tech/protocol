@@ -114,13 +114,12 @@ registers:
     access: Write
     maskType: ClockConfigurationFlags
     description: Specifies the configuration for the device synchronization clock.
-  CoreReserved0:
+  TimestampOffset:
     address: 15
     type: U8
     access: Write
-    description: This register is reserved and should not be implemented.
+    description: Configures an offset for Timestamp updates.
     deprecated: true
-    visibility: private
   UID:
     address: 16
     type: U8
