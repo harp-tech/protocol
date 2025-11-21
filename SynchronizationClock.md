@@ -50,8 +50,6 @@ Example traces of the transmission signals are shown below from both a logic ana
 
   !["SynchClockLogicAnalyzer](./assets/SyncLogicTrace.png)
 
-  !["SynchClockOscilloscope](./assets/SynchClockOscilloscope.png)
-
 ## Example code
 
 Example microcontroller C code dispatching the serialized data:
