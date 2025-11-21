@@ -119,7 +119,7 @@ The schematic snippet for a device *sending* the timestamp is shown below:
 !["SynchSenderSchematic](./assets/HarpClockSyncSender.png)
 
 > [!NOTE]
-> The device *sending* the timestamp SHOULD isolate each clock output port, preventing ground loops from forming when connecting the audio jack between sender and receiver.
+> The device *sending* the timestamp MUST isolate each clock output port, preventing ground loops from forming when connecting the audio jack between sender and receiver.
 
 A supplementary PDF [example](./assets/PhysicalConnector.pdf) of the sender and the receiver is also available.
 The connector used is from `Switchcraft Inc.` with PartNo. `35RASMT2BHNTRX`.
