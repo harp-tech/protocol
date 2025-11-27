@@ -10,7 +10,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 ## Serial Interface
 
-The Harp Synchronization Clock is a serial communication protocol for relaying time information over RS-232. Each message transmits the current timestamp, in whole seconds. The transmission of the last byte in each message is used as a synchronization signal, allowing Harp devices to align their clocks with sub-millisecond accuracy.
+The Harp Synchronization Clock is a serial communication protocol for relaying time information over RS-232. Each message transmits the current time, in whole seconds. The transmission of the last byte in each message is used as a synchronization signal, allowing Harp devices to align their clocks with sub-millisecond accuracy.
 
 ### Baud Rate
 
@@ -18,7 +18,7 @@ The baud rate for all transmitted data MUST be 100 kbps.
 
 ### Transmission Packet (6 bytes)
 
-All Harp Synchronization Clock messages MUST use Little-Endian byte ordering and follow the structure below:
+Each transmission packet encodes the current time, in whole seconds. All Harp Synchronization Clock messages MUST use Little-Endian byte ordering and follow the structure below:
 
 <table>
 <tr>
@@ -36,13 +36,15 @@ All Harp Synchronization Clock messages MUST use Little-Endian byte ordering and
 </tr>
 <tr>
     <td align="center" colspan="2">Header</td>
-    <td align="center" colspan="4">Previous Elapsed Second</td>
+    <td align="center" colspan="4">Current Time</td>
 </tr>
 </table>
 
 ### Transmission Timing
 
 Transmission of the last byte MUST start exactly 672 μs before the current second lapses.
+
+Receivers MUST align their clocks so the next whole second starts exactly 672 μs following reception of the last byte, ensuring any fractional part of the timestamp is zero. Receivers MAY complete the initial alignment over a few transmission events, but thereafter MUST keep updating the whole second in sync with successfully transmitted Harp Synchronization Clock messages as long as the whole second is incremented sequentially.
 
 ## Example Logic Trace
 
