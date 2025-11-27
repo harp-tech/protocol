@@ -522,7 +522,7 @@ The bytes in this register specify the [semantic version](https://semver.org/) o
 
 * **SDK_ID:** The three-character code of the core microcontroller SDK used to implement the Device.
 
-* **INTERFACE_HASH:** The SHA-1 hash value of the Device Interface schema file (`device.yml`). The byte-order is little-endian. If the client SHOULD NOT perform any validation of its Device Interface schema, the Device MUST set this value to `0` (Zero). 
+* **INTERFACE_HASH:** The SHA-1 hash value of the Device Interface schema file (`device.yml`). The byte-order is little-endian. The Controller SHOULD NOT perform any validation of its Device Interface schema if this value is set to `0` (Zero). 
 
 ## Deprecated Core Registers
 
