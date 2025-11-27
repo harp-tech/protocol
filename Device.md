@@ -101,7 +101,7 @@ gantt
     0      :d1, 0, 2
 ```
 
-Specifies the identity class of the Device. The list of reserved device product identifiers can be found at [harp-tech/whoami](https://github.com/harp-tech/whoami). To reserve specific identifiers for your project or company, please follow the instructions in that repository. If the Device does not have a pre-allocated identifier, this register MUST be set to its default value of `0` (Zero).
+Specifies the identity class of the Device. The list of reserved device identity classes can be found at [harp-tech/whoami](https://github.com/harp-tech/whoami). To reserve specific device identity classes for your project or company, please follow the instructions in that repository. If the Device does not have a pre-allocated identity class, this register MUST be set to its default value of `0` (Zero).
 
 ### **`R_TIMESTAMP_SECOND` (U32) – System timestamp (seconds)**
 
