@@ -63,8 +63,8 @@ The following set of Device core registers MUST be implemented. These reserved r
 |[`R_SERIAL_NUMBER`](#r_serial_number-u16--device-serial-number)|No|No|U16|013|b)|Unique serial number of the device|Deprecated|
 |[`R_CLOCK_CONFIG`](#r_clock_config-u8--synchronization-clock-configuration)|No|No|U8|014|b)|Synchronization clock configuration|Optional|
 |[`R_TIMESTAMP_OFFSET`](#r_timestamp_offset-u8--clock-calibration-offset)|No|No|U8|015|b)|Configures an offset for Timestamp updates|Deprecated|
-|[`R_UID`](#r_uid-16-bytes--unique-identifier)|No|Yes|U8|016|b)|Stores a unique identifier (UID) |Optional|
-|[`R_TAG`](#r_tag-8-bytes--firmware-tag)|-|Yes|U8|017|b)|Firmware tag|Optional|
+|[`R_UID`](#r_uid-u8-array--unique-identifier)|No|Yes|U8|016|b)|Stores a unique identifier (UID) |Optional|
+|[`R_TAG`](#r_tag-u8-array--firmware-tag)|-|Yes|U8|017|b)|Firmware tag|Optional|
 |[`R_HEARTBEAT`](#r_heartbeat-u16--device-status-information)|Yes|Yes|U16|018|b)|Monitors device status|Required|
 |[`R_VERSION`](#r_version-u8--device-version-information)|-|Yes|U8|019|a)|Device version information|Required|
 
@@ -382,7 +382,7 @@ The implementation of this register is RECOMMENDED if the Device provides a [Syn
 >
 > The Device MUST always boot with the timestamp register in the unlocked state.
 
-### **`R_UID` (16 Bytes) – Unique Identifier**
+### **`R_UID` (U8 Array) – Unique Identifier**
 
 Address: `016`
 
@@ -408,7 +408,7 @@ gantt
 
 An array of 16 bytes specifying a (128-bit) UID (Unique Identifier) for the Device. This register is non-volatile and read-only. The byte-order is little-endian. If not implemented, the Device MUST return a default value of `0` (Zero) for all bytes.
 
-### **`R_TAG` (8 Bytes) – Firmware tag**
+### **`R_TAG` (U8 Array) – Firmware tag**
 
 Address: `017`
 
@@ -740,7 +740,7 @@ Contains the minor firmware version number. The value of this register is persis
 
 > [!WARNING]
 >
-> This register is deprecated in favor of [`R_UID`](#r_uid-16-bytes--unique-identifier). The value of this register MUST duplicate the first two bytes of `R_UID`, in little-endian order.
+> This register is deprecated in favor of [`R_UID`](#r_uid-u8-array--unique-identifier). The value of this register MUST duplicate the first two bytes of `R_UID`, in little-endian order.
 
 Address: `013`
 
