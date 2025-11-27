@@ -47,26 +47,26 @@ The following set of Device core registers MUST be implemented. These reserved r
 
 |**Name**|**Volatile**|**Read Only**|**Type**|**Add.**|**Default**|**Brief Description**|**Necessity**|
 | :- | :-: | :-: | :-: | :-: | :-: | :- | :-: |
-|[`R_WHO_AM_I`](#r_who_am_i-u16--device-identity-class)|-|Yes|U16|000|a)|Device identity class|Required|
-|[`R_HW_VERSION_H`](#r_hw_version_h-u8--major-hardware-version)|-|Yes|U8|001|a)|Major Hardware version|Deprecated|
-|[`R_HW_VERSION_L`](#r_hw_version_l-u8--minor-hardware-version)|-|Yes|U8|002|a)|Minor Hardware version|Deprecated|
-|[`R_ASSEMBLY_VERSION`](#r_assembly_version-u8--version-of-assembled-components)|-|Yes|U8|003|a)|Version of assembled components|Deprecated|
-|[`R_CORE_VERSION_H`](#r_core_version_h-u8--major-core-version)|-|Yes|U8|004|a)|Major core version|Deprecated|
-|[`R_CORE_VERSION_L`](#r_core_version_l-u8--minor-core-version)|-|Yes|U8|005|a)|Minor core version|Deprecated|
-|[`R_FW_VERSION_H`](#r_fw_version_h-u8--major-firmware-version)|-|Yes|U8|006|a)|Major Firmware version of the application|Deprecated|
-|[`R_FW_VERSION_L`](#r_fw_version_l-u8--minor-firmware-version)|-|Yes|U8|007|a)|Minor Firmware version of the application|Deprecated|
-|[`R_TIMESTAMP_SECOND`](#r_timestamp_second-u32--system-timestamp-seconds)|Yes|No|U32|008|0|System timestamp: seconds|Required|
-|[`R_TIMESTAMP_MICRO`](#r_timestamp_micro-u16--system-timestamp-microseconds)|Yes|Yes|U16|009|0|System timestamp: microseconds|Required|
-|[`R_OPERATION_CTRL`](#r_operation_ctrl-u8--operation-mode-configuration)|No|No|U8|010|b)|Configuration of the device operation mode|Required|
-|[`R_RESET_DEV`](#r_reset_dev-u8--reset-device-and-save-non-volatile-registers)|No|No|U8|011|b)|Reset device and save non-volatile registers|Optional|
-|[`R_DEVICE_NAME`](#r_device_name-u8-array--human-readable-device-name)|No|No|U8|012|b)|Human-readable device name|Optional|
-|[`R_SERIAL_NUMBER`](#r_serial_number-u16--device-serial-number)|No|No|U16|013|b)|Unique serial number of the device|Deprecated|
-|[`R_CLOCK_CONFIG`](#r_clock_config-u8--synchronization-clock-configuration)|No|No|U8|014|b)|Synchronization clock configuration|Optional|
-|[`R_TIMESTAMP_OFFSET`](#r_timestamp_offset-u8--clock-calibration-offset)|No|No|U8|015|b)|Configures an offset for Timestamp updates|Deprecated|
-|[`R_UID`](#r_uid-u8-array--unique-identifier)|No|Yes|U8|016|b)|Stores a unique identifier (UID) |Optional|
-|[`R_TAG`](#r_tag-u8-array--firmware-tag)|-|Yes|U8|017|b)|Firmware tag|Optional|
-|[`R_HEARTBEAT`](#r_heartbeat-u16--device-status-information)|Yes|Yes|U16|018|b)|Monitors device status|Required|
-|[`R_VERSION`](#r_version-u8--device-version-information)|-|Yes|U8|019|a)|Device version information|Required|
+|[`R_WHO_AM_I`](#r_who_am_i-u16--device-identity-class)|-|Yes|U16|000|a)|Device Identity Class|Required|
+|[`R_HW_VERSION_H`](#r_hw_version_h-u8--major-hardware-version)|-|Yes|U8|001|a)|Major Hardware Version|Deprecated|
+|[`R_HW_VERSION_L`](#r_hw_version_l-u8--minor-hardware-version)|-|Yes|U8|002|a)|Minor Hardware Version|Deprecated|
+|[`R_ASSEMBLY_VERSION`](#r_assembly_version-u8--version-of-assembled-components)|-|Yes|U8|003|a)|Version of Assembled Components|Deprecated|
+|[`R_CORE_VERSION_H`](#r_core_version_h-u8--major-core-version)|-|Yes|U8|004|a)|Major Core Version|Deprecated|
+|[`R_CORE_VERSION_L`](#r_core_version_l-u8--minor-core-version)|-|Yes|U8|005|a)|Minor Core Version|Deprecated|
+|[`R_FW_VERSION_H`](#r_fw_version_h-u8--major-firmware-version)|-|Yes|U8|006|a)|Major Firmware Version|Deprecated|
+|[`R_FW_VERSION_L`](#r_fw_version_l-u8--minor-firmware-version)|-|Yes|U8|007|a)|Minor Firmware Version|Deprecated|
+|[`R_TIMESTAMP_SECOND`](#r_timestamp_second-u32--system-timestamp-seconds)|Yes|No|U32|008|0|System Timestamp (seconds)|Required|
+|[`R_TIMESTAMP_MICRO`](#r_timestamp_micro-u16--system-timestamp-microseconds)|Yes|Yes|U16|009|0|System Timestamp (microseconds)|Required|
+|[`R_OPERATION_CTRL`](#r_operation_ctrl-u8--operation-mode-configuration)|No|No|U8|010|b)|Operation Mode Configuration|Required|
+|[`R_RESET_DEV`](#r_reset_dev-u8--reset-device)|No|No|U8|011|b)|Reset Device|Optional|
+|[`R_DEVICE_NAME`](#r_device_name-u8-array--human-readable-device-name)|No|No|U8 Array|012|b)|Human-readable Device Name|Optional|
+|[`R_SERIAL_NUMBER`](#r_serial_number-u16--device-serial-number)|No|No|U16|013|b)|Device Serial Number|Deprecated|
+|[`R_CLOCK_CONFIG`](#r_clock_config-u8--synchronization-clock-configuration)|No|No|U8|014|b)|Synchronization Clock Configuration|Optional|
+|[`R_TIMESTAMP_OFFSET`](#r_timestamp_offset-u8--clock-calibration-offset)|No|No|U8|015|b)|Clock Calibration Offset|Deprecated|
+|[`R_UID`](#r_uid-u8-array--unique-identifier)|No|Yes|U8 Array|016|b)|Unique Identifier|Optional|
+|[`R_TAG`](#r_tag-u8-array--firmware-tag)|-|Yes|U8 Array|017|b)|Firmware Tag|Optional|
+|[`R_HEARTBEAT`](#r_heartbeat-u16--device-status-information)|Yes|Yes|U16|018|b)|Device Status Information|Required|
+|[`R_VERSION`](#r_version-u8-array--device-version-information)|-|Yes|U8 Array|019|a)|Device Version Information|Required|
 
 ||a) These values MUST be stored during the firmware build process and are persistent, i.e. they SHALL NOT be changeable by the Controller.<br>b) Check notes on the specific register specification. |
 | :- | :- |
@@ -78,7 +78,8 @@ Mermaid plots can be generated here: https://mermaid.live/
 
 ### **`R_WHO_AM_I` (U16) – Device Identity Class**
 
-Address: `000`
+Address: `000`  
+Length: 1
 
 ```mermaid
 ---
@@ -103,9 +104,10 @@ gantt
 
 Specifies the identity class of the Device. The list of reserved device identity classes can be found at [harp-tech/whoami](https://github.com/harp-tech/whoami). To reserve specific device identity classes for your project or company, please follow the instructions in that repository. If the Device does not have a pre-allocated identity class, this register MUST be set to its default value of `0` (Zero).
 
-### **`R_TIMESTAMP_SECOND` (U32) – System timestamp (seconds)**
+### **`R_TIMESTAMP_SECOND` (U32) – System Timestamp (seconds)**
 
-Address: `008`
+Address: `008`  
+Length: 1
 
 ```mermaid
 ---
@@ -132,9 +134,10 @@ gantt
 
 Contains the current system timestamp in whole seconds. The default value is `0` (Zero) and will increment one unit for each elapsed second.
 
-### **`R_TIMESTAMP_MICRO` (U16) – System timestamp (microseconds)**
+### **`R_TIMESTAMP_MICRO` (U16) – System Timestamp (microseconds)**
 
-Address: `009`
+Address: `009`  
+Length: 1
 
 ```mermaid
 ---
@@ -159,9 +162,10 @@ gantt
 
 Contains the microseconds count within each second. Each LSB corresponds to 32 microseconds. The maximum value is 31249. The default value is `0` (Zero).
 
-### **`R_OPERATION_CTRL` (U8) – Operation mode configuration**
+### **`R_OPERATION_CTRL` (U8) – Operation Mode Configuration**
 
-Address: `010`
+Address: `010`  
+Length: 1
 
 ```mermaid
 
@@ -250,9 +254,10 @@ b) `Standby` and `Active` modes are mandatory. `Speed` mode is deprecated.
 
 * **ALIVE_EN [Bit 7]:** If this bit is set, the Device SHOULD send an `Event` message every second with the contents of [`R_TIMESTAMP_SECOND`](#r_timestamp_second-u32--system-timestamp-seconds). This feature has been deprecated and may be removed from future protocol versions. The Controller SHOULD set the `HEARTBEAT_EN` bit and monitor [`R_HEARTBEAT`](#r_heartbeat-u16--device-status-information) instead for periodically checking the status of the Device.
 
-### **`R_RESET_DEV` (U8) – Reset device and save non-volatile registers**
+### **`R_RESET_DEV` (U8) – Reset Device**
 
-Address: `011`
+Address: `011`  
+Length: 1
 
 ```mermaid
 ---
@@ -313,17 +318,19 @@ This register is used to reboot the Device, optionally save or restore non-volat
 >
 > To avoid unexpected behavior, the Controller SHOULD set only one bit at a time when sending a `Write` request to `R_RESET_DEV`.
 
-### **`R_DEVICE_NAME` (U8 Array) – Human-readable device name**
+### **`R_DEVICE_NAME` (U8 Array) – Human-readable Device Name**
 
-Address: `012`
+Address: `012`  
+Length: 25
 
-An array of 25 bytes specifying a human-readable device name. Any unused bytes MUST be set to `0` (Zero). This register is non-volatile. If a `Write` request to this register is received and non-volatile memory is available, the Device MUST reset and save the new register value to persistent storage. Otherwise, if non-volatile memory is not available, the Device MUST reply to any `Write` requests with the default register value.
+The bytes in this register specify a human-readable device name. Any unused bytes MUST be set to `0` (Zero). This register is non-volatile. If a `Write` request to this register is received and non-volatile memory is available, the Device MUST reset and save the new register value to persistent storage. Otherwise, if non-volatile memory is not available, the Device MUST reply to any `Write` requests with the default register value.
 
 Providing a non-empty device name is OPTIONAL. If no name is provided, the default value of this register MUST be `0` (Zero).
 
-### **`R_CLOCK_CONFIG` (U8) – Synchronization clock configuration**
+### **`R_CLOCK_CONFIG` (U8) – Synchronization Clock Configuration**
 
-Address: `014`
+Address: `014`  
+Length: 1
 
 ```mermaid
 ---
@@ -384,7 +391,8 @@ The implementation of this register is RECOMMENDED if the Device provides a [Syn
 
 ### **`R_UID` (U8 Array) – Unique Identifier**
 
-Address: `016`
+Address: `016`  
+Length: 16
 
 ```mermaid
 ---
@@ -406,11 +414,12 @@ gantt
     0      :d1, 0, 1
 ```
 
-An array of 16 bytes specifying a (128-bit) UID (Unique Identifier) for the Device. This register is non-volatile and read-only. The byte-order is little-endian. If not implemented, the Device MUST return a default value of `0` (Zero) for all bytes.
+An array of bytes specifying a (128-bit) UID (Unique Identifier) for the Device. This register is non-volatile and read-only. The byte-order is little-endian. If not implemented, the Device MUST return a default value of `0` (Zero) for all bytes.
 
-### **`R_TAG` (U8 Array) – Firmware tag**
+### **`R_TAG` (U8 Array) – Firmware Tag**
 
-Address: `017`
+Address: `017`  
+Length: 8
 
 ```mermaid
 ---
@@ -432,13 +441,14 @@ gantt
     0      :d1, 0, 1
 ```
 
-An array of 8 bytes that can be used to store a tag for a specific firmware build. For instance, it could be used to store the Git hash of a specific release/commit. The byte-order is little-endian. This register is read-only.
+An array of bytes that can be used to store a tag for a specific firmware build. For instance, it could be used to store the Git hash of a specific release/commit. The byte-order is little-endian. This register is read-only.
 
 If not implemented, the Device MUST return a default value of `0` (Zero) for all bytes.
 
-### **`R_HEARTBEAT` (U16) – Device status information**
+### **`R_HEARTBEAT` (U16) – Device Status Information**
 
-Address: `018`
+Address: `018`  
+Length: 1
 
 ```mermaid
 ---
@@ -471,9 +481,10 @@ This register is read-only and used to provide status information about the Devi
 
 * **IS_SYNCHRONIZED [Bit 1]:** If this bit is set, the Device MUST be synchronized with an external Harp clock generator. If the Device is itself a clock generator (see [`R_CLOCK_CONFIG`](#r_clock_config-u8--synchronization-clock-configuration) bit `CLK_GEN`), this bit MUST always be set.
 
-### **`R_VERSION` (U8) – Device version information**
+### **`R_VERSION` (U8 Array) – Device Version Information**
 
-Address: `019`
+Address: `019`  
+Length: 32
 
 ```mermaid
 ---
@@ -532,9 +543,10 @@ The following registers are deprecated and their functionality SHOULD NOT be imp
 
 > [!WARNING]
 >
-> This register is deprecated in favor of [`R_VERSION`](#r_version-u8--device-version-information). The value of this register MUST be equal to the major `HARDWARE` version in `R_VERSION`.
+> This register is deprecated in favor of [`R_VERSION`](#r_version-u8-array--device-version-information). The value of this register MUST be equal to the major `HARDWARE` version in `R_VERSION`.
 
-Address: `001`
+Address: `001`  
+Length: 1
 
 ```mermaid
 ---
@@ -562,9 +574,10 @@ Specifies the major hardware version number. The value of this register is persi
 
 > [!WARNING]
 >
-> This register is deprecated in favor of [`R_VERSION`](#r_version-u8--device-version-information). The value of this register MUST be equal to the minor `HARDWARE` version in `R_VERSION`.
+> This register is deprecated in favor of [`R_VERSION`](#r_version-u8-array--device-version-information). The value of this register MUST be equal to the minor `HARDWARE` version in `R_VERSION`.
 
-Address: `002`
+Address: `002`  
+Length: 1
 
 ```mermaid
 ---
@@ -594,7 +607,8 @@ Specifies the minor hardware version number. The value of this register is persi
 >
 > This register is deprecated as we do not require tracking the version of assembled components directly in the Device firmware.
 
-Address: `003`
+Address: `003`  
+Length: 1
 
 ```mermaid
 ---
@@ -622,9 +636,10 @@ Specifies the version number of the assembled components. The value of this regi
 
 > [!WARNING]
 >
-> This register is deprecated in favor of [`R_VERSION`](#r_version-u8--device-version-information). The value of this register MUST be equal to the major `PROTOCOL` version in `R_VERSION`.
+> This register is deprecated in favor of [`R_VERSION`](#r_version-u8-array--device-version-information). The value of this register MUST be equal to the major `PROTOCOL` version in `R_VERSION`.
 
-Address: `004`
+Address: `004`  
+Length: 1
 
 ```mermaid
 ---
@@ -652,9 +667,10 @@ Contains the major version of the Harp protocol specification. The value of this
 
 > [!WARNING]
 >
-> This register is deprecated in favor of [`R_VERSION`](#r_version-u8--device-version-information). The value of this register MUST be equal to the minor `PROTOCOL` version in `R_VERSION`.
+> This register is deprecated in favor of [`R_VERSION`](#r_version-u8-array--device-version-information). The value of this register MUST be equal to the minor `PROTOCOL` version in `R_VERSION`.
 
-Address: `005`
+Address: `005`  
+Length: 1
 
 ```mermaid
 ---
@@ -682,9 +698,10 @@ Contains the minor version of the Harp Protocol specification. The value of this
 
 > [!WARNING]
 >
-> This register is deprecated in favor of [`R_VERSION`](#r_version-u8--device-version-information). The value of this register MUST be equal to the major `FIRMWARE` version in `R_VERSION`.
+> This register is deprecated in favor of [`R_VERSION`](#r_version-u8-array--device-version-information). The value of this register MUST be equal to the major `FIRMWARE` version in `R_VERSION`.
 
-Address: `006`
+Address: `006`  
+Length: 1
 
 ```mermaid
 ---
@@ -712,7 +729,10 @@ Contains the major firmware version number. The value of this register is persis
 
 > [!WARNING]
 >
-> This register is deprecated in favor of [`R_VERSION`](#r_version-u8--device-version-information). The value of this register MUST be equal to the minor `FIRMWARE` version in `R_VERSION`.
+> This register is deprecated in favor of [`R_VERSION`](#r_version-u8-array--device-version-information). The value of this register MUST be equal to the minor `FIRMWARE` version in `R_VERSION`.
+
+Address: `007`  
+Length: 1
 
 ```mermaid
 ---
@@ -736,13 +756,14 @@ gantt
 
 Contains the minor firmware version number. The value of this register is persistent and MUST NOT be changeable by the Controller.
 
-### **`R_SERIAL_NUMBER` (U16) – Device serial number**
+### **`R_SERIAL_NUMBER` (U16) – Device Serial Number**
 
 > [!WARNING]
 >
 > This register is deprecated in favor of [`R_UID`](#r_uid-u8-array--unique-identifier). The value of this register MUST duplicate the first two bytes of `R_UID`, in little-endian order.
 
-Address: `013`
+Address: `013`  
+Length: 1
 
 ```mermaid
 ---
@@ -774,13 +795,14 @@ Supporting `Write` requests to this register is OPTIONAL. If `Write` requests ar
 
 Otherwise, if `Write` requests are not supported, the Device MUST reply to any `Write` requests with the fixed device serial number.
 
-### **`R_TIMESTAMP_OFFSET` (U8) – Clock calibration offset**
+### **`R_TIMESTAMP_OFFSET` (U8) – Clock Calibration Offset**
 
 > [!WARNING]
 >
 > This register is deprecated and MUST NOT be implemented on any new devices.
 
-Address: `015`
+Address: `015`  
+Length: 1
 
 ```mermaid
 ---
