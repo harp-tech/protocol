@@ -47,7 +47,7 @@ The following set of Device core registers MUST be implemented. These reserved r
 
 |**Name**|**Volatile**|**Read Only**|**Type**|**Add.**|**Default**|**Brief Description**|**Necessity**|
 | :- | :-: | :-: | :-: | :-: | :-: | :- | :-: |
-|[`R_WHO_AM_I`](#r_who_am_i-u16--product-identifier)|-|Yes|U16|000|a)|Product identifier|Required|
+|[`R_WHO_AM_I`](#r_who_am_i-u16--device-identity-class)|-|Yes|U16|000|a)|Product identifier|Required|
 |[`R_HW_VERSION_H`](#r_hw_version_h-u8--major-hardware-version)|-|Yes|U8|001|a)|Major Hardware version|Deprecated|
 |[`R_HW_VERSION_L`](#r_hw_version_l-u8--minor-hardware-version)|-|Yes|U8|002|a)|Minor Hardware version|Deprecated|
 |[`R_ASSEMBLY_VERSION`](#r_assembly_version-u8--version-of-assembled-components)|-|Yes|U8|003|a)|Version of assembled components|Deprecated|
