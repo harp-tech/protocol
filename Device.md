@@ -47,7 +47,7 @@ The following set of Device core registers MUST be implemented. These reserved r
 
 |**Name**|**Volatile**|**Read Only**|**Type**|**Add.**|**Default**|**Brief Description**|**Necessity**|
 | :- | :-: | :-: | :-: | :-: | :-: | :- | :-: |
-|[`R_WHO_AM_I`](#r_who_am_i-u16--device-identity-class)|-|Yes|U16|000|a)|Product identifier|Required|
+|[`R_WHO_AM_I`](#r_who_am_i-u16--device-identity-class)|-|Yes|U16|000|a)|Device identity class|Required|
 |[`R_HW_VERSION_H`](#r_hw_version_h-u8--major-hardware-version)|-|Yes|U8|001|a)|Major Hardware version|Deprecated|
 |[`R_HW_VERSION_L`](#r_hw_version_l-u8--minor-hardware-version)|-|Yes|U8|002|a)|Minor Hardware version|Deprecated|
 |[`R_ASSEMBLY_VERSION`](#r_assembly_version-u8--version-of-assembled-components)|-|Yes|U8|003|a)|Version of assembled components|Deprecated|
@@ -765,7 +765,7 @@ gantt
     -      :d1, 0, 2
 ```
 
-Specifies a device serial number. If this register is implemented, the number SHOULD be unique for each unit with the same device product identifier stored in `R_WHO_AM_I`. If the register functionality is not implemented, the Device MUST reply to any `Read` requests with a fixed default value of `0` (Zero).
+Specifies a device serial number. If this register is implemented, the number SHOULD be unique for each unit with the same device identity class stored in `R_WHO_AM_I`. If the register functionality is not implemented, the Device MUST reply to any `Read` requests with a fixed default value of `0` (Zero).
 
 Supporting `Write` requests to this register is OPTIONAL. If `Write` requests are supported, the following two-step write sequence MUST be implemented:
 
