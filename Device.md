@@ -68,7 +68,7 @@ The following set of Device core registers MUST be implemented. These reserved r
 |[`R_HEARTBEAT`](#r_heartbeat-u16--device-status-information)|Yes|Yes|U16|018|b)|Monitors device status|Required|
 |[`R_VERSION`](#r_version-u8--device-version-information)|-|Yes|U8|019|a)|Device version information|Required|
 
-||a) These values MUST be stored during the firmware build process and are persistent, i.e. they SHALL NOT be changeable by the Controller.<br>b) Check register notes on the specific register explanation |
+||a) These values MUST be stored during the firmware build process and are persistent, i.e. they SHALL NOT be changeable by the Controller.<br>b) Check notes on the specific register specification. |
 | :- | :- |
 
 <!---
