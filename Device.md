@@ -467,7 +467,7 @@ gantt
 
 This register is read-only and used to provide status information about the Device. Any changes to the below bits are controlled by the Device and sent to the Controller through a periodic `Event` message. If periodic reporting is enabled by setting [`R_OPERATION_CTRL`](#r_operation_ctrl-u8--operation-mode-configuration) bit `HEARTBEAT_EN`, the Device MUST emit a periodic event on this register at a rate of 1 Hz, in sync with updates to the [`R_TIMESTAMP_SECOND`](#r_timestamp_second-u32--system-timestamp-seconds) register.
 
-* **IS_ACTIVE [Bit 0]:** If this bit is set, the Device MUST be in `Active` mode. The bit must be cleared if the Device is in any other mode (see [Operation Mode](#operation-mode) for information on available device modes).
+* **IS_ACTIVE [Bit 0]:** If this bit is set, the Device MUST be in `Active` mode. This bit MUST be cleared if the Device is in any other mode (see [Operation Mode](#operation-mode) for information on available device modes).
 
 * **IS_SYNCHRONIZED [Bit 1]:** If this bit is set, the Device MUST be synchronized with an external Harp clock generator. If the Device is itself a clock generator (see [`R_CLOCK_CONFIG`](#r_clock_config-u8--synchronization-clock-configuration) bit `CLK_GEN`), this bit MUST always be set.
 
