@@ -78,7 +78,8 @@ Mermaid plots can be generated here: https://mermaid.live/
 
 ### **`R_WHO_AM_I` (U16) – Device Identity Class**
 
-Address: `000`
+Address: `000`  
+Length: 1
 
 ```mermaid
 ---
@@ -105,7 +106,8 @@ Specifies the identity class of the Device. The list of reserved device identity
 
 ### **`R_TIMESTAMP_SECOND` (U32) – System Timestamp (seconds)**
 
-Address: `008`
+Address: `008`  
+Length: 1
 
 ```mermaid
 ---
@@ -134,7 +136,8 @@ Contains the current system timestamp in whole seconds. The default value is `0`
 
 ### **`R_TIMESTAMP_MICRO` (U16) – System Timestamp (microseconds)**
 
-Address: `009`
+Address: `009`  
+Length: 1
 
 ```mermaid
 ---
@@ -161,7 +164,8 @@ Contains the microseconds count within each second. Each LSB corresponds to 32 m
 
 ### **`R_OPERATION_CTRL` (U8) – Operation Mode Configuration**
 
-Address: `010`
+Address: `010`  
+Length: 1
 
 ```mermaid
 
@@ -252,7 +256,8 @@ b) `Standby` and `Active` modes are mandatory. `Speed` mode is deprecated.
 
 ### **`R_RESET_DEV` (U8) – Reset Device**
 
-Address: `011`
+Address: `011`  
+Length: 1
 
 ```mermaid
 ---
@@ -315,7 +320,8 @@ This register is used to reboot the Device, optionally save or restore non-volat
 
 ### **`R_DEVICE_NAME` (U8 Array) – Human-readable Device Name**
 
-Address: `012`
+Address: `012`  
+Length: 25
 
 An array of 25 bytes specifying a human-readable device name. Any unused bytes MUST be set to `0` (Zero). This register is non-volatile. If a `Write` request to this register is received and non-volatile memory is available, the Device MUST reset and save the new register value to persistent storage. Otherwise, if non-volatile memory is not available, the Device MUST reply to any `Write` requests with the default register value.
 
@@ -323,7 +329,8 @@ Providing a non-empty device name is OPTIONAL. If no name is provided, the defau
 
 ### **`R_CLOCK_CONFIG` (U8) – Synchronization Clock Configuration**
 
-Address: `014`
+Address: `014`  
+Length: 1
 
 ```mermaid
 ---
@@ -384,7 +391,8 @@ The implementation of this register is RECOMMENDED if the Device provides a [Syn
 
 ### **`R_UID` (U8 Array) – Unique Identifier**
 
-Address: `016`
+Address: `016`  
+Length: 16
 
 ```mermaid
 ---
@@ -410,7 +418,8 @@ An array of 16 bytes specifying a (128-bit) UID (Unique Identifier) for the Devi
 
 ### **`R_TAG` (U8 Array) – Firmware Tag**
 
-Address: `017`
+Address: `017`  
+Length: 8
 
 ```mermaid
 ---
@@ -438,7 +447,8 @@ If not implemented, the Device MUST return a default value of `0` (Zero) for all
 
 ### **`R_HEARTBEAT` (U16) – Device Status Information**
 
-Address: `018`
+Address: `018`  
+Length: 1
 
 ```mermaid
 ---
@@ -473,7 +483,8 @@ This register is read-only and used to provide status information about the Devi
 
 ### **`R_VERSION` (U8 Array) – Device Version Information**
 
-Address: `019`
+Address: `019`  
+Length: 32
 
 ```mermaid
 ---
@@ -534,7 +545,8 @@ The following registers are deprecated and their functionality SHOULD NOT be imp
 >
 > This register is deprecated in favor of [`R_VERSION`](#r_version-u8-array--device-version-information). The value of this register MUST be equal to the major `HARDWARE` version in `R_VERSION`.
 
-Address: `001`
+Address: `001`  
+Length: 1
 
 ```mermaid
 ---
@@ -564,7 +576,8 @@ Specifies the major hardware version number. The value of this register is persi
 >
 > This register is deprecated in favor of [`R_VERSION`](#r_version-u8-array--device-version-information). The value of this register MUST be equal to the minor `HARDWARE` version in `R_VERSION`.
 
-Address: `002`
+Address: `002`  
+Length: 1
 
 ```mermaid
 ---
@@ -594,7 +607,8 @@ Specifies the minor hardware version number. The value of this register is persi
 >
 > This register is deprecated as we do not require tracking the version of assembled components directly in the Device firmware.
 
-Address: `003`
+Address: `003`  
+Length: 1
 
 ```mermaid
 ---
@@ -624,7 +638,8 @@ Specifies the version number of the assembled components. The value of this regi
 >
 > This register is deprecated in favor of [`R_VERSION`](#r_version-u8-array--device-version-information). The value of this register MUST be equal to the major `PROTOCOL` version in `R_VERSION`.
 
-Address: `004`
+Address: `004`  
+Length: 1
 
 ```mermaid
 ---
@@ -654,7 +669,8 @@ Contains the major version of the Harp protocol specification. The value of this
 >
 > This register is deprecated in favor of [`R_VERSION`](#r_version-u8-array--device-version-information). The value of this register MUST be equal to the minor `PROTOCOL` version in `R_VERSION`.
 
-Address: `005`
+Address: `005`  
+Length: 1
 
 ```mermaid
 ---
@@ -684,7 +700,8 @@ Contains the minor version of the Harp Protocol specification. The value of this
 >
 > This register is deprecated in favor of [`R_VERSION`](#r_version-u8-array--device-version-information). The value of this register MUST be equal to the major `FIRMWARE` version in `R_VERSION`.
 
-Address: `006`
+Address: `006`  
+Length: 1
 
 ```mermaid
 ---
@@ -714,6 +731,9 @@ Contains the major firmware version number. The value of this register is persis
 >
 > This register is deprecated in favor of [`R_VERSION`](#r_version-u8-array--device-version-information). The value of this register MUST be equal to the minor `FIRMWARE` version in `R_VERSION`.
 
+Address: `007`  
+Length: 1
+
 ```mermaid
 ---
 displayMode: compact
@@ -742,7 +762,8 @@ Contains the minor firmware version number. The value of this register is persis
 >
 > This register is deprecated in favor of [`R_UID`](#r_uid-u8-array--unique-identifier). The value of this register MUST duplicate the first two bytes of `R_UID`, in little-endian order.
 
-Address: `013`
+Address: `013`  
+Length: 1
 
 ```mermaid
 ---
@@ -780,7 +801,8 @@ Otherwise, if `Write` requests are not supported, the Device MUST reply to any `
 >
 > This register is deprecated and MUST NOT be implemented on any new devices.
 
-Address: `015`
+Address: `015`  
+Length: 1
 
 ```mermaid
 ---
