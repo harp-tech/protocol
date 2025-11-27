@@ -248,7 +248,7 @@ b) `Standby` and `Active` modes are mandatory. `Speed` mode is deprecated.
 | 1          	| Speed Mode.                                                                                              	|
 | 0.1        	| A critical error occurred. Only a hardware reset or a new power up can remove the Device from this Mode. 	|
 
-* **ALIVE_EN [Bit 7]:** If this bit is set, the Device SHOULD send an `Event` message every second with the contents of [`R_TIMESTAMP_SECOND`](#r_timestamp_second-u32--system-timestamp-seconds). This allows the Controller to check the status of the Device periodically. This feature is deprecated and may be removed from future protocol versions.
+* **ALIVE_EN [Bit 7]:** If this bit is set, the Device SHOULD send an `Event` message every second with the contents of [`R_TIMESTAMP_SECOND`](#r_timestamp_second-u32--system-timestamp-seconds). This feature has been deprecated and may be removed from future protocol versions. The Controller should set the `HEARTBEAT_EN` bit and monitor [`R_HEARTBEAT`](#r_heartbeat-u16--device-status-information) instead for periodically checking the status of the Device.
 
 ### **`R_RESET_DEV` (U8) – Reset device and save non-volatile registers**
 
