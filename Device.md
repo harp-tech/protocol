@@ -323,7 +323,7 @@ This register is used to reboot the Device, optionally save or restore non-volat
 Address: `012`  
 Length: 25
 
-An array of 25 bytes specifying a human-readable device name. Any unused bytes MUST be set to `0` (Zero). This register is non-volatile. If a `Write` request to this register is received and non-volatile memory is available, the Device MUST reset and save the new register value to persistent storage. Otherwise, if non-volatile memory is not available, the Device MUST reply to any `Write` requests with the default register value.
+The bytes in this register specify a human-readable device name. Any unused bytes MUST be set to `0` (Zero). This register is non-volatile. If a `Write` request to this register is received and non-volatile memory is available, the Device MUST reset and save the new register value to persistent storage. Otherwise, if non-volatile memory is not available, the Device MUST reply to any `Write` requests with the default register value.
 
 Providing a non-empty device name is OPTIONAL. If no name is provided, the default value of this register MUST be `0` (Zero).
 
@@ -414,7 +414,7 @@ gantt
     0      :d1, 0, 1
 ```
 
-An array of 16 bytes specifying a (128-bit) UID (Unique Identifier) for the Device. This register is non-volatile and read-only. The byte-order is little-endian. If not implemented, the Device MUST return a default value of `0` (Zero) for all bytes.
+An array of bytes specifying a (128-bit) UID (Unique Identifier) for the Device. This register is non-volatile and read-only. The byte-order is little-endian. If not implemented, the Device MUST return a default value of `0` (Zero) for all bytes.
 
 ### **`R_TAG` (U8 Array) – Firmware Tag**
 
@@ -441,7 +441,7 @@ gantt
     0      :d1, 0, 1
 ```
 
-An array of 8 bytes that can be used to store a tag for a specific firmware build. For instance, it could be used to store the Git hash of a specific release/commit. The byte-order is little-endian. This register is read-only.
+An array of bytes that can be used to store a tag for a specific firmware build. For instance, it could be used to store the Git hash of a specific release/commit. The byte-order is little-endian. This register is read-only.
 
 If not implemented, the Device MUST return a default value of `0` (Zero) for all bytes.
 
@@ -523,7 +523,7 @@ gantt
     -      :d4, after sdk_id, 32
 ```
 
-An array of 32 bytes specifying the [semantic version](https://semver.org/) of the components making up the Device. Each component version is made up of three bytes, following the order `major`, `minor`, `patch`. The register also includes a unique identifier of the core microcontroller SDK and a hash digest of the interface schema file describing the Device Interface.
+The bytes in this register specify the [semantic version](https://semver.org/) of the components making up the Device. Each component version is made up of three bytes, following the order `major`, `minor`, `patch`. The register also includes a unique identifier of the core microcontroller SDK and a hash digest of the interface schema file describing the Device Interface.
 
 * **PROTOCOL:** The semantic version of the Harp protocol implemented by the Device.
 
