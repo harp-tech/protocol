@@ -47,26 +47,26 @@ The following set of Device core registers MUST be implemented. These reserved r
 
 |**Name**|**Volatile**|**Read Only**|**Type**|**Add.**|**Default**|**Brief Description**|**Necessity**|
 | :- | :-: | :-: | :-: | :-: | :-: | :- | :-: |
-|[`R_WHO_AM_I`](#r_who_am_i-u16--device-identity-class)|-|Yes|U16|000|a)|Device identity class|Required|
-|[`R_HW_VERSION_H`](#r_hw_version_h-u8--major-hardware-version)|-|Yes|U8|001|a)|Major Hardware version|Deprecated|
-|[`R_HW_VERSION_L`](#r_hw_version_l-u8--minor-hardware-version)|-|Yes|U8|002|a)|Minor Hardware version|Deprecated|
-|[`R_ASSEMBLY_VERSION`](#r_assembly_version-u8--version-of-assembled-components)|-|Yes|U8|003|a)|Version of assembled components|Deprecated|
-|[`R_CORE_VERSION_H`](#r_core_version_h-u8--major-core-version)|-|Yes|U8|004|a)|Major core version|Deprecated|
-|[`R_CORE_VERSION_L`](#r_core_version_l-u8--minor-core-version)|-|Yes|U8|005|a)|Minor core version|Deprecated|
-|[`R_FW_VERSION_H`](#r_fw_version_h-u8--major-firmware-version)|-|Yes|U8|006|a)|Major Firmware version of the application|Deprecated|
-|[`R_FW_VERSION_L`](#r_fw_version_l-u8--minor-firmware-version)|-|Yes|U8|007|a)|Minor Firmware version of the application|Deprecated|
-|[`R_TIMESTAMP_SECOND`](#r_timestamp_second-u32--system-timestamp-seconds)|Yes|No|U32|008|0|System timestamp: seconds|Required|
-|[`R_TIMESTAMP_MICRO`](#r_timestamp_micro-u16--system-timestamp-microseconds)|Yes|Yes|U16|009|0|System timestamp: microseconds|Required|
-|[`R_OPERATION_CTRL`](#r_operation_ctrl-u8--operation-mode-configuration)|No|No|U8|010|b)|Configuration of the device operation mode|Required|
-|[`R_RESET_DEV`](#r_reset_dev-u8--reset-device-and-save-non-volatile-registers)|No|No|U8|011|b)|Reset device and save non-volatile registers|Optional|
-|[`R_DEVICE_NAME`](#r_device_name-u8-array--human-readable-device-name)|No|No|U8 Array|012|b)|Human-readable device name|Optional|
-|[`R_SERIAL_NUMBER`](#r_serial_number-u16--device-serial-number)|No|No|U16|013|b)|Unique serial number of the device|Deprecated|
-|[`R_CLOCK_CONFIG`](#r_clock_config-u8--synchronization-clock-configuration)|No|No|U8|014|b)|Synchronization clock configuration|Optional|
-|[`R_TIMESTAMP_OFFSET`](#r_timestamp_offset-u8--clock-calibration-offset)|No|No|U8|015|b)|Configures an offset for Timestamp updates|Deprecated|
-|[`R_UID`](#r_uid-u8-array--unique-identifier)|No|Yes|U8 Array|016|b)|Stores a unique identifier (UID) |Optional|
-|[`R_TAG`](#r_tag-u8-array--firmware-tag)|-|Yes|U8 Array|017|b)|Firmware tag|Optional|
-|[`R_HEARTBEAT`](#r_heartbeat-u16--device-status-information)|Yes|Yes|U16|018|b)|Monitors device status|Required|
-|[`R_VERSION`](#r_version-u8-array--device-version-information)|-|Yes|U8 Array|019|a)|Device version information|Required|
+|[`R_WHO_AM_I`](#r_who_am_i-u16--device-identity-class)|-|Yes|U16|0|a)|Device identity class|Required|
+|[`R_HW_VERSION_H`](#r_hw_version_h-u8--major-hardware-version)|-|Yes|U8|1|a)|Major Hardware version|Deprecated|
+|[`R_HW_VERSION_L`](#r_hw_version_l-u8--minor-hardware-version)|-|Yes|U8|2|a)|Minor Hardware version|Deprecated|
+|[`R_ASSEMBLY_VERSION`](#r_assembly_version-u8--version-of-assembled-components)|-|Yes|U8|3|a)|Version of assembled components|Deprecated|
+|[`R_CORE_VERSION_H`](#r_core_version_h-u8--major-core-version)|-|Yes|U8|4|a)|Major core version|Deprecated|
+|[`R_CORE_VERSION_L`](#r_core_version_l-u8--minor-core-version)|-|Yes|U8|5|a)|Minor core version|Deprecated|
+|[`R_FW_VERSION_H`](#r_fw_version_h-u8--major-firmware-version)|-|Yes|U8|6|a)|Major Firmware version of the application|Deprecated|
+|[`R_FW_VERSION_L`](#r_fw_version_l-u8--minor-firmware-version)|-|Yes|U8|7|a)|Minor Firmware version of the application|Deprecated|
+|[`R_TIMESTAMP_SECOND`](#r_timestamp_second-u32--system-timestamp-seconds)|Yes|No|U32|8|0|System timestamp: seconds|Required|
+|[`R_TIMESTAMP_MICRO`](#r_timestamp_micro-u16--system-timestamp-microseconds)|Yes|Yes|U16|9|0|System timestamp: microseconds|Required|
+|[`R_OPERATION_CTRL`](#r_operation_ctrl-u8--operation-mode-configuration)|No|No|U8|10|b)|Configuration of the device operation mode|Required|
+|[`R_RESET_DEV`](#r_reset_dev-u8--reset-device-and-save-non-volatile-registers)|No|No|U8|11|b)|Reset device and save non-volatile registers|Optional|
+|[`R_DEVICE_NAME`](#r_device_name-u8-array--human-readable-device-name)|No|No|U8 Array|12|b)|Human-readable device name|Optional|
+|[`R_SERIAL_NUMBER`](#r_serial_number-u16--device-serial-number)|No|No|U16|13|b)|Unique serial number of the device|Deprecated|
+|[`R_CLOCK_CONFIG`](#r_clock_config-u8--synchronization-clock-configuration)|No|No|U8|14|b)|Synchronization clock configuration|Optional|
+|[`R_TIMESTAMP_OFFSET`](#r_timestamp_offset-u8--clock-calibration-offset)|No|No|U8|15|b)|Configures an offset for Timestamp updates|Deprecated|
+|[`R_UID`](#r_uid-u8-array--unique-identifier)|No|Yes|U8 Array|16|b)|Stores a unique identifier (UID) |Optional|
+|[`R_TAG`](#r_tag-u8-array--firmware-tag)|-|Yes|U8 Array|17|b)|Firmware tag|Optional|
+|[`R_HEARTBEAT`](#r_heartbeat-u16--device-status-information)|Yes|Yes|U16|18|b)|Monitors device status|Required|
+|[`R_VERSION`](#r_version-u8-array--device-version-information)|-|Yes|U8 Array|19|a)|Device version information|Required|
 
 ||a) These values MUST be stored during the firmware build process and are persistent, i.e. they SHALL NOT be changeable by the Controller.<br>b) Check notes on the specific register specification. |
 | :- | :- |
