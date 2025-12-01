@@ -44,7 +44,7 @@ Each transmission packet encodes the current time, in whole seconds. All Harp Sy
 
 Transmission of the last byte MUST start exactly 672 μs before the current second lapses.
 
-Receivers MUST align their clocks so the next whole second starts exactly 672 μs following reception of the last byte, ensuring any fractional part of the timestamp is zero. Receivers MAY complete the initial alignment over a few transmission events, but thereafter MUST keep updating the whole second in sync with successfully transmitted Harp Synchronization Clock messages as long as the whole second is incremented sequentially.
+Receivers MUST align their clocks so the next whole second starts exactly 672 μs following reception of the last byte, ensuring any fractional part of the timestamp is zero. Receivers SHOULD complete the initial alignment over as few transmission events as possible, and thereafter MUST keep updating the whole second in sync with successfully transmitted Harp Synchronization Clock messages as long as the whole second is incremented sequentially.
 
 ## Example Logic Trace
 
