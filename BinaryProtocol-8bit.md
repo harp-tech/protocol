@@ -81,7 +81,7 @@ Specifies the type of the Harp message.
 
 #### Error flag (1 bit)
 
-When this flag is set, the message represents an error reply sent from the Device to a request from the Controller. This flag SHALL NOT be set in any other messages. This flag SHALL NOT be set in any messages sent from the Controller to the Device.
+When this flag is set, the message represents an error reply sent from the Device to a request from the Controller. This flag SHOULD NOT be set in any other messages. This flag SHALL NOT be set in any messages sent from the Controller to the Device.
 
 ### Length (1 byte)
 
