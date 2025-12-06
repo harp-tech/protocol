@@ -209,11 +209,11 @@ All `Event` messages sent by the Device SHOULD be timestamped with the Harp cloc
 
 The [`Error`](#error-flag-1-bit) flag in the [`MessageType`](#messagetype-1-byte) field is set by the Device on messages representing an error reply to a request from the Controller. Since information included in error messages is limited, we RECOMMEND restricting error replies to the following cases:
 
-  1. The Controller tries to read from (or write to) a register that does not exist on the Device;
-  2. The Controller tries to write on a read-only register;
-  3. The message [`PayloadType`](#payloadtype-1-byte) does not match the register specification;
-  4. The length of the payload does not match the register specification;
-  5. The Controller tries to write data which is outside the allowable range of register values.
+  1. The message is a request to read (or write) a register that does not exist on the Device.
+  2. The message [`PayloadType`](#payloadtype-1-byte) does not match the register specification.
+  3. The message is a write request to a read-only register.
+  4. The message is a write request, and the length of the payload does not match the register specification.
+  5. The message is a write request, and the payload is outside the allowable range of register values.
 
 Requests which require prior configuration of multiple registers (e.g. starting a pulse train, moving a motor), or requests which are invalid due to particular combinations of other register values, SHOULD NOT be handled by sending an error reply to a write request from the Controller.
 
@@ -223,7 +223,7 @@ Instead, such cases MAY be handled by sending an event message from a different 
 >
 > A Device MAY reject a change to the register value. In this case, a reply to the write request MUST still be sent, containing the current register value.
 
-If an event message is sent from a register in response to a write request sent to a different register, the documentation for the register sending the event SHOULD clearly indicate which cases will raise the event, including specific combinations of values leading to error.
+If an event message is sent from a register as a result of a write request sent to a different register, the documentation for the register sending the event SHOULD clearly indicate which cases will raise the event, including specific combinations of values leading to error.
 
 ### Message Exchange Examples
 
