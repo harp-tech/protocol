@@ -12,12 +12,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 The Harp Binary Protocol SHOULD be used for all exchanges between a **Controller** and a **Device**. The Controller is typically a computer, or a server. The Device is typically a data acquisition or actuator microcontroller.
 
-Exchanges of data using the protocol are based on messages addressed to specific registers, as defined in the [Device Interface](Device.md#device-interface), and are used to implement two main messaging patterns between Controller and Device:
-
-* **Request-Reply**: The Controller sends a message to the Device requesting to read or write register contents. The Device replies with a message back to the Controller containing the updated register contents.
-* **Event Stream**: The Device sends event messages to the Controller reporting the contents of specific registers, whenever an external or internal event of interest happens.
-
-Best practices and guidelines on implementing these patterns are described in the [Messaging Patterns](#messaging-patterns) section.
+Exchanges of data using the protocol are based on messages addressed to specific registers, as defined in the [Device Interface](Device.md#device-interface).
 
 > [!NOTE]
 >
@@ -179,86 +174,6 @@ The contents of the Harp message.
 
 The sum of all bytes (`U8`) contained in the other fields of the Harp message structure. The receiver of the message MUST calculate its own checksum from all received bytes and compare it against the received value in this field. If the two values do not match, the Harp message SHOULD be discarded.
 
----
-
-## Messaging Patterns
-
-### Request-Reply
-
-A Device that implements this protocol MAY receive `Write` and `Read` requests from the Controller at any point. For each request arriving from the Controller, a reply message with the same message type, register address, and register type MUST be returned by the Device.
-
-All reply messages sent by the Device MUST be timestamped with the Harp clock time at which the request was processed.
-
-> [!NOTE]
->
-> For requests triggering a fast action, the reply timestamp SHOULD indicate when the action is finished. However, if a request triggers a long-running action, the reply timestamp SHOULD indicate the time at which the action has started. An event register MAY be used to report when the action completes.
-
-The payload of the reply message SHOULD represent the up-to-date state of the register targeted by the request, after the request is processed. If a `Write` request is sent, the payload of the reply MAY be different from the payload of the original request, e.g. if the Device needs to transform or adjust the actual value written on the register ([see "Register Polymorphism" section below](#register-polymorphism)).
-
-The Device SHOULD NOT send more than a single reply message. The only supported exception is the operation of the [`R_OPERATION_CTRL`](Device.md#r_operation_ctrl-u8--operation-mode-configuration) register, which allows the Controller to request a dump of all registers in the Device. In this case, the Device replies with a single `Write` message from `R_OPERATION_CTRL`, in accordance with the above specification. However, if **DUMP [Bit 3]** is set, the Device will additionally emit a sequence of `Read` messages back-to-back, containing the state of each register in the Device.
-
-### Event Stream
-
-A Device MAY send to the Controller `Event` messages reporting the contents of specific registers at any time. Sending of events depends on both the current Device configuration and [Operation Mode](Device.md#operation-mode). A Device SHOULD NOT send `Event` messages when in the `Standby` operation mode.
-
-When the Device is in `Active` mode, device-specific registers can be used by the Controller to further restrict the sending of events. The documentation of each device interface should be consulted to understand the operation of such registers.
-
-All `Event` messages sent by the Device SHOULD be timestamped with the Harp clock time as early as possible following the event trigger.
-
-### Error Handling
-
-The [`Error`](#error-flag-1-bit) flag in the [`MessageType`](#messagetype-1-byte) field is set by the Device on messages representing an error reply to a request from the Controller. Since information included in error messages is limited, we RECOMMEND restricting error replies to the following cases:
-
-  1. The message is a request to read (or write) a register that does not exist on the Device.
-  2. The message [`PayloadType`](#payloadtype-1-byte) does not match the register specification.
-  3. The message is a write request to a read-only register.
-  4. The message is a write request, and the length of the payload does not match the register specification.
-  5. The message is a write request, and the payload is outside the allowable range of register values.
-
-Requests which require prior configuration of multiple registers (e.g. starting a pulse train, moving a motor), or requests which are invalid due to particular combinations of other register values, SHOULD NOT be handled by sending an error reply to a write request from the Controller.
-
-Instead, such cases MAY be handled by sending an event message from a different register. Alternatively, an allowed value MAY be set by the Device, in which case the reply to the request MUST contain the actual register value which was set.
-
-> [!NOTE]
->
-> A Device MAY reject a change to the register value. In this case, a reply to the write request MUST still be sent, containing the current register value.
-
-If an event message is sent from a register as a result of a write request sent to a different register, the documentation for the register sending the event SHOULD clearly indicate which cases will raise the event, including specific combinations of values leading to error.
-
-### Message Exchange Examples
-
-Some Harp message exchanges are shown below to demonstrate the typical usage of the protocol between a Device and a Controller. Note that timestamp information is usually omitted in messages sent from the Controller to the Device, since actions are expected to run as soon as possible.
-
-We will use the following abbreviations:
-
-- [REQ] is a Request (From the Controller to the Device).
-- [REP] is a Reply (From the Device to the Controller).
-- [EVT] is an Event (A message sent from the Device to the Controller without a request from the Controller).
-
-#### Write Message
-
-- [REQ] **Controller**:       `2`  `Length` `Address` `Port` `PayloadType` `Payload` `Checksum`
-- [REP] **Device**: `2`  `Length` `Address` `Port` `PayloadType` `Timestamp` `Payload` `Checksum`       OK
-- [REP] **Device**: `10` `Length` `Address` `Port` `PayloadType` `Timestamp` `Payload` `Checksum`       ERROR
-
-The timestamp information in [REP] represents the time when the register contents were updated.
-
-#### Read Message
-
-- [REQ] **Controller**: `1` `4`      `Address` `Port` `PayloadType` `Checksum`
-- [REP] **Device**: `1` `Length` `Address` `Port` `PayloadType` `Timestamp` `Payload` `Checksum`       OK
-- [REP] **Device**: `9` `10`     `Address` `Port` `PayloadType` `Timestamp` `Payload` `Checksum`       ERROR
-
-The timestamp information in [REP] represents the time when the register contents were read.
-
-#### Event message
-
-- [EVT] **Device**: `3` `Length` `Address` `Port` `PayloadType` `Timestamp` `Payload` `Checksum`      OK
-
-The timestamp information in [EVT] represents the time when the register contents were read.
-
----
-
 ## Implementation Notes and Code Examples
 
 Below we present technical notes and reference implementation examples for some of the protocol features.
@@ -354,37 +269,6 @@ else
     arrayLength = (Length – 4) / (PayloadType & sizeMask )
 }
 ```
-
-### Register polymorphism
-
-A Device SHOULD NOT accept or send different types of data for the same register address. The protocol was designed to be as simple as possible, and having different types of data in the same register would make the parsing and manipulation of messages unnecessarily complex.
-
-Messages sent from a specific Device register SHOULD:
-  1. have a single data type (e.g. `U8`) for all message types (`Read`, `Write`, `Event`); and
-  2. have a payload with the same functional semantics regardless of the message type (see examples below).
-
-Finally, if the register is a fixed-length register, the same message length MUST be used for all message types sent from the Device.
-
-> **Example**
->
-> Consider the following register:
->
->```
->   CameraFrequency:
->   - Address: 32
->   - Type: U8
->   - Access: Read, Write
->   - Description: Sets the frequency of the camera in Hz.
->```
->
-> ❌ DO NOT reply with a frequency in U16 for a `Read` request and the frequency in U8 for a `Write` request.  
-> ❌ DO NOT reply with a frequency in Hz for a `Read` request and the period in seconds for a `Write` request.  
->
-> ✅ DO reply with a frequency in U8 for both a `Read` and `Write` request.  
-> ✅ DO reply with a frequency in Hz for both a `Read` and a `Write` request.  
-> ✅ CONSIDER accepting an approximate value for frequency in `Write` requests from the Controller, if the Device is able to determine a valid exact frequency from the request. In this case, DO reply with the exact frequency value set by the Device.
-
----
 
 ## Release notes:
 
