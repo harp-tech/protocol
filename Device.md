@@ -10,7 +10,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 ## Device Interface
 
-All Device functionality, including device configuration, SHOULD be provided to the Controller using the [Harp Binary Protocol](BinaryProtocol-8bit.md), and documented using a standardized Device Interface. The Device Interface is described by a collection of hardware registers. Each register is defined by a unique memory location, which can be accessed for reading and writing. These memory locations are often tied to hardware-related functionality, such that changing the value of the register directly changes the operation of the Device.
+All Device functionality, including device configuration, SHOULD be provided to the Controller using the [Harp Binary Protocol](BinaryProtocol-8bit.md), and documented using a standardized Device Interface. The Device Interface is described by a collection of hardware registers defined by a unique memory location. These memory locations are often tied to hardware-related functionality, such that changing the value of the register directly changes the operation of the Device.
 
 For example, a register can be used to configure device properties such as sampling frequency, operation mode, input / output routing, and other device-specific parameters. A register can also be used to control specific functionality, such as toggling digital output lines, starting and stopping pulse trains, or moving a motor.
 
@@ -27,13 +27,13 @@ The following Device operation modes MUST be implemented:
 
 The Device SHOULD continuously check if communication with the Controller is active and healthy. This status check will be largely dependent on the transport layer implementing the Harp communication protocol between Controller and Device. Each implementation SHOULD clearly distinguish between `Connected` and `NotConnected` states, and it is up to the developer to decide how to implement this status check. When the Device transitions to the `NotConnected` state, it MUST immediately enter `Standby` and stop transmission of further `Event` messages.
 
-As an application example, a Device using RS-232 as the transport layer MAY poll for an active USB connection by checking whether the state of the DTR pin is `HIGH`. Once the DTR pin is brought `LOW` the Device SHOULD assume that the Controller closed the connection and enter `Standby`. The Controller MUST update the state of the DTR line when opening or closing a new RS-232 connection to the Device.
+As an application example, a Device using RS-232 as the physical layer MAY poll for an active USB connection by checking whether the state of the DTR pin is `HIGH`. Once the DTR pin is brought `LOW`, the Device SHOULD assume the Controller closed the connection and enter `Standby`. The Controller MUST update the state of the DTR line when opening or closing a new serial connection to the Device.
 
 ## Messaging Patterns
 
 All exchanges of data between the Controller and the Device SHOULD use the following messaging patterns.
 
-* **Request-Reply**: The Controller sends a message to the Device requesting to read or write register contents. The Device replies with a message back to the Controller containing the updated register contents.
+* **Request-Reply**: The Controller sends a message to the Device requesting to read or write register contents. The Device replies with a message back to the Controller containing the latest register contents.
 * **Event Stream**: The Device sends event messages to the Controller reporting the contents of specific registers, whenever an external or internal event of interest happens.
 * **Error Handling**: The Device sends an error message whenever there is an error processing a Controller request, or if the Device enters an exceptional error state requiring immediate action from the Controller.
 

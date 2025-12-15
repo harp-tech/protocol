@@ -182,7 +182,7 @@ Below we present technical notes and reference implementation examples for some 
 
 The following pseudo-code snippet illustrates how to check for the [`Error`](#error-flag-1-bit) flag in the [`MessageType`](#messagetype-1-byte) field:
 
-```C#
+```C
     int errorMask = 0x08;
 
     if (MessageType & errorMask)
