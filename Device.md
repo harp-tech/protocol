@@ -33,7 +33,7 @@ As an application example, a Device communicating over a serial port MAY poll fo
 
 All exchanges of data between the Controller and the Device SHOULD use the following messaging patterns.
 
-* **Request-Reply**: The Controller sends a message to the Device requesting to read or write register contents. The Device replies with a message back to the Controller containing the latest register contents.
+* **Request-Reply**: The Controller sends a message to the Device requesting to read or write register contents. The Device replies with a message back to the Controller containing the register contents after the request is processed.
 * **Event Stream**: The Device sends event messages to the Controller reporting the contents of specific registers, whenever an external or internal event of interest happens.
 * **Error Handling**: The Device sends an error message whenever there is an error processing a Controller request, or if the Device enters an exceptional error state requiring immediate action from the Controller.
 
