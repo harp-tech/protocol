@@ -306,7 +306,7 @@ This register is used to reboot the Device, optionally save or restore non-volat
 
 * **SAVE [Bit 2]:** If this bit is set and non-volatile memory is available, the Device MUST save any non-volatile core and application registers to persistent storage, and reboot. The non-volatile memory should be configured as the permanent boot option. If this bit is set and non-volatile memory is not available, the Device MUST reply with an `Error` message. When sending a reply to a `Read` request, the Device MUST clear this bit in the message payload.
 
-* **NAME_TO_DEFAULT [Bit 3]:** If this bit is set, the Device MUST reboot and restore the value of [`R_DEVICE_NAME`](#r_device_name-25-bytes--devices-name) to its default value. When sending a reply to a `Read` request, the Device MUST clear this bit in the message payload.
+* **NAME_TO_DEFAULT [Bit 3]:** If this bit is set, the Device MUST reboot and restore the value of [`R_DEVICE_NAME`](#r_device_name-u8-array--human-readable-device-name) to its default value. When sending a reply to a `Read` request, the Device MUST clear this bit in the message payload.
 
 * **UPDATE_FIRMWARE [Bit 5]:** If this bit is set, the Device MUST enter firmware update mode. In this mode the Device MAY NOT reply to any requests until the update completes. Once completed, the Device MUST reboot. When sending a reply to a `Read` request, the Device MUST clear this bit in the message payload.
 
