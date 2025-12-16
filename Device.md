@@ -25,9 +25,9 @@ The following Device operation modes MUST be implemented:
 - `Standby:` All `Event` messages are disabled and MUST NOT be sent to the Controller.
 - `Active:` All `Event` messages are enabled and SHOULD be sent to the Controller following the Device specification.
 
-The Device SHOULD continuously check if communication with the Controller is active and healthy. This status check will be largely dependent on the transport layer implementing the Harp communication protocol between Controller and Device. Each implementation SHOULD clearly distinguish between `Connected` and `NotConnected` states, and it is up to the developer to decide how to implement this status check. When the Device transitions to the `NotConnected` state, it MUST immediately enter `Standby` and stop transmission of further `Event` messages.
+The Device SHOULD continuously check if communication with the Controller is active and healthy. This status check will be largely dependent on the communication interface used to implement the Harp protocol between Controller and Device. Each implementation SHOULD allow distinguishing between `Connected` and `NotConnected` states, and it is up to the developer to decide how to implement this status check. When the Device transitions to the `NotConnected` state, it MUST immediately enter `Standby` and stop transmission of further `Event` messages.
 
-As an application example, a Device using RS-232 as the physical layer MAY poll for an active USB connection by checking whether the state of the DTR pin is `HIGH`. Once the DTR pin is brought `LOW`, the Device SHOULD assume the Controller closed the connection and enter `Standby`. The Controller MUST update the state of the DTR line when opening or closing a new serial connection to the Device.
+As an application example, a Device communicating over a serial port MAY poll for an active connection by checking whether the state of the DTR pin is `HIGH`. Once the DTR pin is brought `LOW`, the Device SHOULD assume the Controller closed the connection and enter `Standby`. The Controller MUST update the state of the DTR line when opening or closing a new serial connection to the Device.
 
 ## Messaging Patterns
 
