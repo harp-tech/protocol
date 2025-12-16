@@ -10,13 +10,136 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 ## Device Interface
 
-All Device functionality, including device configuration, SHOULD be provided to the Controller using the [Harp Binary Protocol](BinaryProtocol-8bit.md), and documented using a standardized Device Interface. The Device Interface is described by a collection of hardware registers. Each register is defined by a unique memory location, which can be accessed for reading and writing. These memory locations can be tied to hardware-related functionality, such that changing the value of the register can directly change the operation of the Device.
+All Device functionality, including device configuration, SHOULD be provided to the Controller using the [Harp Binary Protocol](BinaryProtocol-8bit.md), and documented using a standardized Device Interface. The Device Interface is described by a collection of hardware registers defined by a unique memory location. These memory locations are often tied to hardware-related functionality, such that changing the value of the register directly changes the operation of the Device.
 
 For example, a register can be used to configure device properties such as sampling frequency, operation mode, input / output routing, and other device-specific parameters. A register can also be used to control specific functionality, such as toggling digital output lines, starting and stopping pulse trains, or moving a motor.
 
 Each register in the Device Interface is assigned a unique zero-based address, and a payload type describing the format of the data stored in the register. Registers can be read-only or allow both reading and writing.
 
 Except for [Optional or Deprecated registers](#optional-or-deprecated-registers), whose behavior is clarified below, all registers and functionality specified in this document MUST be implemented by a Device complying with this specification.
+
+## Operation Mode
+
+The following Device operation modes MUST be implemented:
+
+- `Standby:` All `Event` messages are disabled and MUST NOT be sent to the Controller.
+- `Active:` All `Event` messages are enabled and SHOULD be sent to the Controller following the Device specification.
+
+The Device SHOULD continuously check if communication with the Controller is active and healthy. This status check will be largely dependent on the communication interface used to implement the Harp protocol between Controller and Device. Each implementation SHOULD allow distinguishing between `Connected` and `NotConnected` states, and it is up to the developer to decide how to implement this status check. When the Device transitions to the `NotConnected` state, it MUST immediately enter `Standby` and stop transmission of further `Event` messages.
+
+As an application example, a Device communicating over a serial port MAY poll for an active connection by checking whether the state of the DTR pin is `HIGH`. Once the DTR pin is brought `LOW`, the Device SHOULD assume the Controller closed the connection and enter `Standby`. The Controller MUST update the state of the DTR line when opening or closing a new serial connection to the Device.
+
+## Messaging Patterns
+
+All exchanges of data between the Controller and the Device SHOULD use the following messaging patterns.
+
+* **Request-Reply**: The Controller sends a message to the Device requesting to read or write register contents. The Device replies with a message back to the Controller containing the register contents after the request is processed.
+* **Event Stream**: The Device sends event messages to the Controller reporting the contents of specific registers, whenever an external or internal event of interest happens.
+* **Error Handling**: The Device sends an error message whenever there is an error processing a Controller request, or if the Device enters an exceptional error state requiring immediate action from the Controller.
+
+The following sections provide a detailed specification on implementing each of these patterns.
+
+### Request-Reply
+
+A Device MUST process any `Write` and `Read` requests sent from the Controller. For each request arriving from the Controller, a reply message with the same message type, register address, and register type MUST be returned by the Device, unless the Device is configured to mute all replies (see **MUTE_RPL [Bit 4]** in [`R_OPERATION_CTRL`](#r_operation_ctrl-u8--operation-mode-configuration) below), in which case the Device SHALL NOT send reply messages for any Controller requests.
+
+All reply messages sent by the Device MUST be timestamped with the Harp clock time at which the request was processed.
+
+> [!NOTE]
+>
+> For requests triggering a fast action, the reply timestamp SHOULD indicate the time at which the action is finished. However, if a request triggers a long-running action, the reply timestamp SHOULD indicate the time at which the action has started. An event register MAY be used to report when a long-running action completes.
+
+The payload of the reply message SHOULD represent the up-to-date state of the register targeted by the request, after the request is processed. If a `Write` request is sent, the payload of the reply MAY be different from the payload of the original request, e.g. if the Device needs to transform or adjust the actual value written on the register ([see "Register Polymorphism" section below](#register-polymorphism)).
+
+The Device SHOULD NOT send more than a single reply message. The only supported exception is the operation of the [`R_OPERATION_CTRL`](#r_operation_ctrl-u8--operation-mode-configuration) register, which allows the Controller to request a dump of all registers in the Device. In this case, the Device replies with a single `Write` message from `R_OPERATION_CTRL`, in accordance with the above specification. However, if **DUMP [Bit 3]** is set, the Device will additionally emit a sequence of `Read` messages back-to-back, containing the state of each register in the Device.
+
+### Event Stream
+
+A Device MAY send to the Controller `Event` messages reporting the contents of specific registers at any time. Sending of events depends on the Device [Operation Mode](#operation-mode). A Device SHOULD NOT send `Event` messages when in `Standby` mode.
+
+When the Device is in `Active` mode, device-specific application registers can be used by the Controller to further restrict the sending of events. The documentation of each device interface should be consulted to understand the operation of such registers.
+
+All `Event` messages sent by the Device SHOULD be timestamped with the Harp clock time as early as possible following the event trigger.
+
+### Error Handling
+
+The [`Error`](BinaryProtocol-8bit.md#error-flag-1-bit) flag in the [`MessageType`](BinaryProtocol-8bit.md#messagetype-1-byte) field MAY be set by the Device on messages signalling an error while processing a request from the Controller. The Device SHALL NOT send any error replies to the Controller when configured to mute all replies (see [Request-Reply](#request-reply)). Since information included in error messages is limited, we RECOMMEND restricting error replies to the following cases:
+
+  1. The message is a request to read (or write) a register that does not exist on the Device.
+  2. The message [`PayloadType`](BinaryProtocol-8bit.md#payloadtype-1-byte) does not match the register specification.
+  3. The message is a write request to a read-only register.
+  4. The message is a write request, and the length of the payload does not match the register specification.
+  5. The message is a write request, and the payload is outside the allowable range of register values.
+
+Requests which require prior configuration of multiple registers (e.g. starting a pulse train, moving a motor), or requests which are invalid due to particular combinations of other register values, SHOULD NOT be handled by sending an error reply to a write request from the Controller.
+
+Instead, such cases MAY be handled by sending an event message from a different register. Alternatively, an allowed value MAY be set by the Device, in which case the reply to the request MUST contain the actual register value which was set.
+
+> [!NOTE]
+>
+> A Device MAY reject a change to the register value. In this case, a reply to the write request MUST still be sent, containing the current register value.
+
+If an event message is sent from a register as a result of a write request sent to a different register, the documentation for the register sending the event SHOULD clearly indicate which cases will raise the event, including specific combinations of values leading to error.
+
+### Register polymorphism
+
+A Device SHOULD NOT accept or send different types of data for the same register address. The protocol was designed to be as simple as possible, and having different types of data in the same register would make the parsing and manipulation of messages unnecessarily complex.
+
+Messages sent from a specific Device register SHOULD:
+  1. have a single data type (e.g. `U8`) for all message types (`Read`, `Write`, `Event`)
+  2. have the same message length for all message types, if the register is a fixed-length register
+  3. have a payload with the same functional semantics regardless of the message type (see examples below)
+
+> **Example**
+>
+> Consider the following register:
+>
+>```
+>   CameraFrequency:
+>   - Address: 32
+>   - Type: U8
+>   - Access: Read, Write
+>   - Description: Sets the frequency of the camera in Hz.
+>```
+>
+> ❌ DO NOT reply with a frequency in U16 for a `Read` request and the frequency in U8 for a `Write` request.  
+> ❌ DO NOT reply with a frequency in Hz for a `Read` request and the period in seconds for a `Write` request.  
+>
+> ✅ DO reply with a frequency in U8 for both a `Read` and `Write` request.  
+> ✅ DO reply with a frequency in Hz for both a `Read` and a `Write` request.  
+> ✅ CONSIDER accepting an approximate value for frequency in `Write` requests from the Controller, if the Device is able to determine a valid exact frequency from the request. In this case, DO reply with the exact frequency value set by the Device.
+
+### Message Exchange Examples
+
+Some Harp message exchanges are shown below to demonstrate the typical usage of the protocol between a Device and a Controller. Note that timestamp information is usually omitted in messages sent from the Controller to the Device, since actions are expected to run as soon as possible.
+
+We will use the following abbreviations:
+
+- [REQ] is a Request (From the Controller to the Device).
+- [REP] is a Reply (From the Device to the Controller).
+- [EVT] is an Event (A message sent from the Device to the Controller without a request from the Controller).
+
+#### Write Message
+
+- [REQ] **Controller**:       `2`  `Length` `Address` `Port` `PayloadType` `Payload` `Checksum`
+- [REP] **Device**: `2`  `Length` `Address` `Port` `PayloadType` `Timestamp` `Payload` `Checksum`       OK
+- [REP] **Device**: `10` `Length` `Address` `Port` `PayloadType` `Timestamp` `Payload` `Checksum`       ERROR
+
+The timestamp information in [REP] represents the time when the register contents were updated.
+
+#### Read Message
+
+- [REQ] **Controller**: `1` `4`      `Address` `Port` `PayloadType` `Checksum`
+- [REP] **Device**: `1` `Length` `Address` `Port` `PayloadType` `Timestamp` `Payload` `Checksum`       OK
+- [REP] **Device**: `9` `10`     `Address` `Port` `PayloadType` `Timestamp` `Payload` `Checksum`       ERROR
+
+The timestamp information in [REP] represents the time when the register contents were read.
+
+#### Event message
+
+- [EVT] **Device**: `3` `Length` `Address` `Port` `PayloadType` `Timestamp` `Payload` `Checksum`      OK
+
+The timestamp information in [EVT] represents the time when the register contents were read.
 
 ## Application Registers
 
@@ -29,17 +152,6 @@ Some registers are marked as **Optional** or **Deprecated** in the [Core Registe
 For any writeable optional or deprecated registers whose function is not implemented, the Device MUST always return a `Write` reply payload containing the register default value, to indicate the `Write` request had no effect. The Device SHOULD NOT crash or enter an undefined state when a `Write` request is sent to an optional or deprecated unimplemented register.
 
 In most cases, the default value of an optional or deprecated register SHOULD be `0` (Zero). Other values MAY be allowed, in which case they MUST be explicitly documented and justified on a per-register basis.
-
-## Operation Mode
-
-The following Device operation modes MUST be implemented:
-
-- `Standby:` The Device MUST reply to Controller requests. All `Event` messages are disabled and MUST NOT be sent to the Controller.
-- `Active:` The Device MUST reply to Controller requests. All `Event` messages are enabled and SHOULD be sent to the Controller following the Device specification.
-
-The Device SHOULD continuously check if communication with the Controller is active and healthy. This status check will be largely dependent on the transport layer implementing the Harp communication protocol between Controller and Device. Each implementation SHOULD clearly distinguish between `Connected` and `NotConnected` states, and it is up to the developer to decide how to implement this status check. When the Device transitions to the `NotConnected` state, it MUST immediately enter `Standby` and stop transmission of further `Event` messages.
-
-As an application example, a Device using USB as the transport layer MAY poll for an active USB connection by checking that the state of the DTR pin is `HIGH`. Once the DTR pin is brought `LOW` it SHOULD be assumed that the Controller closed the connection and the Device MUST enter `Standby`. In this case, the Controller is responsible for setting the state of the DTR line when opening or closing a new connection.
 
 ## Core Registers
 
@@ -306,7 +418,7 @@ This register is used to reboot the Device, optionally save or restore non-volat
 
 * **SAVE [Bit 2]:** If this bit is set and non-volatile memory is available, the Device MUST save any non-volatile core and application registers to persistent storage, and reboot. The non-volatile memory should be configured as the permanent boot option. If this bit is set and non-volatile memory is not available, the Device MUST reply with an `Error` message. When sending a reply to a `Read` request, the Device MUST clear this bit in the message payload.
 
-* **NAME_TO_DEFAULT [Bit 3]:** If this bit is set, the Device MUST reboot and restore the value of [`R_DEVICE_NAME`](#r_device_name-25-bytes--devices-name) to its default value. When sending a reply to a `Read` request, the Device MUST clear this bit in the message payload.
+* **NAME_TO_DEFAULT [Bit 3]:** If this bit is set, the Device MUST reboot and restore the value of [`R_DEVICE_NAME`](#r_device_name-u8-array--human-readable-device-name) to its default value. When sending a reply to a `Read` request, the Device MUST clear this bit in the message payload.
 
 * **UPDATE_FIRMWARE [Bit 5]:** If this bit is set, the Device MUST enter firmware update mode. In this mode the Device MAY NOT reply to any requests until the update completes. Once completed, the Device MUST reboot. When sending a reply to a `Read` request, the Device MUST clear this bit in the message payload.
 
