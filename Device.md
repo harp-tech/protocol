@@ -617,25 +617,25 @@ gantt
     6         :hw_major, after fw_patch, 7
     7         :hw_minor, after hw_major, 8
     8         :hw_patch, after hw_minor, 9
-    9-11      :sdk_id, after hw_patch, 12
-    12-31     :interface_hash, after sdk_id, 32
+    9-11      :core_id, after hw_patch, 12
+    12-31     :interface_hash, after core_id, 32
 
     section Id
     PROTOCOL        :protocol, 0, 3
     FIRMWARE        :firmware, after prot_patch, 6
     HARDWARE        :hardware, after fw_patch, 9
-    SDK_ID          :sdk, after hw_patch, 12
-    INTERFACE_HASH  :protocol, after sdk_id, 32
+    CORE_ID         :core, after hw_patch, 12
+    INTERFACE_HASH  :protocol, after core_id, 32
 
     section Default
     -      :d0, 0, 3
     -      :d1, after prot_patch, 6
     -      :d2, after fw_patch, 9
     -      :d3, after hw_patch, 12
-    -      :d4, after sdk_id, 32
+    -      :d4, after core_id, 32
 ```
 
-The bytes in this register specify the [semantic version](https://semver.org/) of the components making up the Device. Each component version is made up of three bytes, following the order `major`, `minor`, `patch`. The register also includes a unique identifier of the core microcontroller SDK and a hash digest of the interface schema file describing the Device Interface.
+The bytes in this register specify the [semantic version](https://semver.org/) of the components making up the Device. Each component version is made up of three bytes, following the order `major`, `minor`, `patch`. The register also includes a unique identifier of the Harp microcontroller core and a hash digest of the interface schema file describing the Device Interface.
 
 * **PROTOCOL:** The semantic version of the Harp protocol implemented by the Device.
 
@@ -643,7 +643,7 @@ The bytes in this register specify the [semantic version](https://semver.org/) o
 
 * **HARDWARE:** The semantic version of the Device hardware.
 
-* **SDK_ID:** The three-character code of the core microcontroller SDK used to implement the Device.
+* **CORE_ID:** The three-character code of the Harp microcontroller core targeted by the Device firmware.
 
 * **INTERFACE_HASH:** The SHA-1 hash value of the Device Interface schema file (`device.yml`). The byte-order is little-endian. The Controller SHOULD NOT perform any validation of its Device Interface schema if this value is set to `0` (Zero). 
 
