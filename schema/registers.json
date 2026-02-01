@@ -113,8 +113,13 @@
                     "type": "integer"
                 },
                 "offset": {
-                    "description": "Specifies the payload array offset where this payload member is stored.",
+                    "description": "Specifies the zero-based index at which encoding of this payload member starts.",
                     "type": "integer"
+                },
+                "length": {
+                    "description": "Specifies the number of elements used to encode this payload member.",
+                    "type": "integer",
+                    "minimum": 1
                 },
                 "description": {
                     "description": "Specifies a summary description of the payload member.",
