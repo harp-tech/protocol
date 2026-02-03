@@ -19,9 +19,12 @@
                     "type": "string"
                 },
                 "hardwareTargets": {
-                    "description": "Specifies the version of the device hardware.",
-                    "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$",
-                    "type": "string"
+                    "description": "Specifies the version of the hardware targets.",
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$"
+                    }
                 },
                 "registers": {
                     "additionalProperties": {
