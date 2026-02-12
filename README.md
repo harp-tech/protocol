@@ -1,3 +1,9 @@
+# Harp
+
+[![DOI:10.5281/zenodo.15874647](https://zenodo.org/badge/DOI/10.5281/zenodo.15874647.svg)](https://doi.org/10.5281/zenodo.15874647)
+
+This is the main repository for the [Harp](https://harp-tech.org/) standard for asynchronous real-time data acquisition and experimental control devices. It includes protocols and specifications for lightweight and versatile binary communication, implementation of compliant microcontroller firmware, and clock synchronization.
+
 ## Introduction
 
 On this repository you can find documentation of the Harp protocol, what is a Harp device and the Harp Timestamp Bus.
