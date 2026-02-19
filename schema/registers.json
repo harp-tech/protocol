@@ -1,26 +1,26 @@
 {
-    "$schema": "https://json-schema.org/draft-07/schema",
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
     "$id": "https://harp-tech.org/draft-03/schema/registers.json",
     "type": "object",
     "properties": {
         "registers": {
             "type": "object",
             "description": "Specifies the collection of registers implementing the device function.",
-            "additionalProperties": { "$ref": "#/definitions/register" }
+            "additionalProperties": { "$ref": "#/$defs/register" }
         },
         "bitMasks": {
             "type": "object",
             "description": "Specifies the collection of masks available to be used with the different registers.",
-            "additionalProperties": { "$ref": "#/definitions/bitMask" }
+            "additionalProperties": { "$ref": "#/$defs/bitMask" }
         },
         "groupMasks": {
             "type": "object",
             "description": "Specifies the collection of group masks available to be used with the different registers.",
-            "additionalProperties": { "$ref": "#/definitions/groupMask" }
+            "additionalProperties": { "$ref": "#/$defs/groupMask" }
         }
     },
     "required": ["registers"],
-    "definitions": {
+    "$defs": {
         "type": {
             "description": "Specifies the type of the register payload.",
             "type": "string",
@@ -60,7 +60,7 @@
                 },
                 "bits": {
                     "type": "object",
-                    "additionalProperties": { "$ref": "#/definitions/maskValue" }
+                    "additionalProperties": { "$ref": "#/$defs/maskValue" }
                 }
             },
             "required": ["bits"]
@@ -75,7 +75,7 @@
                 },
                 "values": {
                     "type": "object",
-                    "additionalProperties": { "$ref": "#/definitions/maskValue" }
+                    "additionalProperties": { "$ref": "#/$defs/maskValue" }
                 }
             },
             "required": ["values"]
@@ -120,12 +120,12 @@
                     "description": "Specifies a summary description of the payload member.",
                     "type": "string"
                 },
-                "minValue": { "$ref": "#/definitions/minValue" },
-                "maxValue": { "$ref": "#/definitions/maxValue" },
-                "defaultValue": { "$ref": "#/definitions/defaultValue" },
-                "maskType": { "$ref": "#/definitions/maskType" },
-                "interfaceType": { "$ref": "#/definitions/interfaceType" },
-                "converter": { "$ref": "#/definitions/converter" }
+                "minValue": { "$ref": "#/$defs/minValue" },
+                "maxValue": { "$ref": "#/$defs/maxValue" },
+                "defaultValue": { "$ref": "#/$defs/defaultValue" },
+                "maskType": { "$ref": "#/$defs/maskType" },
+                "interfaceType": { "$ref": "#/$defs/interfaceType" },
+                "converter": { "$ref": "#/$defs/converter" }
             }
         },
         "register": {
@@ -136,7 +136,7 @@
                     "type": "integer",
                     "maximum": 255
                 },
-                "type": { "$ref": "#/definitions/type" },
+                "type": { "$ref": "#/$defs/type" },
                 "length": {
                     "description": "Specifies the length of the register payload.",
                     "type": "integer",
@@ -145,10 +145,10 @@
                 "access": {
                     "description": "Specifies the expected use of the register.",
                     "oneOf": [
-                        { "$ref": "#/definitions/access" },
+                        { "$ref": "#/$defs/access" },
                         {
                             "type": "array",
-                            "items": { "$ref": "#/definitions/access" },
+                            "items": { "$ref": "#/$defs/access" },
                             "uniqueItems": true,
                             "minItems": 1,
                             "maxItems": 3
@@ -159,10 +159,10 @@
                     "description": "Specifies a summary description of the register function.",
                     "type": "string"
                 },
-                "minValue": { "$ref": "#/definitions/minValue" },
-                "maxValue": { "$ref": "#/definitions/maxValue" },
-                "defaultValue": { "$ref": "#/definitions/defaultValue" },
-                "maskType": { "$ref": "#/definitions/maskType" },
+                "minValue": { "$ref": "#/$defs/minValue" },
+                "maxValue": { "$ref": "#/$defs/maxValue" },
+                "defaultValue": { "$ref": "#/$defs/defaultValue" },
+                "maskType": { "$ref": "#/$defs/maskType" },
                 "visibility": {
                     "description": "Specifies whether the register function is exposed in the high-level interface.",
                     "type": "string",
@@ -174,10 +174,10 @@
                 },
                 "payloadSpec": {
                     "type": "object",
-                    "additionalProperties": { "$ref": "#/definitions/payloadMember" }
+                    "additionalProperties": { "$ref": "#/$defs/payloadMember" }
                 },
-                "interfaceType": { "$ref": "#/definitions/interfaceType" },
-                "converter": { "$ref": "#/definitions/converter" }
+                "interfaceType": { "$ref": "#/$defs/interfaceType" },
+                "converter": { "$ref": "#/$defs/converter" }
             },
             "required": ["address", "access", "type"]
         }
