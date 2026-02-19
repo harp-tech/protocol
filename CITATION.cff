@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+title: "Harp: A standard for reactive and self-synchronising hardware for behavioural research"
+message: "If you use this project in your research, please cite it as below."
+authors:
+- affiliation: Open Ephys Production Site
+  family-names: Carvalho
+  given-names: Filipe
+- affiliation: Champalimaud Foundation
+  family-names: Silva
+  given-names: Artur
+- affiliation: Allen Institute for Neural Dynamics
+  family-names: Cruz
+  given-names: Bruno
+  orcid: 0000-0002-9361-6378
+- affiliation: NeuroGEARS
+  family-names: Frazao
+  given-names: Joao
+  orcid: 0000-0003-4827-1400
+- affiliation: NeuroGEARS
+  family-names: Lopes
+  given-names: Gonçalo
+  orcid: 0000-0003-0731-4945
+doi: 10.5281/zenodo.15874647
+repository-code: "https://github.com/harp-tech/protocol"
+url: "https://harp-tech.org/"
+license: MIT
