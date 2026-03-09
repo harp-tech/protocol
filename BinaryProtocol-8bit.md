@@ -26,7 +26,6 @@ All Harp messages MUST follow the structure below, specifying the minimal amount
 | ------------------------------------------ |
 | [MessageType](#messagetype-1-byte)         |
 | [Length](#length-1-byte)                   |
-| [ExtendedLength](#extendedlength-2-bytes)* |
 | [Address](#address-1-byte)                 |
 | [Port](#port-1-byte)                       |
 | [PayloadType](#payloadtype-1-byte)         |
@@ -80,11 +79,7 @@ When this flag is set, the message represents an error reply sent from the Devic
 
 ### Length (1 byte)
 
-Specifies the number of bytes (`U8`) after this field that are still available and need to be read to complete the Harp message. If one byte is not enough to express the length of the message, the `Length` field MUST be set to 255. In this case the [`ExtendedLength`](#extendedlength-2-bytes) field MUST be included.
-
-### ExtendedLength (2 bytes)
-
-Specifies the number of bytes (`U16`) after this field that are still available and need to be read to complete the Harp message. If this field is used, the [`Length`](#length-1-byte) field MUST be set to 255.
+Specifies the number of bytes (`U8`) after this field that are still available and need to be read to complete the Harp message.
 
 ### Address (1 byte)
 
