@@ -74,7 +74,7 @@
                 "pinMode": {
                     "description": "Specifies the output pin wiring configuration.",
                     "type": "string",
-                    "enum": ["wiredOr", "wiredAnd", "wiredOrPull", "wiredAndPull"]
+                    "enum": ["digital", "wiredOr", "wiredAnd", "wiredOrPull", "wiredAndPull"]
                 },
                 "initialState": {
                     "description": "Specifies the initial state of the output pin at boot time.",
