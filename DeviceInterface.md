@@ -290,7 +290,7 @@ bitMasks:
 
 Bit mask values SHOULD be powers of two (or combinations thereof), since they represent individual flags that can be OR-ed together.
 
-> **Note:** Following the naming convention for Enums proposed by [Microsoft](https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/enum), `BitMask` names SHOULD be plural (e.g. `DigitalOutputs`) since multiple values can be combined, and bit names SHOULD be singular (e.g. `DOPort0`) since they represent individual flags.
+> [!Note] Following the naming convention for Enums proposed by [Microsoft](https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/enum), `BitMask` names SHOULD be plural (e.g. `DigitalOutputs`) since multiple values can be combined, and bit names SHOULD be singular (e.g. `DOPort0`) since they represent individual flags.
 
 ## Group Masks
 
@@ -350,7 +350,7 @@ groupMasks:
 
 Group mask values are typically sequential integers starting from zero, since they represent mutually exclusive modes or states.
 
-> **Note:** Following the naming convention for Enums proposed by [Microsoft](https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/enum), `GroupMask` names SHOULD be singular (e.g. `MimicOutput`) since they represent a single choice among options, and value names SHOULD also be singular (e.g. `DIO0`) since they represent individual states.
+> [!Note] Following the naming convention for Enums proposed by [Microsoft](https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/enum), `GroupMask` names SHOULD be singular (e.g. `MimicOutput`) since they represent a single choice among options, and value names SHOULD also be singular (e.g. `DIO0`) since they represent individual states.
 
 ## YAML Authoring Conventions
 
