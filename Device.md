@@ -188,6 +188,10 @@ Tables can be generated here https://www.tablesgenerator.com/html_tables
 Mermaid plots can be generated here: https://mermaid.live/
 --->
 
+### Register layout diagrams
+
+Several core registers include a diagram of their bit or byte layout, drawn with one of two orientations. A register that holds a single value, e.g. a multi-byte integer or a set of bit flags, is drawn most significant first, so the least significant bit or byte is rightmost. A register that holds a structured sequence of fields, such as [`R_VERSION`](#r_version-u8-array--device-version-information), is drawn in field order, with byte 0 leftmost. On the wire the byte order is little-endian, as specified by the [Harp Binary Protocol](BinaryProtocol-8bit.md).
+
 ### **`R_WHO_AM_I` (U16) – Device Identity Class**
 
 Address: `000`  
@@ -506,54 +510,14 @@ The implementation of this register is RECOMMENDED if the Device provides a [Syn
 Address: `016`  
 Length: 16
 
-```mermaid
----
-displayMode: compact
----
-
-gantt
-    title R_UID (016) [16 Bytes]
-
-    dateFormat X
-    axisFormat %
-    tickInterval 0
-
-    section Bytes
-    15-0      :bytes, 0, 1
-    section Id
-    UID      :id1, 0, 1
-    section Default
-    0      :d1, 0, 1
-```
-
-An array of bytes specifying a (128-bit) UID (Unique Identifier) for the Device. This register is non-volatile and read-only. The byte-order is little-endian. If not implemented, the Device MUST return a default value of `0` (Zero) for all bytes.
+An array of bytes serving as a unique identifier for the Device, with no defined internal structure or numeric interpretation. This register is non-volatile and read-only. Implementing it is OPTIONAL. If implemented, the value MUST be unique among all devices that share the same [`R_WHO_AM_I`](#r_who_am_i-u16--device-identity-class), so that `R_WHO_AM_I` and `R_UID` together uniquely identify the Device. If not implemented, the Device MUST return a default value of `0` (Zero) for all bytes.
 
 ### **`R_TAG` (U8 Array) – Firmware Tag**
 
 Address: `017`  
 Length: 8
 
-```mermaid
----
-displayMode: compact
----
-
-gantt
-    title R_TAG (017) [8 Bytes]
-
-    dateFormat X
-    axisFormat %
-    tickInterval 0
-
-    section Bytes
-    7-0      :bytes, 0, 1
-    section Id
-    TAG      :id1, 0, 1
-    section Default
-    0      :d1, 0, 1
-```
-
-An array of bytes that can be used to store a tag for a specific firmware build. For instance, it could be used to store the Git hash of a specific release/commit. The byte-order is little-endian. This register is read-only.
+An array of bytes that can be used to store a tag for a specific firmware build. For instance, it could store the Git hash of a specific release or commit. The bytes have no defined internal structure or numeric interpretation. This register is read-only.
 
 If not implemented, the Device MUST return a default value of `0` (Zero) for all bytes.
 
@@ -872,7 +836,7 @@ Contains the minor firmware version number. The value of this register is persis
 
 > [!WARNING]
 >
-> This register is deprecated in favor of [`R_UID`](#r_uid-u8-array--unique-identifier). The value of this register MUST duplicate the first two bytes of `R_UID`, in little-endian order.
+> This register is deprecated in favor of [`R_UID`](#r_uid-u8-array--unique-identifier).
 
 Address: `013`  
 Length: 1
