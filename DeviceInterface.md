@@ -60,14 +60,13 @@ The `registers` section is a map where each key is the register name (PascalCase
 | `address`       | integer (0–255)    |   Yes    |    —     | The unique 8-bit address of the register. Application registers MUST use addresses ≥ 32.                                        |
 | `type`          | string             |   Yes    |    —     | The payload type. One of: `U8`, `S8`, `U16`, `S16`, `U32`, `S32`, `U64`, `S64`, `Float`.                                        |
 | `length`        | integer (≥ 1)      |    No    |    1     | The number of elements in the register payload. Values greater than 1 indicate an array payload.                                |
-| `access`        | string or string[] |    No    |  `Read`  | The access mode(s) of the register. Valid values: `Read`, `Write`, `Event`, or an array combining them (e.g. `[Write, Event]`). |
+| `access`        | string or string[] |   Yes    |    —     | The access mode(s) of the register. A single value or an array of 1–3 unique values from: `Read`, `Write`, `Event`.            |
 | `description`   | string             |    No    |    —     | A summary description of the register function.                                                                                 |
 | `minValue`      | number             |    No    |    —     | The minimum allowable value for the register payload.                                                                           |
 | `maxValue`      | number             |    No    |    —     | The maximum allowable value for the register payload.                                                                           |
 | `defaultValue`  | number             |    No    |    —     | The default value for the register payload.                                                                                     |
 | `maskType`      | string             |    No    |    —     | The name of a `bitMask` or `groupMask` used to interpret the payload value.                                                     |
 | `interfaceType` | string             |    No    |    —     | The name of the type used to represent the payload value in high-level interfaces (e.g. code-generated classes).                |
-| `converter`     | string             |    No    |  `None`  | Whether a custom converter is used to parse or format the payload. One of: `None`, `Payload`, `RawPayload`.                     |
 | `visibility`    | string             |    No    | `public` | Whether the register is exposed in the high-level interface. One of: `public`, `private`.                                       |
 | `deprecated`    | boolean            |    No    | `false`  | Whether the register is deprecated.                                                                                             |
 | `volatile`      | boolean            |    No    | `false`  | Whether the register value can be saved to non-volatile memory. Volatile registers are not persisted.                           |
@@ -75,7 +74,7 @@ The `registers` section is a map where each key is the register name (PascalCase
 
 ### Access Modes
 
-The `access` field determines which Harp message types are valid for a given register:
+Every register MUST declare an `access` field, which determines which Harp message types are valid for it:
 
 | Access  | Behavior                                                                                                                          |
 | :------ | :-------------------------------------------------------------------------------------------------------------------------------- |
@@ -85,7 +84,7 @@ The `access` field determines which Harp message types are valid for a given reg
 
 A register that specifies only `Event` as its access mode is implicitly read-only from the Controller's perspective — the Controller cannot write to it, and the device pushes data when events occur.
 
-When multiple access modes are needed, they SHOULD be expressed as a YAML sequence:
+When multiple access modes are needed, they SHOULD be expressed as a YAML sequence (1–3 unique values):
 
 ```yaml
 access: [Write, Event]
@@ -166,9 +165,17 @@ Each key in `payloadSpec` is a member name, and the value is an object with the 
 | `defaultValue`  | number  |    No    | The default value for this member.                                           |
 | `maskType`      | string  |    No    | The name of a mask used to interpret this member's value.                    |
 | `interfaceType` | string  |    No    | The type name used for this member in high-level interfaces.                 |
-| `converter`     | string  |    No    | Whether a custom converter is used for this member.                          |
 
-Members are specified using one of two strategies:
+A member is located within the payload using two **independent** coordinates, either or both of which MAY be present:
+
+- `offset` (with optional `length`) selects *which element(s)* of the payload array the member occupies.
+- `mask` selects *which bits* within a payload word the member occupies.
+
+These coordinates are orthogonal and MAY be combined: a member can specify both an `offset` (to pick an element of an array) **and** a `mask` (to pick a bitfield within that element). See [Combining Offset and Mask](#combining-offset-and-mask).
+
+Members also need not cover the payload exhaustively. A `payloadSpec` is a *sparse annotation*: elements or bits that no member describes are simply left undocumented, and gaps between members are permitted.
+
+The sections below describe each strategy in isolation and then in combination:
 
 ### Offset-Based Members (Array Payloads)
 
@@ -228,9 +235,102 @@ OperationControl:
       mask: 0x80
 ```
 
+### Combining Offset and Mask
+
+When an array payload packs multiple bitfields into *individual elements*, members combine both coordinates: `offset` selects the array element and `mask` selects the bits within it. Several members MAY share the same `offset` while occupying different bit ranges via distinct `mask` values.
+
+**Example — a 2-element `U16` payload with bitfields in each word:**
+
+```yaml
+StartPulseTrain:
+  address: 101
+  type: U16
+  length: 2
+  access: Write
+  description: Starts a PWM pulse train.
+  payloadSpec:
+    DigitalOutput:
+      offset: 0
+      mask: 0xC00
+      maskType: PwmPort
+    PulseWidth:
+      offset: 0
+      mask: 0x3FF
+      interfaceType: ushort
+    Frequency:
+      offset: 1
+      mask: 0xFF00
+      minValue: 1
+      maxValue: 255
+      defaultValue: 1
+      interfaceType: byte
+    PulseCount:
+      offset: 1
+      mask: 0xFF
+      interfaceType: byte
+```
+
+Here `DigitalOutput` and `PulseWidth` both read from element `0` (different bit ranges of the same word), and `Frequency` and `PulseCount` both read from element `1`. This example also shows that a masked member MAY carry a `maskType` (here `DigitalOutput` is interpreted through the `PwmPort` group mask) and MAY constrain its value with `minValue`/`maxValue`/`defaultValue`.
+
+### Interface Type and Reinterpretation
+
+The `interfaceType` field names the type used to represent a value in high-level interfaces (e.g. code-generated classes). It does not change the wire `type`; it tells consumers how to *reinterpret* the raw payload elements.
+
+When `interfaceType` is applied to a member that spans multiple elements (`length` > 1), the indicated elements are combined into a single value of that type:
+
+```yaml
+Version:
+  address: 35
+  type: U8
+  length: 32
+  access: Event
+  payloadSpec:
+    ProtocolVersion:                 # 3 × U8 reinterpreted as one HarpVersion
+      offset: 0
+      length: 3
+      interfaceType: HarpVersion
+    CoreId:                          # 3 × U8 reinterpreted as a string
+      offset: 9
+      length: 3
+      interfaceType: string
+    InterfaceHash:                   # 20 × U8 left as a raw array (no interfaceType)
+      offset: 12
+      length: 20
+```
+
+`interfaceType` MAY also be applied at the **register level** (with no `payloadSpec`), in which case the whole payload is reinterpreted:
+
+```yaml
+CustomPayload:
+  address: 36
+  type: U32
+  length: 3
+  access: Read
+  interfaceType: HarpVersion
+```
+
+> [!NOTE]
+> The set of valid `interfaceType` names is intentionally open-ended (the schema treats it as a free string). Values seen in practice include primitive type names such as `bool`, `byte`, `int`, `uint`, `ushort`, `float`, and `string`, as well as custom type names such as `HarpVersion`. The meaning of each name is defined by the consuming tooling, not by this schema.
+
+### Interface Types
+
+> [!WARNING]
+> **TODO.** The canonical list of supported `interfaceType` values is not yet finalized. The entries below are observed in existing device files and are provided as a non-exhaustive working list pending standardization.
+
+| Interface Type | Notes                                              |
+| :------------- | :------------------------------------------------- |
+| `bool`         | Boolean flag, typically over a single masked bit.  |
+| `byte`         | 8-bit unsigned integer.                            |
+| `int`          | Signed integer.                                    |
+| `uint`         | Unsigned integer.                                  |
+| `ushort`       | 16-bit unsigned integer.                           |
+| `float`        | Floating-point value.                              |
+| `string`       | Text, typically over a span of byte elements.      |
+| `HarpVersion`  | Custom type composed from multiple elements.       |
+
 ## Bit Masks
 
-The `bitMasks` section defines flag-style enumerations where **multiple bits MAY be set simultaneously**. Each entry is a named mask containing a `description` and a `bits` map.
+The `bitMasks` section defines flag-style enumerations where **multiple bits MAY be set simultaneously**. Each entry is a named mask containing a `bits` map (REQUIRED) and an OPTIONAL `description`.
 
 ### Bit Mask Structure
 
@@ -294,7 +394,7 @@ Bit mask values SHOULD be powers of two (or combinations thereof), since they re
 
 ## Group Masks
 
-The `groupMasks` section defines enumerations where **exactly one value is selected at a time** (mutually exclusive). Each entry is a named mask containing a `description` and a `values` map.
+The `groupMasks` section defines enumerations where **exactly one value is selected at a time** (mutually exclusive). Each entry is a named mask containing a `values` map (REQUIRED) and an OPTIONAL `description`.
 
 ### Group Mask Structure
 
@@ -348,7 +448,7 @@ groupMasks:
       Displacement: 1
 ```
 
-Group mask values are typically sequential integers starting from zero, since they represent mutually exclusive modes or states.
+Group mask values are *typically* sequential integers starting from zero, since they represent mutually exclusive modes or states. This is a convention, not a requirement: the schema accepts any integer values, and non-sequential values (e.g. `0x1`, `0x2`, `0x4`, `0xA`) are permitted.
 
 > [!Note] Following the naming convention for Enums proposed by [Microsoft](https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/enum), `GroupMask` names SHOULD be singular (e.g. `MimicOutput`) since they represent a single choice among options, and value names SHOULD also be singular (e.g. `DIO0`) since they represent individual states.
 
@@ -379,6 +479,35 @@ registers:
 ```
 
 Here, `PulseDOPort1` and `PulseDOPort2` inherit all properties from the anchor `&pulseDO` but override the `address` field. Additional fields such as `description` MAY also be overridden as needed.
+
+A `payloadSpec` map MAY itself be anchored and merged into another register, allowing a common set of payload members to be reused and extended:
+
+```yaml
+StartPulse:
+  address: 100
+  type: U16
+  access: Write
+  payloadSpec: &startPulse
+    DigitalOutput:
+      offset: 0
+      mask: 0xC00
+      maskType: PwmPort
+    PulseWidth:
+      offset: 0
+      mask: 0x3FF
+      interfaceType: ushort
+StartPulseTrain:
+  address: 101
+  type: U16
+  length: 2
+  access: Write
+  payloadSpec:
+    <<: *startPulse        # inherits DigitalOutput and PulseWidth
+    Frequency:             # and adds further members
+      offset: 1
+      mask: 0xFF00
+      interfaceType: byte
+```
 
 ### Anchor Scoping
 
