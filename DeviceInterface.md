@@ -315,7 +315,7 @@ CustomPayload:
 ### Interface Types
 
 > [!WARNING]
-> **TODO.** The canonical list of supported `interfaceType` values is not yet finalized. The entries below are observed in existing device files and are provided as a non-exhaustive working list pending standardization.
+> The canonical list of supported (standardized) `interfaceType` values listed below. We MAY add additional types in the future if widespread use cases emerge.
 
 | Interface Type | Notes                                              |
 | :------------- | :------------------------------------------------- |
@@ -325,8 +325,8 @@ CustomPayload:
 | `uint`         | Unsigned integer.                                  |
 | `ushort`       | 16-bit unsigned integer.                           |
 | `float`        | Floating-point value.                              |
-| `string`       | Text, typically over a span of byte elements.      |
-| `HarpVersion`  | Custom type composed from multiple elements.       |
+| `string`       | Text, typically over a span of byte elements. When using interfaceType, the `length` parameter MUST be defined     |
+| `HarpVersion`  | Custom type composed from multiple elements that describes a SemVer-like version. When using this `interfaceType`, the `length` MUST be equal to 3       |
 
 ## Bit Masks
 
