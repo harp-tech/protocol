@@ -1,15 +1,15 @@
 {
-    "$schema": "https://json-schema.org/draft-07/schema",
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
     "$id": "https://harp-tech.org/draft-03/schema/ios.json",
     "type": "object",
     "description": "Specifies the IO pin configuration used to automatically generate firmware.",
     "additionalProperties": {
         "oneOf": [
-            { "$ref": "#/definitions/inputPin" },
-            { "$ref": "#/definitions/outputPin" }
+            { "$ref": "#/$defs/inputPin" },
+            { "$ref": "#/$defs/outputPin" }
         ]
     },
-    "definitions": {
+    "$defs": {
         "portPin": {
             "type": "object",
             "properties": {
@@ -34,7 +34,7 @@
             "required": ["port", "pinNumber", "direction"]
         },
         "inputPin": {
-            "allOf": [{ "$ref": "#/definitions/portPin" }],
+            "allOf": [{ "$ref": "#/$defs/portPin" }],
             "properties": {
                 "direction": {
                     "enum": ["input"]
@@ -62,7 +62,7 @@
             }
         },
         "outputPin": {
-            "allOf": [{ "$ref": "#/definitions/portPin" }],
+            "allOf": [{ "$ref": "#/$defs/portPin" }],
             "properties": {
                 "direction": {
                     "enum": ["output"]
