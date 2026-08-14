@@ -9,7 +9,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 ## Relationship to Other Specifications
 
 - [**Binary Protocol**](Protocol.md) — defines the wire format for all Harp messages (message type, payload type encoding, checksum, etc.).
-- [**Device Registers and Operation**](Device.md) — defines the behavioral contract every Harp device must follow (operation modes, request-reply patterns, core registers). The device interface file describes *which* registers a specific device exposes, not *how* the protocol operates. Additionally, the device interface further specifies application registers and their payloads, which are outside the scope of the core device specification.
+- [**Device Registers and Operation**](Device.md) — defines the behavioral contract every Harp device must follow (operation modes, request-reply patterns, core registers). The device interface file describes _which_ registers a specific device exposes, not _how_ the protocol operates. Additionally, the device interface further specifies application registers and their payloads, which are outside the scope of the core device specification.
 
 ## Document Structure Overview
 
@@ -55,22 +55,22 @@ The `registers` section is a map where each key is the register name (PascalCase
 
 ### Register Properties
 
-| Property        | Type               | Required | Default  | Description                                                                                                                     |
-| :-------------- | :----------------- | :------: | :------: | :------------------------------------------------------------------------------------------------------------------------------ |
-| `address`       | integer (0–255)    |   Yes    |    —     | The unique 8-bit address of the register. Application registers MUST use addresses ≥ 32.                                        |
-| `type`          | string             |   Yes    |    —     | The payload type. One of: `U8`, `S8`, `U16`, `S16`, `U32`, `S32`, `U64`, `S64`, `Float`.                                        |
-| `length`        | integer (≥ 1)      |    No    |    1     | The number of elements in the register payload. Values greater than 1 indicate an array payload.                                |
-| `access`        | string or string[] |   Yes    |    —     | The access mode(s) of the register. A single value or an array of 1–3 unique values from: `Read`, `Write`, `Event`.            |
-| `description`   | string             |    No    |    —     | A summary description of the register function.                                                                                 |
-| `minValue`      | number             |    No    |    —     | The minimum allowable value for the register payload.                                                                           |
-| `maxValue`      | number             |    No    |    —     | The maximum allowable value for the register payload.                                                                           |
-| `defaultValue`  | number             |    No    |    —     | The default value for the register payload.                                                                                     |
-| `maskType`      | string             |    No    |    —     | The name of a `bitMask` or `groupMask` used to interpret the payload value.                                                     |
-| `interfaceType` | string             |    No    |    —     | The name of the type used to represent the payload value in high-level interfaces (e.g. code-generated classes).                |
-| `visibility`    | string             |    No    | `public` | Whether the register is exposed in the high-level interface. One of: `public`, `private`.                                       |
-| `deprecated`    | boolean            |    No    | `false`  | Whether the register is deprecated.                                                                                             |
-| `volatile`      | boolean            |    No    | `false`  | Whether the register value can be saved to non-volatile memory. Volatile registers are not persisted.                           |
-| `payloadSpec`   | object             |    No    |    —     | Defines named members within a structured payload. See [Payload Specification](#payload-specification).                         |
+| Property        | Type               | Required | Default  | Description                                                                                                         |
+| :-------------- | :----------------- | :------: | :------: | :------------------------------------------------------------------------------------------------------------------ |
+| `address`       | integer (0–255)    |   Yes    |    —     | The unique 8-bit address of the register. Application registers MUST use addresses ≥ 32.                            |
+| `type`          | string             |   Yes    |    —     | The payload type. One of: `U8`, `S8`, `U16`, `S16`, `U32`, `S32`, `U64`, `S64`, `Float`.                            |
+| `length`        | integer (≥ 1)      |    No    |    1     | The number of elements in the register payload. Values greater than 1 indicate an array payload.                    |
+| `access`        | string or string[] |   Yes    |    —     | The access mode(s) of the register. A single value or an array of 1–3 unique values from: `Read`, `Write`, `Event`. |
+| `description`   | string             |    No    |    —     | A summary description of the register function.                                                                     |
+| `minValue`      | number             |    No    |    —     | The minimum allowable value for the register payload.                                                               |
+| `maxValue`      | number             |    No    |    —     | The maximum allowable value for the register payload.                                                               |
+| `defaultValue`  | number             |    No    |    —     | The default value for the register payload.                                                                         |
+| `maskType`      | string             |    No    |    —     | The name of a `bitMask` or `groupMask` used to interpret the payload value.                                         |
+| `interfaceType` | string             |    No    |    —     | The name of the type used to represent the payload value in high-level interfaces (e.g. code-generated classes).    |
+| `visibility`    | string             |    No    | `public` | Whether the register is exposed in the high-level interface. One of: `public`, `private`.                           |
+| `deprecated`    | boolean            |    No    | `false`  | Whether the register is deprecated.                                                                                 |
+| `volatile`      | boolean            |    No    | `false`  | Whether the register value can be saved to non-volatile memory. Volatile registers are not persisted.               |
+| `payloadSpec`   | object             |    No    |    —     | Defines named members within a structured payload. See [Payload Specification](#payload-specification).             |
 
 ### Access Modes
 
@@ -168,12 +168,12 @@ Each key in `payloadSpec` is a member name, and the value is an object with the 
 
 A member is located within the payload using two **independent** coordinates, either or both of which MAY be present:
 
-- `offset` (with optional `length`) selects *which element(s)* of the payload array the member occupies.
-- `mask` selects *which bits* within a payload word the member occupies.
+- `offset` (with optional `length`) selects _which element(s)_ of the payload array the member occupies.
+- `mask` selects _which bits_ within a payload word the member occupies.
 
 These coordinates are orthogonal and MAY be combined: a member can specify both an `offset` (to pick an element of an array) **and** a `mask` (to pick a bitfield within that element). See [Combining Offset and Mask](#combining-offset-and-mask).
 
-Members also need not cover the payload exhaustively. A `payloadSpec` is a *sparse annotation*: elements or bits that no member describes are simply left undocumented, and gaps between members are permitted.
+Members also need not cover the payload exhaustively. A `payloadSpec` is a _sparse annotation_: elements or bits that no member describes are simply left undocumented, and gaps between members are permitted.
 
 The sections below describe each strategy in isolation and then in combination:
 
@@ -237,7 +237,7 @@ OperationControl:
 
 ### Combining Offset and Mask
 
-When an array payload packs multiple bitfields into *individual elements*, members combine both coordinates: `offset` selects the array element and `mask` selects the bits within it. Several members MAY share the same `offset` while occupying different bit ranges via distinct `mask` values.
+When an array payload packs multiple bitfields into _individual elements_, members combine both coordinates: `offset` selects the array element and `mask` selects the bits within it. Several members MAY share the same `offset` while occupying different bit ranges via distinct `mask` values.
 
 **Example — a 2-element `U16` payload with bitfields in each word:**
 
@@ -274,7 +274,7 @@ Here `DigitalOutput` and `PulseWidth` both read from element `0` (different bit 
 
 ### Interface Type and Reinterpretation
 
-The `interfaceType` field names the type used to represent a value in high-level interfaces (e.g. code-generated classes). It does not change the wire `type`; it tells consumers how to *reinterpret* the raw payload elements.
+The `interfaceType` field names the type used to represent a value in high-level interfaces (e.g. code-generated classes). It does not change the wire `type`; it tells consumers how to _reinterpret_ the raw payload elements.
 
 When `interfaceType` is applied to a member that spans multiple elements (`length` > 1), the indicated elements are combined into a single value of that type:
 
@@ -285,15 +285,15 @@ Version:
   length: 32
   access: Event
   payloadSpec:
-    ProtocolVersion:                 # 3 × U8 reinterpreted as one HarpVersion
+    ProtocolVersion: # 3 × U8 reinterpreted as one HarpVersion
       offset: 0
       length: 3
       interfaceType: HarpVersion
-    CoreId:                          # 3 × U8 reinterpreted as a string
+    CoreId: # 3 × U8 reinterpreted as a string
       offset: 9
       length: 3
       interfaceType: string
-    InterfaceHash:                   # 20 × U8 left as a raw array (no interfaceType)
+    InterfaceHash: # 20 × U8 left as a raw array (no interfaceType)
       offset: 12
       length: 20
 ```
@@ -317,16 +317,16 @@ CustomPayload:
 > [!WARNING]
 > The canonical list of supported (standardized) `interfaceType` values listed below. We MAY add additional types in the future if widespread use cases emerge.
 
-| Interface Type | Notes                                              |
-| :------------- | :------------------------------------------------- |
-| `bool`         | Boolean flag, typically over a single masked bit.  |
-| `byte`         | 8-bit unsigned integer.                            |
-| `int`          | Signed integer.                                    |
-| `uint`         | Unsigned integer.                                  |
-| `ushort`       | 16-bit unsigned integer.                           |
-| `float`        | Floating-point value.                              |
-| `string`       | Text, typically over a span of byte elements. When using interfaceType, the `length` parameter MUST be defined     |
-| `HarpVersion`  | Custom type composed from multiple elements that describes a SemVer-like version. When using this `interfaceType`, the `length` MUST be equal to 3       |
+| Interface Type | Notes                                                                                                                                              |
+| :------------- | :------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `bool`         | Boolean flag, typically over a single masked bit.                                                                                                  |
+| `byte`         | 8-bit unsigned integer.                                                                                                                            |
+| `int`          | Signed integer.                                                                                                                                    |
+| `uint`         | Unsigned integer.                                                                                                                                  |
+| `ushort`       | 16-bit unsigned integer.                                                                                                                           |
+| `float`        | Floating-point value.                                                                                                                              |
+| `string`       | Text, typically over a span of byte elements. When using interfaceType, the `length` parameter MUST be defined                                     |
+| `HarpVersion`  | Custom type composed from multiple elements that describes a SemVer-like version. When using this `interfaceType`, the `length` MUST be equal to 3 |
 
 ## Bit Masks
 
@@ -346,6 +346,7 @@ bitMasks:
 ```
 
 Each bit entry can be either:
+
 - A bare integer value (shorthand), or
 - An object with `value` (required) and `description` (optional).
 
@@ -448,9 +449,94 @@ groupMasks:
       Displacement: 1
 ```
 
-Group mask values are *typically* sequential integers starting from zero, since they represent mutually exclusive modes or states. This is a convention, not a requirement: the schema accepts any integer values, and non-sequential values (e.g. `0x1`, `0x2`, `0x4`, `0xA`) are permitted.
+Group mask values are _typically_ sequential integers starting from zero, since they represent mutually exclusive modes or states. This is a convention, not a requirement: the schema accepts any integer values, and non-sequential values (e.g. `0x1`, `0x2`, `0x4`, `0xA`) are permitted.
 
 > [!Note] Following the naming convention for Enums proposed by [Microsoft](https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/enum), `GroupMask` names SHOULD be singular (e.g. `MimicOutput`) since they represent a single choice among options, and value names SHOULD also be singular (e.g. `DIO0`) since they represent individual states.
+
+## Style Guide
+
+Identifiers declared in a device interface file are not private to the file: code generators lift register names, mask names, and payload member names directly into the public surface of the interfaces they emit (classes, properties, enumerations, and enumeration members). A name chosen here becomes a name a downstream user must type.
+
+For this reason, device interface files SHOULD follow the [.NET Framework Design Guidelines](https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/) for naming, in particular [Capitalization Conventions](https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/capitalization-conventions), [General Naming Conventions](https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/general-naming-conventions), and [Enum Design](https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/enum). The remaining conventions in this section are derived from existing Harp device interfaces, of which [`device.behavior`](https://github.com/harp-tech/device.behavior/blob/main/device.yml) is the reference implementation.
+
+### Casing Summary
+
+| Element                   | Casing                 | Rationale                                                   | Example                                |
+| :------------------------ | :--------------------- | :---------------------------------------------------------- | :------------------------------------- |
+| Register name             | `PascalCase`           | Becomes a public type or member in generated interfaces     | `DigitalInputState`, `PwmDutyCycleDO0` |
+| `bitMasks` entry name     | `PascalCase`, plural   | Becomes a flags enumeration; multiple values combine        | `DigitalOutputs`, `PwmOutputs`         |
+| Bit name                  | `PascalCase`, singular | Becomes a single flag member                                | `DOPort0`, `Led1`                      |
+| `groupMasks` entry name   | `PascalCase`, singular | Becomes a simple enumeration; one value at a time           | `MimicOutput`                          |
+| Group mask value name     | `PascalCase`, singular | Becomes a single enumeration member                         | `Position`, `Displacement`             |
+| `payloadSpec` member name | `PascalCase`           | Becomes a property on the generated payload type            | `AnalogInput0`, `Red0`                 |
+| YAML anchor name          | `camelCase`            | Authoring aid only; never surfaces in a generated interface | `&pulseDO`, `&reserved`                |
+| Schema property key       | `camelCase`            | Fixed by the schema, not author-chosen                      | `maskType`, `firmwareVersion`          |
+
+Names MUST NOT contain underscores, hyphens, or any other non-alphanumeric character. Note that this differs from the `SCREAMING_SNAKE_CASE` used for core register names in [Device Registers and Operation](Device.md#core-registers) (e.g. `R_WHO_AM_I`): those are conventional names for the registers as described by the protocol, whereas the identifiers in this file are the names of the generated interface members (e.g. `WhoAmI`).
+
+### Acronyms and Abbreviations
+
+Abbreviations and contractions SHOULD NOT be used — prefer `PulseDuration` over `PulseDur`. Acronyms are capitalized according to their length, following the .NET rule:
+
+- **Two-letter acronyms** keep both letters capitalized: `DI`, `DO`, `IO`, `IR` — as in `DIPort0`, `PulseDO0`, `MimicPort0IR`.
+- **Acronyms of three or more letters** are treated as ordinary words and PascalCased: `Pwm` (not `PWM`), `Rgb` (not `RGB`), `Led` (not `LED`), `Adc` (not `ADC`) — as in `PwmFrequencyDO0`, `RgbAll`, `Led1Current`.
+
+Only widely accepted acronyms SHOULD be used, and only where the expanded form would be unreasonably verbose.
+
+### Register Names
+
+Register names SHOULD read as noun phrases when the register holds state, and as verb phrases when writing to the register performs an action:
+
+```yaml
+DigitalInputState:  # holds state — noun phrase
+AnalogData:         # holds state — noun phrase
+EncoderMode:        # holds state — noun phrase
+StartCameras:       # performs an action — verb phrase
+EncoderReset:       # performs an action — verb phrase
+```
+
+Registers belonging to the same functional family SHOULD share a leading term so that they sort and autocomplete together, with the distinguishing qualifier and any index following it:
+
+```yaml
+PulseDOPort0: # <Family><Target><Index>
+PulseDOPort1:
+PwmFrequencyDO0:
+PwmDutyCycleDO0:
+MimicPort0Valve:
+```
+
+Indices SHOULD be zero-based and appended without a separator (`Led0`, `Camera1Frame`), matching the hardware numbering printed on the device.
+
+Register names SHOULD be unique across the whole device — including against core register names — since consumers typically merge `core.yml` and the device interface file into a single namespace.
+
+### Mask and Payload Member Names
+
+Mask naming follows [Enum Design](https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/enum) and is described in detail under [Bit Masks](#bit-masks) and [Group Masks](#group-masks). Two further rules apply:
+
+- Mask names MUST NOT carry a `Mask`, `Flag`, `Flags`, or `Enum` suffix; the section the mask is declared in already conveys its kind.
+- Bit and value names MUST NOT carry a prefix repeating the mask name. Within `DigitalOutputs`, the flag is `DOPort0`, not `DigitalOutputsDOPort0`.
+- A `groupMasks` entry that has a natural "nothing selected" state SHOULD name that value `None` and assign it `0`.
+
+`payloadSpec` member names SHOULD describe the quantity the member carries rather than its position in the payload — `AnalogInput0` and `Encoder` rather than `Element0` and `Element1`.
+
+### Descriptions
+
+The `description` field SHOULD be supplied for every register, bit, and group mask value, since it is the source of the documentation comments in generated interfaces. Descriptions SHOULD:
+
+- Begin with a capital letter and read as a single sentence.
+- Use the third person to state what the register _is_ or _does_ (`Reflects the state of DI digital lines of each Port`, `Specifies the duty cycle of the PWM at DO0`), rather than addressing the reader.
+- Be terminated with a period, applied consistently across the file.
+- Be written as plain unquoted YAML scalars, reserving quoting for values that genuinely require it.
+
+### Value Formatting
+
+- Bit mask and `mask` values SHOULD be written in hexadecimal with uppercase digits (`0x1`, `0x80`, `0x3FF`), since their bit structure is the point.
+- Group mask values SHOULD be written in decimal, since they are ordinarily sequential.
+- `firmwareVersion` and `hardwareTargets` MUST be quoted (`"3.4"`), otherwise YAML parses them as floating-point numbers and `"3.10"` would collapse to `3.1`.
+- Indentation SHOULD be two spaces per level, and the file SHOULD open with the `%YAML 1.1` directive, the `---` document start, and the schema directive comment.
+
+> [!NOTE]
+> Some names in existing device interfaces predate this guide and do not follow it — `EncoderModeMask` carries a forbidden `Mask` suffix, and `PortDigitalIOS` pluralizes an acronym awkwardly. These names are retained because changing them is a breaking change for every downstream consumer. New names SHOULD follow this guide; existing names SHOULD only be corrected as part of a deliberate major revision of the device interface.
 
 ## YAML Authoring Conventions
 
@@ -502,8 +588,8 @@ StartPulseTrain:
   length: 2
   access: Write
   payloadSpec:
-    <<: *startPulse        # inherits DigitalOutput and PulseWidth
-    Frequency:             # and adds further members
+    <<: *startPulse # inherits DigitalOutput and PulseWidth
+    Frequency: # and adds further members
       offset: 1
       mask: 0xFF00
       interfaceType: byte
