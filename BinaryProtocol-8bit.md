@@ -16,7 +16,7 @@ Exchanges of data using the protocol are based on messages addressed to specific
 
 > [!NOTE]
 >
-> The Harp Binary Protocol uses Little-Endian byte ordering.
+> The Harp Binary Protocol uses Little-Endian byte ordering. This applies to each multi-byte value individually, ordering its bytes from least to most significant. It does not reorder the values of a [`Payload`](#payload--bytes) containing an array.
 
 ## Harp Message Format
 
@@ -246,7 +246,7 @@ for (; i < Length + 1; i++)
 
 ### Parsing [Payload] with Arrays
 
-The [`Payload`](#payload--bytes) field can contain a single value, or an array of values of the same type. The first step to parse these payloads is to first find the number of values contained in the [`Payload`](#payload--bytes) field. The following code example demonstrates how to calculate the array length for both timestamped and non-timestamped payloads:
+The [`Payload`](#payload--bytes) field can contain a single value, or an array of values of the same type, in order of increasing index. The first step to parse these payloads is to first find the number of values contained in the [`Payload`](#payload--bytes) field. The following code example demonstrates how to calculate the array length for both timestamped and non-timestamped payloads:
 
 ```C
 int arrayLength;

@@ -190,7 +190,7 @@ Mermaid plots can be generated here: https://mermaid.live/
 
 ### Register layout diagrams
 
-Several core registers include a diagram of their bit or byte layout, drawn with one of two orientations. A register that holds a single value, e.g. a multi-byte integer or a set of bit flags, is drawn most significant first, so the least significant bit or byte is rightmost. A register that holds a structured sequence of fields, such as [`R_VERSION`](#r_version-u8-array--device-version-information), is drawn in field order, with byte 0 leftmost. On the wire the byte order is little-endian, as specified by the [Harp Binary Protocol](BinaryProtocol-8bit.md).
+Several core registers include a diagram of their bit or byte layout, drawn with one of two orientations. A register that holds a single value, such as a multi-byte integer or a set of bit flags, is indexed by bit and drawn most significant first. A register that holds a structured sequence of fields, such as [`R_VERSION`](#r_version-u8-array--device-version-information), is indexed by byte and drawn in field order from byte 0. On the wire, the bytes of each value are ordered least significant first, as specified by the [Harp Binary Protocol](BinaryProtocol-8bit.md).
 
 ### **`R_WHO_AM_I` (U16) – Device Identity Class**
 
@@ -284,7 +284,6 @@ Address: `010`
 Length: 1
 
 ```mermaid
-
 ---
 displayMode: compact
 ---
@@ -609,7 +608,7 @@ The bytes in this register specify the [semantic version](https://semver.org/) o
 
 * **CORE_ID:** The three-character code of the Harp microcontroller core targeted by the Device firmware.
 
-* **INTERFACE_HASH:** The SHA-1 hash value of the Device Interface schema file (`device.yml`). The byte-order is little-endian. The Controller SHOULD NOT perform any validation of its Device Interface schema if this value is set to `0` (Zero). 
+* **INTERFACE_HASH:** The SHA-1 hash value of the Device Interface schema file (`device.yml`). The Controller SHOULD NOT perform any validation of its Device Interface schema if this value is set to `0` (Zero).
 
 ## Deprecated Core Registers
 
