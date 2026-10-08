@@ -1,5 +1,5 @@
 # yaml-language-server: $schema=core.json
-protocolVersion: "1.13"
+protocolVersion: "1.14"
 registers:
   WhoAmI:
     address: 0
@@ -114,6 +114,61 @@ registers:
     access: Write
     maskType: ClockConfigurationFlags
     description: Specifies the configuration for the device synchronization clock.
+  NetworkSsid:
+    address: 20
+    type: U8
+    length: 32
+    access: Write
+    description: Stores the Wi-Fi station SSID, NUL-terminated and zero-padded.
+  NetworkPassword:
+    address: 21
+    type: U8
+    length: 64
+    access: Write
+    description: Stores the Wi-Fi station password, NUL-terminated and zero-padded. Reads return zeroes.
+  NetworkEndpoint:
+    address: 22
+    type: U8
+    length: 18
+    access: Write
+    description: Specifies the endpoint address of the network controller.
+    payloadSpec:
+      Ip:
+        description: Specifies the IP address of the network controller.
+        interfaceType: IPAddress
+        offset: 0
+        length: 16
+      Port:
+        description: Specifies the port of the network controller.
+        interfaceType: ushort
+        offset: 16
+        length: 2
+  NetworkConfiguration:
+    address: 23
+    type: U8
+    access: Write
+    description: Specifies the configuration for WiFi and TCP networking, and reports the current network status.
+    payloadSpec:
+      WiFi:
+        description: Specifies whether WiFi is enabled.
+        maskType: EnableFlag
+        mask: 0x1
+      Tcp:
+        description: Specifies whether TCP is enabled.
+        maskType: EnableFlag
+        mask: 0x2
+      WiFiCapability:
+        description: Specifies whether the device has Wi-Fi capabilities.
+        interfaceType: bool
+        mask: 0x4
+      NetworkStatus:
+        description: Specifies the current network status.
+        maskType: NetworkStatus
+        mask: 0x38
+      Operation:
+        description: Specifies whether to apply or clear the network configuration.
+        maskType: NetworkConfigurationOperationFlags
+        mask: 0xC0
 groupMasks:
   OperationMode:
     description: Specifies the operation mode of the device.
@@ -126,6 +181,23 @@ groupMasks:
     values:
       Disabled: {value: 0, description: Specifies that the flag is disabled.}
       Enabled: {value: 1, description: Specifies that the flag is enabled.}
+  NetworkConfigurationOperationFlags:
+    description: Specifies whether to apply or clear the network configuration.
+    values:
+      None: {value: 0, description: No operation is performed on the network configuration.}
+      Apply: {value: 0x40, description: The device will apply the current network configuration.}
+      Clear: {value: 0x80, description: The device will clear the current network configuration.}
+  NetworkStatus:
+    description: Specifies the current network status.
+    values:
+      Connected: {value: 0, description: The network is connected.}
+      Reserved: {value: 0x08, description: Reserved for future use.}
+      TcpHostUnreachable: {value: 0x10, description: The TCP host could not be reached.}
+      IpUnavailable: {value: 0x18, description: A valid IP address could not be received.}
+      WiFiNetworkUnavailable: {value: 0x20, description: The device could not connect to the Wi-Fi network.}
+      WiFiUnavailable: {value: 0x28, description: Wi-Fi could not be enabled on the device.}
+      InvalidConfiguration: {value: 0x30, description: The network configuration is invalid or malformed.}
+      UnknownError: {value: 0x38, description: An unknown network error occurred.}
 bitMasks:
   ResetFlags:
     description: Specifies the behavior of the non-volatile registers when resetting the device.
