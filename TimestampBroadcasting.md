@@ -54,10 +54,6 @@ The timing error between the first falling edge and the whole-second boundary SH
 
 For example, at the start of Harp second `42`, the output transitions LOW to begin the first start bit, and the Device transmits `0x2A`, `0x00`, `0x00`, and `0x00`. The time associated with that first falling edge is `42` seconds, rather than the time at which reception of the packet completes.
 
-> [!NOTE]
->
-> The [latest meeting notes in issue #128](https://github.com/harp-tech/protocol/issues/128#issuecomment-6066398774) refer to a rising edge while also specifying an idle HIGH signal pulled LOW at the first start bit. This proposal uses the falling edge, consistent with the stated signal polarity and the existing Behavior implementation. The timing edge requires confirmation during review.
-
 ## Device Interface
 
 Devices MUST document the output connector, pin assignment, logic levels, and any configuration required to enable timestamp broadcasting. The electrical output MUST be compatible with the recording device's input. Serial framing alone does not imply the use of RS-232 voltage levels or the physical connector defined by the Harp Synchronization Clock.
@@ -95,7 +91,6 @@ A pulse-per-second output provides a timing reference with a simpler implementat
 - Should the common recommended baud rate be 1 kbps for compatibility with existing implementations, or a standard UART rate such as 1.2 kbps?
 - Should the baud rate and output enable controls eventually be assigned standardized device-specific or core registers?
 - Should an error of less than 32 μs at the first start bit be REQUIRED, or remain RECOMMENDED with a documented implementation limit?
-- Confirm the falling edge as the whole-second marker, resolving the inconsistent edge terminology in the latest meeting notes.
 
 ## Relevant Discussions
 
