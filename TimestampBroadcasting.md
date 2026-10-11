@@ -47,6 +47,14 @@ While timestamp broadcasting is enabled, the Device MUST transmit one packet at 
 
 The timing error between the first falling edge and the whole-second boundary SHOULD be less than 32 μs. Devices MUST document the maximum timing error of their output. Implementations SHOULD validate this error at the physical output, including the effects of interrupt latency and serial peripheral scheduling.
 
+### Example Logic Trace
+
+The upper **AUX UART** trace below illustrates timestamp broadcasting. The output is initially HIGH, and the first falling edge marks the start of Harp second `14`. The four transmitted bytes are `0x0E`, `0x00`, `0x00`, and `0x00`, encoding the whole second as a Little-Endian `U32`. After the final stop bit, the output remains HIGH until the next packet.
+
+![Logic analyzer traces showing timestamp broadcasting on AUX UART and the native Harp Synchronization Clock on CLKOUT](./assets/SyncLogicTrace.png)
+
+The lower **CLKOUT** trace shows the [Harp Synchronization Clock](SynchronizationClock.md) for comparison. Its two-byte header and 672 μs timing offset apply to that protocol only. Timestamp broadcasting sends four bytes without a header and marks the encoded whole second at the first falling edge. The bit duration of the broadcasting signal depends on the selected baud rate.
+
 ## Device Interface
 
 Devices SHOULD document the output connector, pin assignment, logic levels, and any configuration required to enable timestamp broadcasting. Serial framing alone MAY NOT imply the use of RS-232 voltage levels or the physical connector defined by the Harp Synchronization Clock.
