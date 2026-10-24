@@ -1,5 +1,5 @@
 {
-    "$schema": "https://json-schema.org/draft-07/schema",
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
     "$id": "https://harp-tech.org/draft-03/schema/device.json",
     "type": "object",
     "allOf": [
@@ -15,13 +15,19 @@
                 },
                 "firmwareVersion": {
                     "description": "Specifies the version of the device firmware.",
-                    "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$",
-                    "type": "string"
+                    "$ref": "core.json#/$defs/version"
                 },
                 "hardwareTargets": {
-                    "description": "Specifies the version of the device hardware.",
-                    "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$",
-                    "type": "string"
+                    "description": "Specifies the version of the hardware targets.",
+                    "oneOf": [
+                        { "$ref": "core.json#/$defs/version" },
+                        {
+                    "type": "array",
+                            "items": { "$ref": "core.json#/$defs/version" },
+                            "uniqueItems": true,
+                            "minItems": 1
+                    }
+                    ]
                 },
                 "registers": {
                     "additionalProperties": {
