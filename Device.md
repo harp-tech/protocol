@@ -541,20 +541,20 @@ gantt
 
     section Id
     -               :idr, 0, 1
-    IS_ACTIVE       :id0, after reserved, 2
-    IS_SYNCHRONIZED :id1, after bit1, 3
+    IS_ACTIVE       :id1, after reserved, 2
+    IS_SYNCHRONIZED :id0, after bit1, 3
 
     section Default
     -      :dr, 0, 1
-    -      :d7, after reserved, 2
-    -      :d6, after bit1, 3
+    -      :d1, after reserved, 2
+    -      :d0, after bit1, 3
 ```
 
 This register is read-only and used to provide status information about the Device. Any changes to the below bits are controlled by the Device and sent to the Controller through a periodic `Event` message. If periodic reporting is enabled by setting [`R_OPERATION_CTRL`](#r_operation_ctrl-u8--operation-mode-configuration) bit `HEARTBEAT_EN`, the Device MUST emit a periodic event on this register at a rate of 1 Hz, in sync with updates to the [`R_TIMESTAMP_SECOND`](#r_timestamp_second-u32--system-timestamp-seconds) register.
 
-* **IS_ACTIVE [Bit 0]:** If this bit is set, the Device MUST be in `Active` mode. This bit MUST be cleared if the Device is in any other mode (see [Operation Mode](#operation-mode) for information on available device modes).
+* **IS_SYNCHRONIZED [Bit 0]:** If this bit is set, the Device MUST be synchronized with an external Harp clock generator. If the Device is itself a clock generator (see [`R_CLOCK_CONFIG`](#r_clock_config-u8--synchronization-clock-configuration) bit `CLK_GEN`), this bit MUST always be set.
 
-* **IS_SYNCHRONIZED [Bit 1]:** If this bit is set, the Device MUST be synchronized with an external Harp clock generator. If the Device is itself a clock generator (see [`R_CLOCK_CONFIG`](#r_clock_config-u8--synchronization-clock-configuration) bit `CLK_GEN`), this bit MUST always be set.
+* **IS_ACTIVE [Bit 1]:** If this bit is set, the Device MUST be in `Active` mode. This bit MUST be cleared if the Device is in any other mode (see [Operation Mode](#operation-mode) for information on available device modes).
 
 ### **`R_VERSION` (U8 Array) – Device Version Information**
 
@@ -600,9 +600,9 @@ gantt
 
 The bytes in this register specify the [semantic version](https://semver.org/) of the components making up the Device. Each component version is made up of three bytes, following the order `major`, `minor`, `patch`. The register also includes a unique identifier of the Harp microcontroller core and a hash digest of the interface schema file describing the Device Interface.
 
-* **PROTOCOL:** The semantic version of the Harp protocol implemented by the Device.
+* **PROTOCOL:** The semantic version of the Harp protocol implemented by the Device. The major and minor components MUST be equal to the `protocolVersion` declared in the Device Interface schema file (`device.yml`). The patch component identifies the release of the Harp core implementing that version, and is reset to `0` (Zero) when the major or minor component changes. Patch components are therefore comparable only between releases of the same core, as identified by `CORE_ID`.
 
-* **FIRMWARE:** The semantic version of the Device firmware application.
+* **FIRMWARE:** The semantic version of the Device firmware application. The major and minor components MUST be equal to the `version` declared in the Device Interface schema file (`device.yml`). The patch component identifies the release of the firmware implementing that version.
 
 * **HARDWARE:** The semantic version of the Device hardware.
 

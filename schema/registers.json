@@ -3,6 +3,10 @@
     "$id": "https://harp-tech.org/draft-03/schema/registers.json",
     "type": "object",
     "properties": {
+        "description": {
+            "description": "Specifies a summary description of the register interface.",
+            "type": "string"
+        },
         "registers": {
             "type": "object",
             "description": "Specifies the collection of registers implementing the device function.",
@@ -124,6 +128,10 @@
                 "description": {
                     "description": "Specifies a summary description of the payload member.",
                     "type": "string"
+                },
+                "deprecated": {
+                    "description": "Specifies whether the payload member function is deprecated.",
+                    "type": "boolean"
                 },
                 "minValue": { "$ref": "#/definitions/minValue" },
                 "maxValue": { "$ref": "#/definitions/maxValue" },
