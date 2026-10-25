@@ -153,9 +153,15 @@ For any writeable optional or deprecated registers whose function is not impleme
 
 In most cases, the default value of an optional or deprecated register SHOULD be `0` (Zero). Other values MAY be allowed, in which case they MUST be explicitly documented and justified on a per-register basis.
 
+## Reserved Registers
+
+A reserved register occupies an address with no defined function, either to hold the address for future use or to retire the address of a removed register. The Device MAY implement a reserved register, in which case it MUST reply to `Read` requests and MAY include the register in the [`R_OPERATION_CTRL`](#r_operation_ctrl-u8--operation-mode-configuration) register dump. `Write` requests to a reserved register have no defined effect, and the Controller MUST NOT rely on the value or behavior of a reserved register.
+
+The function of a register address MUST NOT change within a major version, so that the version and the address together always identify the function. For core registers this is the version of this specification, and for application registers the version of the Device interface. Assigning a function to an address that has never had one, whether unallocated or reserved for future use, is a minor change. Changing the function of a register, reserving a register, or assigning a function to the reserved address of a removed register is a major change, since each changes what the address means. For example, core address `015` is reserved from version 2.0, since earlier versions of this specification assigned it to a clock calibration offset.
+
 ## Core Registers
 
-The following set of Device core registers MUST be implemented. These reserved registers are used to identify the Device, the version of various components, determine the current Device operation mode, and other common operations.
+The following set of Device core registers MUST be implemented. These registers are used to identify the Device, the version of various components, determine the current Device operation mode, and other common operations.
 
 |**Name**|**Volatile**|**Read Only**|**Type**|**Add.**|**Default**|**Brief Description**|**Necessity**|
 | :- | :-: | :-: | :-: | :-: | :-: | :- | :-: |
@@ -174,7 +180,7 @@ The following set of Device core registers MUST be implemented. These reserved r
 |[`R_DEVICE_NAME`](#r_device_name-u8-array--human-readable-device-name)|No|No|U8 Array|012|b)|Human-readable Device Name|Optional|
 |[`R_SERIAL_NUMBER`](#r_serial_number-u16--device-serial-number)|No|No|U16|013|b)|Device Serial Number|Deprecated|
 |[`R_CLOCK_CONFIG`](#r_clock_config-u8--synchronization-clock-configuration)|No|No|U8|014|b)|Synchronization Clock Configuration|Optional|
-|[`R_TIMESTAMP_OFFSET`](#r_timestamp_offset-u8--clock-calibration-offset)|No|No|U8|015|b)|Clock Calibration Offset|Deprecated|
+|-|-|-|-|015|-|[Reserved](#reserved-registers)|Reserved|
 |[`R_UID`](#r_uid-u8-array--unique-identifier)|No|Yes|U8 Array|016|b)|Unique Identifier|Optional|
 |[`R_TAG`](#r_tag-u8-array--firmware-tag)|-|Yes|U8 Array|017|b)|Firmware Tag|Optional|
 |[`R_HEARTBEAT`](#r_heartbeat-u16--device-status-information)|Yes|Yes|U16|018|b)|Device Status Information|Required|
@@ -869,38 +875,6 @@ Supporting `Write` requests to this register is OPTIONAL. If `Write` requests ar
   2. Receive a second `Write` message with the new serial number. The Device MUST reset after the second `Write` message is received.
 
 Otherwise, if `Write` requests are not supported, the Device MUST reply to any `Write` requests with the fixed device serial number.
-
-### **`R_TIMESTAMP_OFFSET` (U8) – Clock Calibration Offset**
-
-> [!WARNING]
->
-> This register is deprecated and MUST NOT be implemented on any new devices.
-
-Address: `015`  
-Length: 1
-
-```mermaid
----
-displayMode: compact
----
-
-gantt
-    title R_TIMESTAMP_OFFSET (015) [U8]
-
-    dateFormat X
-    axisFormat %
-    tickInterval 0
-
-    section Bit
-    7-0      :byte1, 0, 1
-    section Id
-    RESERVED      :id1, 0, 1
-    section Default
-    0      :d1, 0, 1
-```
-
-When the value of this register is greater than `0` (Zero), the Device timestamp SHOULD be offset by this amount. The register is sensitive to 500 microsecond increments. This register is non-volatile.
-
 
 ## Release Notes
 

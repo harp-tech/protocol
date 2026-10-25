@@ -10,6 +10,9 @@
         "registers": {
             "type": "object",
             "description": "Specifies the collection of registers implementing the device function.",
+            "patternProperties": {
+                "^Reserved[0-9]+$": { "$ref": "#/definitions/reservedRegister" }
+            },
             "additionalProperties": { "$ref": "#/definitions/register" }
         },
         "bitMasks": {
@@ -197,6 +200,34 @@
                 "converter": { "$ref": "#/definitions/converter" }
             },
             "required": ["address", "access", "type"]
+        },
+        "reservedRegister": {
+            "description": "Specifies a register reserved for future use.",
+            "type": "object",
+            "properties": {
+                "address": { "$ref": "#/definitions/register/properties/address" },
+                "visibility": {
+                    "description": "Specifies that the register is reserved.",
+                    "const": "reserved"
+                },
+                "type": {
+                    "allOf": [{ "$ref": "#/definitions/type" }],
+                    "default": "U8"
+                },
+                "length": { "$ref": "#/definitions/register/properties/length" },
+                "access": {
+                    "description": "Specifies the expected use of the register.",
+                    "const": "Read",
+                    "default": "Read"
+                },
+                "description": {
+                    "description": "Specifies a summary description of the reserved register.",
+                    "type": "string",
+                    "default": "Reserved for future use."
+                }
+            },
+            "required": ["address", "visibility"],
+            "additionalProperties": false
         }
     }
 }
