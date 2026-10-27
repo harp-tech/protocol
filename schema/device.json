@@ -5,8 +5,9 @@
     "allOf": [
         {
             "properties": {
-                "device": {
+                "name": {
                     "description": "Specifies the name of the device.",
+                    "pattern": "^[A-Z][a-zA-Z0-9]*$",
                     "type": "string"
                 },
                 "whoAmI": {
@@ -26,7 +27,7 @@
                     }
                 }
             },
-            "required": ["device", "whoAmI", "version"]
+            "required": ["name", "whoAmI", "version"]
         },
         { "$ref": "core.json" }
     ]
