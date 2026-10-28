@@ -88,28 +88,28 @@
             "required": ["values"]
         },
         "maskType": {
-            "description": "Specifies the name of the bit mask or group mask used to represent the payload value.",
+            "description": "Specifies the name of the bit mask or group mask used to represent the value.",
             "type": "string"
         },
         "interfaceType": {
-            "description": "Specifies the name of the type used to represent the payload value in the high-level interface.",
+            "description": "Specifies the name of the type used to represent the value in the high-level interface.",
             "type": "string"
         },
         "converter": {
-            "description": "Specifies whether a custom converter will be used to parse or format the payload value.",
+            "description": "Specifies whether a custom converter will be used to parse or format the value.",
             "type": "string",
             "enum": ["None", "Payload", "RawPayload"]
         },
         "minValue": {
-            "description": "Specifies the minimum allowable value for the payload or payload member.",
+            "description": "Specifies the minimum allowable value.",
             "type": "number"
         },
         "maxValue": {
-            "description": "Specifies the maximum allowable value for the payload or payload member.",
+            "description": "Specifies the maximum allowable value.",
             "type": "number"
         },
         "defaultValue": {
-            "description": "Specifies the default value for the payload or payload member.",
+            "description": "Specifies the default value.",
             "type": "number"
         },
         "payloadMember": {
@@ -133,7 +133,7 @@
                     "type": "string"
                 },
                 "deprecated": {
-                    "description": "Specifies whether the payload member function is deprecated.",
+                    "description": "Specifies whether the payload member is deprecated.",
                     "type": "boolean"
                 },
                 "minValue": { "$ref": "#/definitions/minValue" },
