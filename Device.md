@@ -153,9 +153,15 @@ For any writeable optional or deprecated registers whose function is not impleme
 
 In most cases, the default value of an optional or deprecated register SHOULD be `0` (Zero). Other values MAY be allowed, in which case they MUST be explicitly documented and justified on a per-register basis.
 
+## Reserved Registers
+
+A reserved register occupies an address with no defined function, either to hold the address for future use or to retire the address of a removed register. The Device MAY implement a reserved register, in which case it MUST reply to `Read` requests and MAY include the register in the [`R_OPERATION_CTRL`](#r_operation_ctrl-u8--operation-mode-configuration) register dump. `Write` requests to a reserved register have no defined effect, and the Controller MUST NOT rely on the value or behavior of a reserved register.
+
+The function of a register address MUST NOT change within a major version, so that the version and the address together always identify the function. For core registers this is the version of this specification, and for application registers the version of the Device interface. Assigning a function to an address that has never had one, whether unallocated or reserved for future use, is a minor change. Changing the function of a register, reserving a register, or assigning a function to the reserved address of a removed register is a major change, since each changes what the address means. For example, core address `015` is reserved from version 2.0, since earlier versions of this specification assigned it to a clock calibration offset.
+
 ## Core Registers
 
-The following set of Device core registers MUST be implemented. These reserved registers are used to identify the Device, the version of various components, determine the current Device operation mode, and other common operations.
+The following set of Device core registers MUST be implemented. These registers are used to identify the Device, the version of various components, determine the current Device operation mode, and other common operations.
 
 |**Name**|**Volatile**|**Read Only**|**Type**|**Add.**|**Default**|**Brief Description**|**Necessity**|
 | :- | :-: | :-: | :-: | :-: | :-: | :- | :-: |
@@ -174,7 +180,7 @@ The following set of Device core registers MUST be implemented. These reserved r
 |[`R_DEVICE_NAME`](#r_device_name-u8-array--human-readable-device-name)|No|No|U8 Array|012|b)|Human-readable Device Name|Optional|
 |[`R_SERIAL_NUMBER`](#r_serial_number-u16--device-serial-number)|No|No|U16|013|b)|Device Serial Number|Deprecated|
 |[`R_CLOCK_CONFIG`](#r_clock_config-u8--synchronization-clock-configuration)|No|No|U8|014|b)|Synchronization Clock Configuration|Optional|
-|[`R_TIMESTAMP_OFFSET`](#r_timestamp_offset-u8--clock-calibration-offset)|No|No|U8|015|b)|Clock Calibration Offset|Deprecated|
+|-|-|-|-|015|-|[Reserved](#reserved-registers)|Reserved|
 |[`R_UID`](#r_uid-u8-array--unique-identifier)|No|Yes|U8 Array|016|b)|Unique Identifier|Optional|
 |[`R_TAG`](#r_tag-u8-array--firmware-tag)|-|Yes|U8 Array|017|b)|Firmware Tag|Optional|
 |[`R_HEARTBEAT`](#r_heartbeat-u16--device-status-information)|Yes|Yes|U16|018|b)|Device Status Information|Required|
@@ -541,20 +547,20 @@ gantt
 
     section Id
     -               :idr, 0, 1
-    IS_ACTIVE       :id0, after reserved, 2
-    IS_SYNCHRONIZED :id1, after bit1, 3
+    IS_ACTIVE       :id1, after reserved, 2
+    IS_SYNCHRONIZED :id0, after bit1, 3
 
     section Default
     -      :dr, 0, 1
-    -      :d7, after reserved, 2
-    -      :d6, after bit1, 3
+    -      :d1, after reserved, 2
+    -      :d0, after bit1, 3
 ```
 
 This register is read-only and used to provide status information about the Device. Any changes to the below bits are controlled by the Device and sent to the Controller through a periodic `Event` message. If periodic reporting is enabled by setting [`R_OPERATION_CTRL`](#r_operation_ctrl-u8--operation-mode-configuration) bit `HEARTBEAT_EN`, the Device MUST emit a periodic event on this register at a rate of 1 Hz, in sync with updates to the [`R_TIMESTAMP_SECOND`](#r_timestamp_second-u32--system-timestamp-seconds) register.
 
-* **IS_ACTIVE [Bit 0]:** If this bit is set, the Device MUST be in `Active` mode. This bit MUST be cleared if the Device is in any other mode (see [Operation Mode](#operation-mode) for information on available device modes).
+* **IS_SYNCHRONIZED [Bit 0]:** If this bit is set, the Device MUST be synchronized with an external Harp clock generator. If the Device is itself a clock generator (see [`R_CLOCK_CONFIG`](#r_clock_config-u8--synchronization-clock-configuration) bit `CLK_GEN`), this bit MUST always be set.
 
-* **IS_SYNCHRONIZED [Bit 1]:** If this bit is set, the Device MUST be synchronized with an external Harp clock generator. If the Device is itself a clock generator (see [`R_CLOCK_CONFIG`](#r_clock_config-u8--synchronization-clock-configuration) bit `CLK_GEN`), this bit MUST always be set.
+* **IS_ACTIVE [Bit 1]:** If this bit is set, the Device MUST be in `Active` mode. This bit MUST be cleared if the Device is in any other mode (see [Operation Mode](#operation-mode) for information on available device modes).
 
 ### **`R_VERSION` (U8 Array) – Device Version Information**
 
@@ -600,9 +606,9 @@ gantt
 
 The bytes in this register specify the [semantic version](https://semver.org/) of the components making up the Device. Each component version is made up of three bytes, following the order `major`, `minor`, `patch`. The register also includes a unique identifier of the Harp microcontroller core and a hash digest of the interface schema file describing the Device Interface.
 
-* **PROTOCOL:** The semantic version of the Harp protocol implemented by the Device.
+* **PROTOCOL:** The semantic version of the Harp protocol implemented by the Device. The major and minor components MUST be equal to the `protocolVersion` declared in the Device Interface schema file (`device.yml`). The patch component identifies the release of the Harp core implementing that version, and is reset to `0` (Zero) when the major or minor component changes. Patch components are therefore comparable only between releases of the same core, as identified by `CORE_ID`.
 
-* **FIRMWARE:** The semantic version of the Device firmware application.
+* **FIRMWARE:** The semantic version of the Device firmware application. The major and minor components MUST be equal to the `version` declared in the Device Interface schema file (`device.yml`). The patch component identifies the release of the firmware implementing that version.
 
 * **HARDWARE:** The semantic version of the Device hardware.
 
@@ -869,38 +875,6 @@ Supporting `Write` requests to this register is OPTIONAL. If `Write` requests ar
   2. Receive a second `Write` message with the new serial number. The Device MUST reset after the second `Write` message is received.
 
 Otherwise, if `Write` requests are not supported, the Device MUST reply to any `Write` requests with the fixed device serial number.
-
-### **`R_TIMESTAMP_OFFSET` (U8) – Clock Calibration Offset**
-
-> [!WARNING]
->
-> This register is deprecated and MUST NOT be implemented on any new devices.
-
-Address: `015`  
-Length: 1
-
-```mermaid
----
-displayMode: compact
----
-
-gantt
-    title R_TIMESTAMP_OFFSET (015) [U8]
-
-    dateFormat X
-    axisFormat %
-    tickInterval 0
-
-    section Bit
-    7-0      :byte1, 0, 1
-    section Id
-    RESERVED      :id1, 0, 1
-    section Default
-    0      :d1, 0, 1
-```
-
-When the value of this register is greater than `0` (Zero), the Device timestamp SHOULD be offset by this amount. The register is sensitive to 500 microsecond increments. This register is non-volatile.
-
 
 ## Release Notes
 

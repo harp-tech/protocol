@@ -3,9 +3,16 @@
     "$id": "https://harp-tech.org/draft-03/schema/registers.json",
     "type": "object",
     "properties": {
+        "description": {
+            "description": "Specifies a summary description of the register interface.",
+            "type": "string"
+        },
         "registers": {
             "type": "object",
             "description": "Specifies the collection of registers implementing the device function.",
+            "patternProperties": {
+                "^Reserved[0-9]+$": { "$ref": "#/definitions/reservedRegister" }
+            },
             "additionalProperties": { "$ref": "#/definitions/register" }
         },
         "bitMasks": {
@@ -81,28 +88,28 @@
             "required": ["values"]
         },
         "maskType": {
-            "description": "Specifies the name of the bit mask or group mask used to represent the payload value.",
+            "description": "Specifies the name of the bit mask or group mask used to represent the value.",
             "type": "string"
         },
         "interfaceType": {
-            "description": "Specifies the name of the type used to represent the payload value in the high-level interface.",
+            "description": "Specifies the name of the type used to represent the value in the high-level interface.",
             "type": "string"
         },
         "converter": {
-            "description": "Specifies whether a custom converter will be used to parse or format the payload value.",
+            "description": "Specifies whether a custom converter will be used to parse or format the value.",
             "type": "string",
             "enum": ["None", "Payload", "RawPayload"]
         },
         "minValue": {
-            "description": "Specifies the minimum allowable value for the payload or payload member.",
+            "description": "Specifies the minimum allowable value.",
             "type": "number"
         },
         "maxValue": {
-            "description": "Specifies the maximum allowable value for the payload or payload member.",
+            "description": "Specifies the maximum allowable value.",
             "type": "number"
         },
         "defaultValue": {
-            "description": "Specifies the default value for the payload or payload member.",
+            "description": "Specifies the default value.",
             "type": "number"
         },
         "payloadMember": {
@@ -124,6 +131,10 @@
                 "description": {
                     "description": "Specifies a summary description of the payload member.",
                     "type": "string"
+                },
+                "deprecated": {
+                    "description": "Specifies whether the payload member is deprecated.",
+                    "type": "boolean"
                 },
                 "minValue": { "$ref": "#/definitions/minValue" },
                 "maxValue": { "$ref": "#/definitions/maxValue" },
@@ -189,6 +200,34 @@
                 "converter": { "$ref": "#/definitions/converter" }
             },
             "required": ["address", "access", "type"]
+        },
+        "reservedRegister": {
+            "description": "Specifies a register reserved for future use.",
+            "type": "object",
+            "properties": {
+                "address": { "$ref": "#/definitions/register/properties/address" },
+                "visibility": {
+                    "description": "Specifies that the register is reserved.",
+                    "const": "reserved"
+                },
+                "type": {
+                    "allOf": [{ "$ref": "#/definitions/type" }],
+                    "default": "U8"
+                },
+                "length": { "$ref": "#/definitions/register/properties/length" },
+                "access": {
+                    "description": "Specifies the expected use of the register.",
+                    "const": "Read",
+                    "default": "Read"
+                },
+                "description": {
+                    "description": "Specifies a summary description of the reserved register.",
+                    "type": "string",
+                    "default": "Reserved for future use."
+                }
+            },
+            "required": ["address", "visibility"],
+            "additionalProperties": false
         }
     }
 }

@@ -5,21 +5,17 @@
     "allOf": [
         {
             "properties": {
-                "device": {
+                "name": {
                     "description": "Specifies the name of the device.",
+                    "pattern": "^[A-Z][a-zA-Z0-9]*$",
                     "type": "string"
                 },
                 "whoAmI": {
                     "description": "Specifies the unique identifier for this device type.",
                     "type": "integer"
                 },
-                "firmwareVersion": {
-                    "description": "Specifies the version of the device firmware.",
-                    "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$",
-                    "type": "string"
-                },
-                "hardwareTargets": {
-                    "description": "Specifies the version of the device hardware.",
+                "version": {
+                    "description": "Specifies the version of the device interface.",
                     "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$",
                     "type": "string"
                 },
@@ -31,7 +27,7 @@
                     }
                 }
             },
-            "required": ["device", "whoAmI", "firmwareVersion", "hardwareTargets"]
+            "required": ["name", "whoAmI", "version"]
         },
         { "$ref": "core.json" }
     ]
