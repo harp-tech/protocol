@@ -179,6 +179,10 @@ The following set of Device core registers MUST be implemented. These reserved r
 |[`R_TAG`](#r_tag-u8-array--firmware-tag)|-|Yes|U8 Array|017|b)|Firmware Tag|Optional|
 |[`R_HEARTBEAT`](#r_heartbeat-u16--device-status-information)|Yes|Yes|U16|018|b)|Device Status Information|Required|
 |[`R_VERSION`](#r_version-u8-array--device-version-information)|-|Yes|U8 Array|019|a)|Device Version Information|Required|
+|[`R_NET_SSID`](#r_net_ssid-u8-array--wi-fi-ssid)|No|No|U8 Array|020|b)|Wi-Fi SSID|Optional|
+|[`R_NET_PASSWORD`](#r_net_password-u8-array--wi-fi-password)|No|No|U8 Array|021|b)|Wi-Fi password|Optional|
+|[`R_NET_ENDPOINT`](#r_net_endpoint-u8-array--tcp-endpoint)|No|No|U8 Array|022|b)|Controller IP Address and TCP Port|Optional|
+|[`R_NET_CONFIG`](#r_net_config-u8--network-configuration)|No|No|U8|023|b)|Wi-Fi/TCP Configuration|Optional|
 
 ||a) These values MUST be stored during the firmware build process and are persistent, i.e. they SHALL NOT be changeable by the Controller.<br>b) Check notes on the specific register specification. |
 | :- | :- |
@@ -610,6 +614,115 @@ The bytes in this register specify the [semantic version](https://semver.org/) o
 
 * **INTERFACE_HASH:** The SHA-1 hash value of the Device Interface schema file (`device.yml`). The Controller SHOULD NOT perform any validation of its Device Interface schema if this value is set to `0` (Zero).
 
+## Network Core Registers
+
+> [!NOTE]
+>
+> The following optional registers are reserved for the Wi-Fi and outbound TCP network module. Some devices have Wi-Fi capabilities and can act as a TCP client connecting to the configured Controller endpoint. They do not listen to incoming TCP connections.
+
+### **`R_NET_SSID` (U8 Array) – Wi-Fi SSID**
+
+Address: `020`<br>
+Length: 32
+
+This register stores the Wi-Fi station SSID as a NUL-terminated, zero-padded
+byte array. The maximum usable SSID length is 31 bytes. The register is
+non-volatile and is applied when [`R_NET_CONFIG`](#r_net_config-u8--network-configuration)
+is written with the `APPLY` command.
+
+### **`R_NET_PASSWORD` (U8 Array) – Wi-Fi Password**
+
+Address: `021`<br>
+Length: 64
+
+This register stores the Wi-Fi station password as a NUL-terminated,
+zero-padded byte array. The maximum usable password length is 63 bytes. The
+register is non-volatile. For security reasons, the Device MUST return zeroes when
+this register is read.
+
+### **`R_NET_ENDPOINT` (U8 Array) – TCP Endpoint**
+
+Address: `022`<br>
+Length: 18
+
+The first 16 bytes contain an IPv6 address, or an IPv4 address encoded as an
+IPv4-mapped IPv6 address. For example, IPv4 address `192.0.2.10` is
+encoded as `::ffff:192.0.2.10`. The final two bytes contain the TCP port as an
+unsigned little-endian value. The register is non-volatile.
+
+### **`R_NET_CONFIG` (U8) – Network Configuration**
+
+Address: `023`<br>
+Length: 1
+
+```mermaid
+---
+displayMode: compact
+---
+
+gantt
+  title R_NET_CONFIG (023)
+  dateFormat X
+  axisFormat %
+
+  section Bit
+  7      :bit7, 0, 1
+  6      :bit6, after bit7, 2
+  5-3    :bits5_3, after bit6, 5
+  2      :bit2, after bits5_3, 6
+  1      :bit1, after bit2, 7
+  0      :bit0, after bit1, 8
+
+  section Id
+  CLEAR            :id7, 0, 1
+  APPLY            :id6, after id7, 2
+  NET_STATUS       :id5, after id6, 5
+  WIFI_ABLE        :id2, after id5, 6
+  TCP_EN           :id1, after id2, 7
+  WIFI_EN          :id0, after id1, 8
+
+  section Default
+  0      :d7, 0, 1
+  0      :d6, after d7, 2
+  -      :d5_3, after d6, 5
+  -      :d2, after d5_3, 6
+  0      :d1, after d2, 7
+  0      :d0, after d1, 8
+```
+
+This register controls Wi-Fi and TCP operation and reports network status.
+The Device MUST ignore status bits supplied by the Controller. The `APPLY`
+and `CLEAR` commands are actions and MUST NOT be set together.
+
+* **WIFI_EN [Bit 0]:** If this bit is set, the Device MUST enable Wi-Fi station mode. Otherwise, if the bit is cleared, the Device MUST turn off Wi-Fi capabilities.
+
+* **TCP_EN [Bit 1]:** If this bit is set, the Device MUST enable the outbound TCP client. Otherwise, if the bit is cleared, the Device MUST disable the outbound TCP client.
+
+* **WIFI_ABLE [Bit 2]:** Read-only status bit. When sending a reply to a `Read` request, the Device MUST set this bit if the Device has Wi-Fi capabilities. If this bit is cleared, the Device MUST report `NET_STATUS` as `0`.
+
+* **NET_STATUS [Bits 5:3]:** Read-only status group reporting the current network status. If `WIFI_EN` or `WIFI_ABLE` is cleared, the Device MUST report `Connected` (`0`).
+
+**Table - Available NET_STATUS values**
+
+| NET_STATUS[5:3] | Configuration                         |
+|-----------------|---------------------------------------|
+| 0               | Connected                             |
+| 1               | - _(reserved for future use)_         |
+| 2               | Could not reach TCP host              |
+| 3               | Could not receive a valid IP          |
+| 4               | Could not connect to Wi-Fi network    |
+| 5               | Could not enable Wi-Fi on the Device  |
+| 6               | Invalid or malformed configuration    |
+| 7               | Unknown error                         |
+
+* **APPLY [Bit 6]:** If this bit is set, the Device MUST apply and save the current network configuration. When sending a reply to a `Read` request, the Device MUST clear this bit in the message payload.
+
+* **CLEAR [Bit 7]:** If this bit is set, the Device MUST clear the saved network configuration and disconnect. When sending a reply to a `Read` request, the Device MUST clear this bit in the message payload.
+
+> [!IMPORTANT]
+>
+> To avoid unexpected behavior, the Controller SHOULD NOT set **APPLY** and **CLEAR** bits at the same time when sending a `Write` request to `R_NET_CONFIG`.
+
 ## Deprecated Core Registers
 
 The following registers are deprecated and their functionality SHOULD NOT be implemented in new devices. They MUST still exist as read-only registers, and included in the [`R_OPERATION_CTRL`](#r_operation_ctrl-u8--operation-mode-configuration) register dump. They are kept for backward compatibility with older Controllers and may be removed in future protocol versions.
@@ -969,3 +1082,9 @@ When the value of this register is greater than `0` (Zero), the Device timestamp
   * Clarify meaning of optional registers
   * Add Device Interface clarifications
   * Adopt requirement key words from RFC 2119
+
+- v1.14.0
+  * Add `R_NET_SSID` register
+  * Add `R_NET_PASSWORD` register
+  * Add `R_NET_ENDPOINT` register
+  * Add `R_NET_CONFIG` register
