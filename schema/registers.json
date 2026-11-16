@@ -4,9 +4,10 @@
     "type": "object",
     "properties": {
         "description": {
-            "description": "Specifies a summary description of the register interface. Must be a single line.",
+            "description": "Specifies a summary description of the register interface.",
             "type": "string",
-            "pattern": "^[^\\r\\n]*$"
+            "pattern": "^(?![\\s\\S]*[\\r\\n])",
+            "patternErrorMessage": "Must be a single line."
         },
         "registers": {
             "type": "object",
@@ -67,7 +68,8 @@
                         "description": {
                             "description": "Specifies a summary description of the mask value function.",
                             "type": "string",
-                            "pattern": "^[^\\r\\n]*$"
+                            "pattern": "^(?![\\s\\S]*[\\r\\n])",
+                            "patternErrorMessage": "Must be a single line."
                         }
                     },
                     "required": ["value"],
@@ -82,7 +84,8 @@
                 "description": {
                     "description": "Specifies a summary description of the bit mask function.",
                     "type": "string",
-                    "pattern": "^[^\\r\\n]*$"
+                    "pattern": "^(?![\\s\\S]*[\\r\\n])",
+                    "patternErrorMessage": "Must be a single line."
                 },
                 "bits": {
                     "description": "Specifies the flags of the bit mask. Each value must be a single bit; zero is only allowed for a member named None.",
@@ -99,7 +102,8 @@
                 "description": {
                     "description": "Specifies a summary description of the group mask function.",
                     "type": "string",
-                    "pattern": "^[^\\r\\n]*$"
+                    "pattern": "^(?![\\s\\S]*[\\r\\n])",
+                    "patternErrorMessage": "Must be a single line."
                 },
                 "values": {
                     "description": "Specifies the mutually exclusive values of the group mask.",
@@ -173,7 +177,8 @@
                 "description": {
                     "description": "Specifies a summary description of the payload member.",
                     "type": "string",
-                    "pattern": "^[^\\r\\n]*$"
+                    "pattern": "^(?![\\s\\S]*[\\r\\n])",
+                    "patternErrorMessage": "Must be a single line."
                 },
                 "deprecated": {
                     "description": "Specifies whether the payload member is deprecated.",
@@ -218,7 +223,8 @@
                 "description": {
                     "description": "Specifies a summary description of the register function.",
                     "type": "string",
-                    "pattern": "^[^\\r\\n]*$"
+                    "pattern": "^(?![\\s\\S]*[\\r\\n])",
+                    "patternErrorMessage": "Must be a single line."
                 },
                 "minValue": { "$ref": "#/definitions/minValue" },
                 "maxValue": { "$ref": "#/definitions/maxValue" },
@@ -273,7 +279,8 @@
                 "description": {
                     "description": "Specifies a summary description of the reserved register.",
                     "type": "string",
-                    "pattern": "^[^\\r\\n]*$",
+                    "pattern": "^(?![\\s\\S]*[\\r\\n])",
+                    "patternErrorMessage": "Must be a single line.",
                     "default": "Reserved for future use."
                 }
             },
