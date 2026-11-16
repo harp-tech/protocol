@@ -63,7 +63,7 @@ All `Event` messages sent by the Device SHOULD be timestamped with the Harp cloc
 
 ### Error Handling
 
-The [`Error`](BinaryProtocol-8bit.md#error-flag-1-bit) flag in the [`MessageType`](BinaryProtocol-8bit.md#messagetype-1-byte) field MAY be set by the Device on messages signalling an error while processing a request from the Controller. The Device SHALL NOT send any error replies to the Controller when configured to mute all replies (see [Request-Reply](#request-reply)). Since information included in error messages is limited, we RECOMMEND restricting error replies to the following cases:
+The [`Error`](BinaryProtocol-8bit.md#error-flag-1-bit) flag in the [`MessageType`](BinaryProtocol-8bit.md#messagetype-1-byte) field MAY be set by the Device on messages signalling an error while processing a request from the Controller. The Device SHALL NOT send any error replies to the Controller when configured to mute all replies (see [Request-Reply](#request-reply)). Since information included in error messages is limited, it is RECOMMENDED that error replies be restricted to the following cases:
 
   1. The message is a request to read (or write) a register that does not exist on the Device.
   2. The message [`PayloadType`](BinaryProtocol-8bit.md#payloadtype-1-byte) does not match the register specification.
@@ -358,7 +358,7 @@ b) `Standby` and `Active` modes are mandatory. `Speed` mode is deprecated.
 >
 > The Device MUST reply with `Error` in case this operation mode is not supported.
 
-* **HEARTBEAT_EN [Bit 2]:** If this bit is set, the Device MUST send an `Event` message every second with the contents of [`R_HEARTBEAT`](#r_heartbeat-u16--device-status-information). This allows the Controller to check the status of the Device periodically. If the `ALIVE_EN` bit is also set, this bit has precedence and the Device must send `R_HEARTBEAT` periodically instead of `R_TIMESTAMP_SECOND`.
+* **HEARTBEAT_EN [Bit 2]:** If this bit is set, the Device MUST send an `Event` message every second with the contents of [`R_HEARTBEAT`](#r_heartbeat-u16--device-status-information). This allows the Controller to check the status of the Device periodically. If the `ALIVE_EN` bit is also set, this bit has precedence and the Device MUST send `R_HEARTBEAT` periodically instead of `R_TIMESTAMP_SECOND`.
 * **DUMP [Bit 3]:** If this bit is set on a `Write` request, the Device SHALL send a sequence of `Read` messages to the Controller, one per register, with the current contents of all core and application registers. These messages MUST be sent following the `Write` reply to the request from the Controller. When sending a reply to a `Read` request, the Device MUST clear this bit in the message payload.
 * **MUTE_RPL [Bit 4]:** If this bit is set, the Device SHALL NOT send any messages in reply to a request from the Controller.
 * **VISUAL_EN [Bit 5]:** If this bit is set, any visual indicators, typically LEDs, available on the Device SHOULD be enabled. Otherwise, if the bit is cleared, all visual indicators SHOULD be turned off.
@@ -425,11 +425,11 @@ This register is used to reboot the Device, optionally save or restore non-volat
 
 * **RST_EE [Bit 1]:** If this bit is set and non-volatile memory is available, the Device MUST reset and reboot with all core and application registers set to the values saved in persistent storage, usually an EEPROM. Any currently stored values MUST remain the permanent boot option. If this bit is set and non-volatile memory is not available, the Device MUST reply with an `Error` message. When sending a reply to a `Read` request, the Device MUST clear this bit in the message payload.
 
-* **SAVE [Bit 2]:** If this bit is set and non-volatile memory is available, the Device MUST save any non-volatile core and application registers to persistent storage, and reboot. The non-volatile memory should be configured as the permanent boot option. If this bit is set and non-volatile memory is not available, the Device MUST reply with an `Error` message. When sending a reply to a `Read` request, the Device MUST clear this bit in the message payload.
+* **SAVE [Bit 2]:** If this bit is set and non-volatile memory is available, the Device MUST save any non-volatile core and application registers to persistent storage, and reboot. The non-volatile memory SHOULD be configured as the permanent boot option. If this bit is set and non-volatile memory is not available, the Device MUST reply with an `Error` message. When sending a reply to a `Read` request, the Device MUST clear this bit in the message payload.
 
 * **NAME_TO_DEFAULT [Bit 3]:** If this bit is set, the Device MUST reboot and restore the value of [`R_DEVICE_NAME`](#r_device_name-u8-array--human-readable-device-name) to its default value. When sending a reply to a `Read` request, the Device MUST clear this bit in the message payload.
 
-* **UPDATE_FIRMWARE [Bit 5]:** If this bit is set, the Device MUST enter firmware update mode. In this mode the Device MAY NOT reply to any requests until the update completes. Once completed, the Device MUST reboot. When sending a reply to a `Read` request, the Device MUST clear this bit in the message payload.
+* **UPDATE_FIRMWARE [Bit 5]:** If this bit is set, the Device MUST enter firmware update mode. In this mode the Device MAY leave requests unanswered until the update completes. Once completed, the Device MUST reboot. When sending a reply to a `Read` request, the Device MUST clear this bit in the message payload.
 
 * **BOOT_DEF [Bit 6]:** When sending a reply to a `Read` request, the Device MUST set this bit if it booted with the default register values. If non-volatile memory is not available, the Device MUST always set this bit when sending a reply to a `Read` request. This bit is read-only state, so if this bit is set on a request message, the Device MUST reply with an `Error` message.
 
