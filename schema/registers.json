@@ -4,8 +4,9 @@
     "type": "object",
     "properties": {
         "description": {
-            "description": "Specifies a summary description of the register interface.",
-            "type": "string"
+            "description": "Specifies a summary description of the register interface. Must be a single line.",
+            "type": "string",
+            "pattern": "^[^\\r\\n]*$"
         },
         "registers": {
             "type": "object",
@@ -31,11 +32,27 @@
         "type": {
             "description": "Specifies the type of the register payload.",
             "type": "string",
-            "enum": ["U8", "S8", "U16", "S16", "U32", "S32", "U64", "S64", "Float"]
+            "enum": ["U8", "S8", "U16", "S16", "U32", "S32", "U64", "S64", "Float"],
+            "enumDescriptions": [
+                "8-bit unsigned integer.",
+                "8-bit signed integer.",
+                "16-bit unsigned integer.",
+                "16-bit signed integer.",
+                "32-bit unsigned integer.",
+                "32-bit signed integer.",
+                "64-bit unsigned integer.",
+                "64-bit signed integer.",
+                "32-bit IEEE 754 floating-point number."
+            ]
         },
         "access": {
             "type": "string",
-            "enum": ["Read", "Write", "Event"]
+            "enum": ["Read", "Write", "Event"],
+            "enumDescriptions": [
+                "The register accepts read requests from the controller.",
+                "The register accepts write requests from the controller.",
+                "The device may send unsolicited event messages from this register."
+            ]
         },
         "maskValue": {
             "oneOf": [
@@ -49,7 +66,8 @@
                         },
                         "description": {
                             "description": "Specifies a summary description of the mask value function.",
-                            "type": "string"
+                            "type": "string",
+                            "pattern": "^[^\\r\\n]*$"
                         }
                     },
                     "required": ["value"],
@@ -63,9 +81,11 @@
             "properties": {
                 "description": {
                     "description": "Specifies a summary description of the bit mask function.",
-                    "type": "string"
+                    "type": "string",
+                    "pattern": "^[^\\r\\n]*$"
                 },
                 "bits": {
+                    "description": "Specifies the flags of the bit mask. Each value must be a single bit; zero is only allowed for a member named None.",
                     "type": "object",
                     "additionalProperties": { "$ref": "#/definitions/maskValue" }
                 }
@@ -78,9 +98,11 @@
             "properties": {
                 "description": {
                     "description": "Specifies a summary description of the group mask function.",
-                    "type": "string"
+                    "type": "string",
+                    "pattern": "^[^\\r\\n]*$"
                 },
                 "values": {
+                    "description": "Specifies the mutually exclusive values of the group mask.",
                     "type": "object",
                     "additionalProperties": { "$ref": "#/definitions/maskValue" }
                 }
@@ -92,13 +114,33 @@
             "type": "string"
         },
         "interfaceType": {
-            "description": "Specifies the name of the type used to represent the value in the high-level interface.",
-            "type": "string"
+            "description": "Specifies the name of the type used to represent the value in the high-level interface. The suggested names are standardized; other names are allowed.",
+            "type": "string",
+            "anyOf": [
+                { "const": "bool", "description": "Boolean flag. Reads true if the value is non-zero. Must not span more than one element." },
+                { "const": "byte", "description": "8-bit unsigned integer. Matches payload type U8, or spans 1 byte." },
+                { "const": "sbyte", "description": "8-bit signed integer. Matches payload type S8, or spans 1 byte." },
+                { "const": "ushort", "description": "16-bit unsigned integer. Matches payload type U16, or spans 2 bytes." },
+                { "const": "short", "description": "16-bit signed integer. Matches payload type S16, or spans 2 bytes." },
+                { "const": "uint", "description": "32-bit unsigned integer. Matches payload type U32, or spans 4 bytes." },
+                { "const": "int", "description": "32-bit signed integer. Matches payload type S32, or spans 4 bytes." },
+                { "const": "ulong", "description": "64-bit unsigned integer. Matches payload type U64, or spans 8 bytes." },
+                { "const": "long", "description": "64-bit signed integer. Matches payload type S64, or spans 8 bytes." },
+                { "const": "float", "description": "32-bit IEEE 754 floating-point number. Matches payload type Float, or spans 4 bytes." },
+                { "const": "string", "description": "UTF-8 text. Requires payload type U8 and a declared length." },
+                { "const": "HarpVersion", "description": "A major.minor.patch version. Spans exactly 3 U8 elements, unless a converter is used." },
+                { "description": "A custom type name, handled by a converter or naming a payload type." }
+            ]
         },
         "converter": {
             "description": "Specifies whether a custom converter will be used to parse or format the value.",
             "type": "string",
-            "enum": ["None", "Payload", "RawPayload"]
+            "enum": ["None", "Payload", "RawPayload"],
+            "enumDescriptions": [
+                "No custom conversion is required. This is the default.",
+                "A hand-written converter operates on the payload decoded as the register type.",
+                "A hand-written converter operates directly on the raw payload bytes."
+            ]
         },
         "minValue": {
             "description": "Specifies the minimum allowable value.",
@@ -130,7 +172,8 @@
                 },
                 "description": {
                     "description": "Specifies a summary description of the payload member.",
-                    "type": "string"
+                    "type": "string",
+                    "pattern": "^[^\\r\\n]*$"
                 },
                 "deprecated": {
                     "description": "Specifies whether the payload member is deprecated.",
@@ -150,11 +193,12 @@
                 "address": {
                     "description": "Specifies the unique 8-bit address of the register.",
                     "type": "integer",
+                    "minimum": 0,
                     "maximum": 255
                 },
                 "type": { "$ref": "#/definitions/type" },
                 "length": {
-                    "description": "Specifies the length of the register payload.",
+                    "description": "Specifies the number of elements in the register payload. If present, the payload is an array, even when the length is 1. If omitted, the payload is a scalar.",
                     "type": "integer",
                     "minimum": 1
                 },
@@ -173,7 +217,8 @@
                 },
                 "description": {
                     "description": "Specifies a summary description of the register function.",
-                    "type": "string"
+                    "type": "string",
+                    "pattern": "^[^\\r\\n]*$"
                 },
                 "minValue": { "$ref": "#/definitions/minValue" },
                 "maxValue": { "$ref": "#/definitions/maxValue" },
@@ -182,7 +227,11 @@
                 "visibility": {
                     "description": "Specifies whether the register function is exposed in the high-level interface.",
                     "type": "string",
-                    "enum": ["public", "private"]
+                    "enum": ["public", "private"],
+                    "enumDescriptions": [
+                        "The register is exposed in the high-level interface. This is the default.",
+                        "The register is hidden from the high-level interface."
+                    ]
                 },
                 "deprecated": {
                     "description": "Specifies whether the register function is deprecated.",
@@ -193,6 +242,7 @@
                     "type": "boolean"
                 },
                 "payloadSpec": {
+                    "description": "Specifies a collection of payload members describing the contents of the raw payload value.",
                     "type": "object",
                     "additionalProperties": { "$ref": "#/definitions/payloadMember" }
                 },
@@ -223,6 +273,7 @@
                 "description": {
                     "description": "Specifies a summary description of the reserved register.",
                     "type": "string",
+                    "pattern": "^[^\\r\\n]*$",
                     "default": "Reserved for future use."
                 }
             },
