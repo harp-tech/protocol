@@ -50,9 +50,9 @@
             "type": "string",
             "enum": ["Read", "Write", "Event"],
             "enumDescriptions": [
-                "The register accepts read requests from the controller.",
-                "The register accepts write requests from the controller.",
-                "The device may send unsolicited event messages from this register."
+                "The controller can read the register.",
+                "The controller can write the register.",
+                "The device can send events from the register."
             ]
         },
         "maskValue": {
@@ -88,7 +88,7 @@
                     "patternErrorMessage": "Must be a single line."
                 },
                 "bits": {
-                    "description": "Specifies the flags of the bit mask. Each value must be a single bit; zero is only allowed for a member named None.",
+                    "description": "Specifies the single-bit flags of the bit mask.",
                     "type": "object",
                     "additionalProperties": { "$ref": "#/definitions/maskValue" }
                 }
@@ -118,22 +118,22 @@
             "type": "string"
         },
         "interfaceType": {
-            "description": "Specifies the name of the type used to represent the value in the high-level interface. The suggested names are standardized; other names are allowed.",
+            "description": "Specifies the name of the type used to represent the value in the high-level interface. The suggested names are built-in types.",
             "type": "string",
             "anyOf": [
-                { "const": "bool", "description": "Boolean flag. Reads true if the value is non-zero. Must not span more than one element." },
-                { "const": "byte", "description": "8-bit unsigned integer. Matches payload type U8, or spans 1 byte." },
-                { "const": "sbyte", "description": "8-bit signed integer. Matches payload type S8, or spans 1 byte." },
-                { "const": "ushort", "description": "16-bit unsigned integer. Matches payload type U16, or spans 2 bytes." },
-                { "const": "short", "description": "16-bit signed integer. Matches payload type S16, or spans 2 bytes." },
-                { "const": "uint", "description": "32-bit unsigned integer. Matches payload type U32, or spans 4 bytes." },
-                { "const": "int", "description": "32-bit signed integer. Matches payload type S32, or spans 4 bytes." },
-                { "const": "ulong", "description": "64-bit unsigned integer. Matches payload type U64, or spans 8 bytes." },
-                { "const": "long", "description": "64-bit signed integer. Matches payload type S64, or spans 8 bytes." },
-                { "const": "float", "description": "32-bit IEEE 754 floating-point number. Matches payload type Float, or spans 4 bytes." },
-                { "const": "string", "description": "UTF-8 text. Requires payload type U8 and a declared length." },
-                { "const": "HarpVersion", "description": "A major.minor.patch version. Spans exactly 3 U8 elements, unless a converter is used." },
-                { "description": "A custom type name, handled by a converter or naming a payload type." }
+                { "const": "bool", "description": "Boolean value, from a single element." },
+                { "const": "byte", "description": "8-bit unsigned integer, the same as payload type U8." },
+                { "const": "sbyte", "description": "8-bit signed integer, the same as payload type S8." },
+                { "const": "ushort", "description": "16-bit unsigned integer, the same as payload type U16." },
+                { "const": "short", "description": "16-bit signed integer, the same as payload type S16." },
+                { "const": "uint", "description": "32-bit unsigned integer, the same as payload type U32." },
+                { "const": "int", "description": "32-bit signed integer, the same as payload type S32." },
+                { "const": "ulong", "description": "64-bit unsigned integer, the same as payload type U64." },
+                { "const": "long", "description": "64-bit signed integer, the same as payload type S64." },
+                { "const": "float", "description": "32-bit IEEE 754 floating-point number, the same as payload type Float." },
+                { "const": "string", "description": "UTF-8 text of up to the declared length in bytes, from U8 elements." },
+                { "const": "HarpVersion", "description": "Major, minor and patch version numbers, one byte each." },
+                { "description": "Custom type, declared in the device interface or supplied by a converter." }
             ]
         },
         "converter": {
@@ -141,9 +141,9 @@
             "type": "string",
             "enum": ["None", "Payload", "RawPayload"],
             "enumDescriptions": [
-                "No custom conversion is required.",
-                "A hand-written converter operates on the payload decoded as the register type.",
-                "A hand-written converter operates directly on the raw payload bytes."
+                "No custom converter is used.",
+                "A custom converter operates on the payload, as values of the register type.",
+                "A custom converter operates on the raw payload bytes."
             ]
         },
         "minValue": {
@@ -203,7 +203,7 @@
                 },
                 "type": { "$ref": "#/definitions/type" },
                 "length": {
-                    "description": "Specifies the number of elements in the register payload. If present, the payload is an array, even when the length is 1. If omitted, the payload is a scalar.",
+                    "description": "Specifies the number of payload elements, or a single element if omitted.",
                     "type": "integer",
                     "minimum": 1
                 },
@@ -248,7 +248,7 @@
                     "type": "boolean"
                 },
                 "payloadSpec": {
-                    "description": "Specifies a collection of payload members describing the contents of the raw payload value.",
+                    "description": "Specifies the members of the register payload.",
                     "type": "object",
                     "additionalProperties": { "$ref": "#/definitions/payloadMember" }
                 },
