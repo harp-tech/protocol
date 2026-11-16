@@ -8,6 +8,7 @@
                 "protocolVersion": {
                     "description": "Specifies the version of the core interface.",
                     "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$",
+                    "patternErrorMessage": "Must be a major and minor version number separated by a dot.",
                     "type": "string"
                 }
             },

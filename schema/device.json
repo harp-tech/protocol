@@ -8,6 +8,7 @@
                 "name": {
                     "description": "Specifies the name of the device.",
                     "pattern": "^[A-Z][a-zA-Z0-9]*$",
+                    "patternErrorMessage": "Must start with an uppercase letter and contain only letters and digits.",
                     "type": "string"
                 },
                 "whoAmI": {
@@ -17,6 +18,7 @@
                 "version": {
                     "description": "Specifies the version of the device interface.",
                     "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$",
+                    "patternErrorMessage": "Must be a major and minor version number separated by a dot.",
                     "type": "string"
                 },
                 "registers": {
