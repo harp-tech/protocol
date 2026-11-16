@@ -1,5 +1,6 @@
 # yaml-language-server: $schema=core.json
-protocolVersion: "1.13"
+protocolVersion: "2.0"
+description: The core register set implemented by every Harp device.
 registers:
   WhoAmI:
     address: 0
@@ -28,25 +29,25 @@ registers:
     address: 4
     type: U8
     access: Read
-    description: Specifies the major version of the Harp core implemented by the device.
+    description: Specifies the major version of the Harp protocol implemented by the device.
     deprecated: true
   CoreVersionLow:
     address: 5
     type: U8
     access: Read
-    description: Specifies the minor version of the Harp core implemented by the device.
+    description: Specifies the minor version of the Harp protocol implemented by the device.
     deprecated: true
   FirmwareVersionHigh:
     address: 6
     type: U8
     access: Read
-    description: Specifies the major version of the Harp core implemented by the device.
+    description: Specifies the major version of the device firmware.
     deprecated: true
   FirmwareVersionLow:
     address: 7
     type: U8
     access: Read
-    description: Specifies the minor version of the Harp core implemented by the device.
+    description: Specifies the minor version of the device firmware.
     deprecated: true
   TimestampSeconds:
     address: 8
@@ -70,6 +71,10 @@ registers:
         description: Specifies the operation mode of the device.
         maskType: OperationMode
         mask: 0x3
+      Heartbeat:
+        description: Specifies whether the device should report the content of the heartbeat register each second.
+        maskType: EnableFlag
+        mask: 0x4
       DumpRegisters:
         description: Specifies whether the device should report the content of all registers on initialization.
         interfaceType: bool
@@ -86,10 +91,11 @@ registers:
         description: Specifies whether the device state LED should report the operation mode of the device.
         maskType: EnableFlag
         mask: 0x40
-      Heartbeat:
+      Alive:
         description: Specifies whether the device should report the content of the seconds register each second.
         maskType: EnableFlag
         mask: 0x80
+        deprecated: true
   ResetDevice:
     address: 11
     type: U8
@@ -101,6 +107,7 @@ registers:
     type: U8
     length: 25
     access: Write
+    interfaceType: string
     description: Stores the user-specified device name.
   SerialNumber:
     address: 13
@@ -114,6 +121,60 @@ registers:
     access: Write
     maskType: ClockConfigurationFlags
     description: Specifies the configuration for the device synchronization clock.
+  Reserved15:
+    address: 15
+    visibility: reserved
+    description: Reserved. Earlier versions of the specification used this address for a timestamp offset.
+  UID:
+    address: 16
+    type: U8
+    length: 16
+    access: Read
+    description: Specifies the unique identifier of the device among all devices with the same identity class.
+  Tag:
+    address: 17
+    type: U8
+    length: 8
+    access: Read
+    description: Specifies the tag of the device firmware build, such as a Git commit hash.
+  Heartbeat:
+    address: 18
+    type: U16
+    access: [Read, Event]
+    maskType: HeartbeatFlags
+    description: Reports the status of the device each second.
+    volatile: true
+  Version:
+    address: 19
+    type: U8
+    length: 32
+    access: Read
+    description: Specifies the version information of the device components.
+    payloadSpec:
+      ProtocolVersion:
+        offset: 0
+        length: 3
+        interfaceType: HarpVersion
+        description: Specifies the version of the Harp protocol implemented by the device.
+      FirmwareVersion:
+        offset: 3
+        length: 3
+        interfaceType: HarpVersion
+        description: Specifies the version of the device firmware.
+      HardwareVersion:
+        offset: 6
+        length: 3
+        interfaceType: HarpVersion
+        description: Specifies the version of the device hardware.
+      CoreId:
+        offset: 9
+        length: 3
+        interfaceType: string
+        description: Specifies the three-character code of the Harp core targeted by the device firmware.
+      InterfaceHash:
+        offset: 12
+        length: 20
+        description: Specifies the SHA-1 hash of the device interface file.
 groupMasks:
   OperationMode:
     description: Specifies the operation mode of the device.
@@ -148,3 +209,9 @@ bitMasks:
       GeneratorCapability: {value: 0x10, description: Specifies the device has the capability to generate the clock synchronization signal to the clock output connector.}
       ClockUnlock: {value: 0x40, description: The device will unlock the timestamp register counter and will accept commands to set new timestamp values.}
       ClockLock: {value: 0x80, description: The device will lock the timestamp register counter and will not accept commands to set new timestamp values.}
+  HeartbeatFlags:
+    description: Specifies the status information reported by the device heartbeat.
+    bits:
+      None: {value: 0, description: All status flags are cleared.}
+      IsSynchronized: {value: 0x1, description: "Specifies that the device is synchronized to an external clock generator, or is itself a clock generator."}
+      IsActive: {value: 0x2, description: Specifies that the device is in Active mode.}
