@@ -77,7 +77,7 @@ The `registers` section is a map where each key is the register name (PascalCase
 | `address`       | integer (0–255)    |   Yes    |    —     | The unique 8-bit address of the register. Application registers MUST use addresses ≥ 32.                                                 |
 | `type`          | string             |   Yes    |    —     | The payload type. One of: `U8`, `S8`, `U16`, `S16`, `U32`, `S32`, `U64`, `S64`, `Float`.                                                 |
 | `access`        | string or string[] |   Yes    |    —     | The access mode(s) of the register. A single value or an array of 1–3 unique values from: `Read`, `Write`, `Event`.                      |
-| `length`        | integer (≥ 1)      |    No    |    —     | The number of elements in the register payload. If present, the payload is an array. See [Payload Length](#payload-length).              |
+| `length`        | integer (≥ 1)      |    No    |    —     | The number of elements in the register payload. If omitted, the payload is a single element. See [Payload Length](#payload-length).      |
 | `description`   | string             |    No    |    —     | A summary description of the register function. MUST be a single line.                                                                   |
 | `minValue`      | number             |    No    |    —     | The minimum allowable value for the register payload.                                                                                    |
 | `maxValue`      | number             |    No    |    —     | The maximum allowable value for the register payload.                                                                                    |
@@ -92,12 +92,17 @@ The `registers` section is a map where each key is the register name (PascalCase
 
 ### Payload Length
 
-The presence of `length`, not only its value, determines the shape of the payload:
+If `length` is omitted, the payload is a single element of type `type`. If `length` is present, the payload is exactly `length` elements of type `type`.
 
-- If `length` is **omitted**, the payload is a single scalar value of type `type`.
-- If `length` is **present**, the payload is an array of exactly `length` elements of type `type`. This holds even for `length: 1`, which declares a one-element array rather than a scalar.
+The value a high-level interface uses for the payload is the first of the following that applies:
 
-High-level interfaces represent the two cases differently (e.g. `ushort` versus `ushort[]`), so `length: 1` SHOULD only be used when an array representation is intended.
+1. If the register declares a `payloadSpec`, the value is a [payload type](#payload-types) holding its members.
+2. If the register declares an `interfaceType`, the value is of that type (e.g. a `string` over a `U8` payload of length 25).
+3. If the register declares a `maskType`, the value is of that mask type.
+4. If the register declares a `length`, the value is an array of `length` elements. This holds even for `length: 1`, which declares a one-element array rather than a scalar.
+5. Otherwise, the value is a scalar of type `type`.
+
+The difference between rules 4 and 5 is visible in high-level interfaces (e.g. `ushort[]` versus `ushort`), so `length: 1` SHOULD only be used when an array representation is intended.
 
 ```yaml
 Threshold: # scalar U16
@@ -423,7 +428,7 @@ When `interfaceType` is applied at the register level **together with** a `paylo
 
 ### Interface Types
 
-The set of valid `interfaceType` names is open-ended: the schema accepts any string, and tooling MAY support additional names. The following names are standardized and SHOULD be supported by tooling that consumes `interfaceType`. New names MAY be standardized in the future if widespread use cases emerge.
+The set of valid `interfaceType` names is open-ended: the schema accepts any string, and tooling MAY support additional names. The following built-in types SHOULD be supported by tooling that consumes `interfaceType`.
 
 | Interface Type | Wire type | Notes                                                                                                                                               |
 | :------------- | :-------: | :-------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -437,13 +442,13 @@ The set of valid `interfaceType` names is open-ended: the schema accepts any str
 | `ulong`        |   `U64`   | 64-bit unsigned integer.                                                                                                                            |
 | `long`         |   `S64`   | 64-bit signed integer.                                                                                                                              |
 | `float`        |  `Float`  | 32-bit IEEE 754 floating-point value.                                                                                                               |
-| `string`       |    `U8`   | UTF-8 text over a span of bytes. The payload `type` MUST be `U8`, and the register or member MUST declare a `length`.                               |
+| `string`       |    `U8`   | UTF-8 text. The payload `type` MUST be `U8`. `length` counts bytes, not characters, and shorter text ends at the first zero byte.                   |
 | `HarpVersion`  |    `U8`   | A [semantic version](https://semver.org/) (`major.minor.patch`). Without a converter, it MUST be used on a member spanning exactly 3 `U8` elements. |
 
 Unless a [converter](#converters) is declared, a primitive name (`byte` through `float`) MUST fit the elements it represents:
 
-- On a member that declares `length`, the primitive MUST be the size of the elements it spans. For example, `uint` (4 bytes) MAY span 4 × `U8` or 2 × `U16`, but not 2 × `U8`. A register cannot do this directly: declare a spanning `payloadSpec` member instead.
-- On a single element (a member without `length`, or a scalar register), the primitive MUST match the wire type (e.g. `int` requires `S32`).
+- On a member with a `length` greater than 1, the primitive MUST be the size in bytes of the elements it spans, regardless of their signedness. For example, `uint` or `int` (4 bytes) MAY span 4 × `U8` or 2 × `U16`, but not 2 × `U8`. A register cannot do this directly: declare a spanning `payloadSpec` member instead.
+- On a single element (a member without `length` or with `length: 1`, or a register without `length`), the primitive MUST match the wire type exactly (e.g. `int` requires `S32`, and `sbyte` requires `S8`).
 - On a member with a `mask`, any primitive MAY be used (e.g. `byte` for the `0xFF00` field of a `U16` word).
 
 Any other name is treated as a custom type that the consuming tooling does not know how to build. A custom `interfaceType` MUST be accompanied by a [converter](#converters), except when it names a [payload type](#payload-types).
@@ -505,7 +510,7 @@ CustomMemberConverter:
       converter: Payload
 ```
 
-The form of the converter is specific to each target language. For example, `Harp.Generators` emits `partial` method declarations (`ParsePayload` and `FormatPayload`) in C#, and imports converter functions from a companion `converters` module in Python, except for standardized types such as `HarpVersion`.
+The form of the converter is specific to each target language. For example, `Harp.Generators` emits `partial` method declarations (`ParsePayload` and `FormatPayload`) in C#, and imports converter functions from a companion `converters` module in Python, except for built-in types such as `HarpVersion`.
 
 ## Bit Masks
 
@@ -806,7 +811,6 @@ The following rules are stated throughout this document but cannot be checked by
 
 | Rule                                                                                                              | Section                                              |
 | :---------------------------------------------------------------------------------------------------------------- | :--------------------------------------------------- |
-| Every `description` is a single line.                                                                             | [Descriptions](#descriptions)                        |
 | `defaultValue` lies within `minValue` and `maxValue`.                                                             | [Register Properties](#register-properties)          |
 | `maskType` names a bit mask or group mask declared in the file or in `core.yml`.                                  | [Mask Type Reference](#mask-type-reference)          |
 | The bits of a referenced bit mask fit within the payload element, or within the (shifted) member `mask`.          | [Mask Type Reference](#mask-type-reference)          |
