@@ -137,7 +137,7 @@
             "type": "string",
             "enum": ["None", "Payload", "RawPayload"],
             "enumDescriptions": [
-                "No custom conversion is required. This is the default.",
+                "No custom conversion is required.",
                 "A hand-written converter operates on the payload decoded as the register type.",
                 "A hand-written converter operates directly on the raw payload bytes."
             ]
@@ -229,7 +229,7 @@
                     "type": "string",
                     "enum": ["public", "private"],
                     "enumDescriptions": [
-                        "The register is exposed in the high-level interface. This is the default.",
+                        "The register is exposed in the high-level interface.",
                         "The register is hidden from the high-level interface."
                     ]
                 },
