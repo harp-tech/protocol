@@ -14,7 +14,7 @@ All Device functionality, including device configuration, SHOULD be provided to 
 
 For example, a register can be used to configure device properties such as sampling frequency, operation mode, input / output routing, and other device-specific parameters. A register can also be used to control specific functionality, such as toggling digital output lines, starting and stopping pulse trains, or moving a motor.
 
-Each register in the Device Interface is assigned a unique zero-based address, and a payload type describing the format of the data stored in the register. Registers can be read-only or allow both reading and writing.
+Each register in the Device Interface is assigned a unique zero-based address, and a payload type describing the format of the data stored in the register. Each register also specifies whether it can be read, whether it can be written, and whether it reports its contents in `Event` messages. Every register MUST support at least one of these. A register SHOULD NOT allow reads when reading back its contents has no meaning, such as a register whose `Write` requests only trigger an action, or a register whose `Event` messages report occurrences without holding state between them.
 
 Except for [Optional or Deprecated registers](#optional-or-deprecated-registers), whose behavior is clarified below, all registers and functionality specified in this document MUST be implemented by a Device complying with this specification.
 
@@ -51,11 +51,13 @@ All reply messages sent by the Device MUST be timestamped with the Harp clock ti
 
 The payload of the reply message SHOULD represent the up-to-date state of the register targeted by the request, after the request is processed. If a `Write` request is sent, the payload of the reply MAY be different from the payload of the original request, e.g. if the Device needs to transform or adjust the actual value written on the register ([see "Register Polymorphism" section below](#register-polymorphism)).
 
-The Device SHOULD NOT send more than a single reply message. The only supported exception is the operation of the [`R_OPERATION_CTRL`](#r_operation_ctrl-u8--operation-mode-configuration) register, which allows the Controller to request a dump of all registers in the Device. In this case, the Device replies with a single `Write` message from `R_OPERATION_CTRL`, in accordance with the above specification. However, if **DUMP [Bit 3]** is set, the Device will additionally emit a sequence of `Read` messages back-to-back, containing the state of each register in the Device.
+For a register which cannot be read, the reply to a `Write` request MUST contain the value written, or the value actually applied by the Device if it differs from the request.
+
+The Device SHOULD NOT send more than a single reply message. The only supported exception is the operation of the [`R_OPERATION_CTRL`](#r_operation_ctrl-u8--operation-mode-configuration) register, which allows the Controller to request a dump of the registers in the Device. In this case, the Device replies with a single `Write` message from `R_OPERATION_CTRL`, in accordance with the above specification. However, if **DUMP [Bit 3]** is set, the Device will additionally emit a sequence of `Read` messages back-to-back, containing the state of each non-reserved register in the Device which can be read.
 
 ### Event Stream
 
-A Device MAY send to the Controller `Event` messages reporting the contents of specific registers at any time. Sending of events depends on the Device [Operation Mode](#operation-mode). A Device SHOULD NOT send `Event` messages when in `Standby` mode.
+A Device MAY send to the Controller `Event` messages reporting the contents of specific registers at any time. Sending of events depends on the Device [Operation Mode](#operation-mode). A Device MUST NOT send `Event` messages when in `Standby` mode.
 
 When the Device is in `Active` mode, device-specific application registers can be used by the Controller to further restrict the sending of events. The documentation of each device interface should be consulted to understand the operation of such registers.
 
@@ -67,9 +69,12 @@ The [`Error`](BinaryProtocol-8bit.md#error-flag-1-bit) flag in the [`MessageType
 
   1. The message is a request to read (or write) a register that does not exist on the Device.
   2. The message [`PayloadType`](BinaryProtocol-8bit.md#payloadtype-1-byte) does not match the register specification.
-  3. The message is a write request to a read-only register.
-  4. The message is a write request, and the length of the payload does not match the register specification.
-  5. The message is a write request, and the payload is outside the allowable range of register values.
+  3. The message is a read request to a register which cannot be read.
+  4. The message is a write request to a register which cannot be written.
+  5. The message is a write request, and the length of the payload does not match the register specification.
+  6. The message is a write request, and the payload is outside the allowable range of register values.
+
+In cases 3 and 4, the Device MUST reply with the `Error` flag set, so that every request to a register receives a reply that the Controller can interpret.
 
 Requests which require prior configuration of multiple registers (e.g. starting a pulse train, moving a motor), or requests which are invalid due to particular combinations of other register values, SHOULD NOT be handled by sending an error reply to a write request from the Controller.
 
@@ -98,7 +103,8 @@ Messages sent from a specific Device register SHOULD:
 >   CameraFrequency:
 >   - Address: 32
 >   - Type: U8
->   - Access: Read, Write
+>   - Read: true
+>   - Write: true
 >   - Description: Sets the frequency of the camera in Hz.
 >```
 >
@@ -149,7 +155,7 @@ All registers pertaining to the hardware-specific operation of the Device are ap
 
 Some registers are marked as **Optional** or **Deprecated** in the [Core Registers](#core-registers) table, and their functionality MAY not be fully implemented by the Device. However, all optional or deprecated registers MUST reply to `Read` requests by sending a message to the Controller with the specified default value. Moreover, they MUST be included as part of the [`R_OPERATION_CTRL`](#r_operation_ctrl-u8--operation-mode-configuration) register dump.
 
-For any writeable optional or deprecated registers whose function is not implemented, the Device MUST always return a `Write` reply payload containing the register default value, to indicate the `Write` request had no effect. The Device SHOULD NOT crash or enter an undefined state when a `Write` request is sent to an optional or deprecated unimplemented register.
+For any optional or deprecated registers which can be written whose function is not implemented, the Device MUST always return a `Write` reply payload containing the register default value, to indicate the `Write` request had no effect. The Device SHOULD NOT crash or enter an undefined state when a `Write` request is sent to an optional or deprecated unimplemented register.
 
 In most cases, the default value of an optional or deprecated register SHOULD be `0` (Zero). Other values MAY be allowed, in which case they MUST be explicitly documented and justified on a per-register basis.
 
@@ -359,7 +365,7 @@ b) `Standby` and `Active` modes are mandatory. `Speed` mode is deprecated.
 > The Device MUST reply with `Error` in case this operation mode is not supported.
 
 * **HEARTBEAT_EN [Bit 2]:** If this bit is set, the Device MUST send an `Event` message every second with the contents of [`R_HEARTBEAT`](#r_heartbeat-u16--device-status-information). This allows the Controller to check the status of the Device periodically. If the `ALIVE_EN` bit is also set, this bit has precedence and the Device MUST send `R_HEARTBEAT` periodically instead of `R_TIMESTAMP_SECOND`.
-* **DUMP [Bit 3]:** If this bit is set on a `Write` request, the Device SHALL send a sequence of `Read` messages to the Controller, one per register, with the current contents of all core and application registers. These messages MUST be sent following the `Write` reply to the request from the Controller. When sending a reply to a `Read` request, the Device MUST clear this bit in the message payload.
+* **DUMP [Bit 3]:** If this bit is set on a `Write` request, the Device SHALL send a sequence of `Read` messages to the Controller, one per register, with the current contents of all non-reserved core and application registers which can be read. Registers which cannot be read MUST NOT be included in this sequence, and [reserved registers](#reserved-registers) MAY be skipped. These messages MUST be sent following the `Write` reply to the request from the Controller. When sending a reply to a `Read` request, the Device MUST clear this bit in the message payload.
 * **MUTE_RPL [Bit 4]:** If this bit is set, the Device SHALL NOT send any messages in reply to a request from the Controller.
 * **VISUAL_EN [Bit 5]:** If this bit is set, any visual indicators, typically LEDs, available on the Device SHOULD be enabled. Otherwise, if the bit is cleared, all visual indicators SHOULD be turned off.
 * **OPLED_EN [Bit 6]:** If this bit is set, the LED present on the Device SHOULD indicate the current Operation Mode.
@@ -515,14 +521,14 @@ The implementation of this register is RECOMMENDED if the Device provides a [Syn
 Address: `016`  
 Length: 16
 
-An array of bytes serving as a unique identifier for the Device, with no defined internal structure or numeric interpretation. This register is non-volatile and read-only. Implementing it is OPTIONAL. If implemented, the value MUST be unique among all devices that share the same [`R_WHO_AM_I`](#r_who_am_i-u16--device-identity-class), so that `R_WHO_AM_I` and `R_UID` together uniquely identify the Device. If not implemented, the Device MUST return a default value of `0` (Zero) for all bytes.
+An array of bytes serving as a unique identifier for the Device, with no defined internal structure or numeric interpretation. This register is non-volatile and cannot be written. Implementing it is OPTIONAL. If implemented, the value MUST be unique among all devices that share the same [`R_WHO_AM_I`](#r_who_am_i-u16--device-identity-class), so that `R_WHO_AM_I` and `R_UID` together uniquely identify the Device. If not implemented, the Device MUST return a default value of `0` (Zero) for all bytes.
 
 ### **`R_TAG` (U8 Array) – Firmware Tag**
 
 Address: `017`  
 Length: 8
 
-An array of bytes that can be used to store a tag for a specific firmware build. For instance, it could store the Git hash of a specific release or commit. The bytes have no defined internal structure or numeric interpretation. This register is read-only.
+An array of bytes that can be used to store a tag for a specific firmware build. For instance, it could store the Git hash of a specific release or commit. The bytes have no defined internal structure or numeric interpretation. This register cannot be written.
 
 If not implemented, the Device MUST return a default value of `0` (Zero) for all bytes.
 
@@ -556,7 +562,7 @@ gantt
     -      :d0, after bit1, 3
 ```
 
-This register is read-only and used to provide status information about the Device. Any changes to the below bits are controlled by the Device and sent to the Controller through a periodic `Event` message. If periodic reporting is enabled by setting [`R_OPERATION_CTRL`](#r_operation_ctrl-u8--operation-mode-configuration) bit `HEARTBEAT_EN`, the Device MUST emit a periodic event on this register at a rate of 1 Hz, in sync with updates to the [`R_TIMESTAMP_SECOND`](#r_timestamp_second-u32--system-timestamp-seconds) register.
+This register cannot be written and is used to provide status information about the Device. Any changes to the below bits are controlled by the Device and sent to the Controller through a periodic `Event` message. If periodic reporting is enabled by setting [`R_OPERATION_CTRL`](#r_operation_ctrl-u8--operation-mode-configuration) bit `HEARTBEAT_EN`, the Device MUST emit a periodic event on this register at a rate of 1 Hz, in sync with updates to the [`R_TIMESTAMP_SECOND`](#r_timestamp_second-u32--system-timestamp-seconds) register.
 
 * **IS_SYNCHRONIZED [Bit 0]:** If this bit is set, the Device MUST be synchronized with an external Harp clock generator. If the Device is itself a clock generator (see [`R_CLOCK_CONFIG`](#r_clock_config-u8--synchronization-clock-configuration) bit `CLK_GEN`), this bit MUST always be set.
 
@@ -618,7 +624,7 @@ The bytes in this register specify the [semantic version](https://semver.org/) o
 
 ## Deprecated Core Registers
 
-The following registers are deprecated and their functionality SHOULD NOT be implemented in new devices. They MUST still exist as read-only registers, and included in the [`R_OPERATION_CTRL`](#r_operation_ctrl-u8--operation-mode-configuration) register dump. They are kept for backward compatibility with older Controllers and may be removed in future protocol versions.
+The following registers are deprecated and their functionality SHOULD NOT be implemented in new devices. They MUST still exist as registers which can be read, and be included in the [`R_OPERATION_CTRL`](#r_operation_ctrl-u8--operation-mode-configuration) register dump. They are kept for backward compatibility with older Controllers and may be removed in future protocol versions.
 
 ### **`R_HW_VERSION_H` (U8) – Major Hardware Version**
 

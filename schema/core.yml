@@ -5,66 +5,69 @@ registers:
   WhoAmI:
     address: 0
     type: U16
-    access: Read
+    read: true
     description: Specifies the identity class of the device.
   HardwareVersionHigh:
     address: 1
     type: U8
-    access: Read
+    read: true
     description: Specifies the major hardware version of the device.
     deprecated: true
   HardwareVersionLow:
     address: 2
     type: U8
-    access: Read
+    read: true
     description: Specifies the minor hardware version of the device.
     deprecated: true
   AssemblyVersion:
     address: 3
     type: U8
-    access: Read
+    read: true
     description: Specifies the version of the assembled components in the device.
     deprecated: true
   CoreVersionHigh:
     address: 4
     type: U8
-    access: Read
+    read: true
     description: Specifies the major version of the Harp protocol implemented by the device.
     deprecated: true
   CoreVersionLow:
     address: 5
     type: U8
-    access: Read
+    read: true
     description: Specifies the minor version of the Harp protocol implemented by the device.
     deprecated: true
   FirmwareVersionHigh:
     address: 6
     type: U8
-    access: Read
+    read: true
     description: Specifies the major version of the device firmware.
     deprecated: true
   FirmwareVersionLow:
     address: 7
     type: U8
-    access: Read
+    read: true
     description: Specifies the minor version of the device firmware.
     deprecated: true
   TimestampSeconds:
     address: 8
     type: U32
-    access: [Read, Write, Event]
+    read: true
+    write: true
+    event: true
     description: Stores the integral part of the system timestamp, in seconds.
     volatile: true
   TimestampMicroseconds:
     address: 9
     type: U16
-    access: Read
+    read: true
     description: Stores the fractional part of the system timestamp, in microseconds.
     volatile: true
   OperationControl:
     address: 10
     type: U8
-    access: Write
+    read: true
+    write: true
     description: Stores the configuration mode of the device.
     payloadSpec:
       OperationMode:
@@ -99,48 +102,54 @@ registers:
   ResetDevice:
     address: 11
     type: U8
-    access: Write
+    read: true
+    write: true
     maskType: ResetFlags
     description: Resets the device and saves non-volatile registers.
   DeviceName:
     address: 12
     type: U8
     length: 25
-    access: Write
+    read: true
+    write: true
     interfaceType: string
     description: Stores the user-specified device name.
   SerialNumber:
     address: 13
     type: U16
-    access: Write
+    read: true
+    write: true
     description: Specifies the unique serial number of the device.
     deprecated: true
   ClockConfiguration:
     address: 14
     type: U8
-    access: Write
+    read: true
+    write: true
     maskType: ClockConfigurationFlags
     description: Specifies the configuration for the device synchronization clock.
   Reserved15:
     address: 15
+    read: true
     visibility: reserved
     description: Reserved. Earlier versions of the specification used this address for a timestamp offset.
   UID:
     address: 16
     type: U8
     length: 16
-    access: Read
+    read: true
     description: Specifies the unique identifier of the device among all devices with the same identity class.
   Tag:
     address: 17
     type: U8
     length: 8
-    access: Read
+    read: true
     description: Specifies the tag of the device firmware build, such as a Git commit hash.
   Heartbeat:
     address: 18
     type: U16
-    access: [Read, Event]
+    read: true
+    event: true
     maskType: HeartbeatFlags
     description: Reports the status of the device each second.
     volatile: true
@@ -148,7 +157,7 @@ registers:
     address: 19
     type: U8
     length: 32
-    access: Read
+    read: true
     description: Specifies the version information of the device components.
     payloadSpec:
       ProtocolVersion:
