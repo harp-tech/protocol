@@ -153,7 +153,7 @@ All registers pertaining to the hardware-specific operation of the Device are ap
 
 ## Optional and Deprecated Registers
 
-Some registers are marked as **Optional** or **Deprecated** in the [Core Registers](#core-registers) table, and their functionality MAY not be fully implemented by the Device. However, all optional or deprecated registers MUST reply to `Read` requests by sending a message to the Controller with the specified default value. Moreover, they MUST be included as part of the [`R_OPERATION_CTRL`](#r_operation_ctrl-u8--operation-mode-configuration) register dump.
+Some registers are marked as **Optional** or **Deprecated** in the [Core Registers](#core-registers) table, and their functionality MAY not be fully implemented by the Device. However, all optional or deprecated registers which can be read MUST reply to `Read` requests by sending a message to the Controller with the specified default value. Moreover, they MUST be included as part of the [`R_OPERATION_CTRL`](#r_operation_ctrl-u8--operation-mode-configuration) register dump.
 
 For any optional or deprecated registers which can be written whose function is not implemented, the Device MUST always return a `Write` reply payload containing the register default value, to indicate the `Write` request had no effect. The Device SHOULD NOT crash or enter an undefined state when a `Write` request is sent to an optional or deprecated unimplemented register.
 
