@@ -181,7 +181,8 @@
                 "maskType": { "$ref": "#/definitions/maskType" },
                 "interfaceType": { "$ref": "#/definitions/interfaceType" },
                 "converter": { "$ref": "#/definitions/converter" }
-            }
+            },
+            "additionalProperties": false
         },
         "register": {
             "type": "object",
@@ -249,6 +250,7 @@
                 "converter": { "$ref": "#/definitions/converter" }
             },
             "required": ["address", "type"],
+            "additionalProperties": false,
             "if": {
                 "properties": { "read": { "const": false } },
                 "required": ["read"]
