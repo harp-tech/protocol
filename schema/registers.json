@@ -200,17 +200,17 @@
                     "minimum": 1
                 },
                 "read": {
-                    "description": "Specifies whether the register can be read.",
+                    "description": "Specifies whether the controller can read the register.",
                     "type": "boolean",
                     "default": true
                 },
                 "write": {
-                    "description": "Specifies whether the register can be written.",
+                    "description": "Specifies whether the controller can write the register.",
                     "type": "boolean",
                     "default": false
                 },
                 "event": {
-                    "description": "Specifies whether the register reports its contents in event messages.",
+                    "description": "Specifies whether the device can send events from the register.",
                     "type": "boolean",
                     "default": false
                 },
@@ -277,7 +277,7 @@
                 },
                 "length": { "$ref": "#/definitions/register/properties/length" },
                 "read": {
-                    "description": "Specifies that the reserved register can be read.",
+                    "description": "Specifies that the controller can read the reserved register.",
                     "const": true,
                     "default": true
                 },
