@@ -99,13 +99,14 @@ Messages sent from a specific Device register SHOULD:
 >
 > Consider the following register:
 >
->```
->   CameraFrequency:
->   - Address: 32
->   - Type: U8
->   - Read: true
->   - Write: true
->   - Description: Sets the frequency of the camera in Hz.
+>```yaml
+>registers:
+>  CameraFrequency:
+>    address: 32
+>    type: U8
+>    read: true
+>    write: true
+>    description: Sets the frequency of the camera in Hz.
 >```
 >
 > ❌ DO NOT reply with a frequency in U16 for a `Read` request and the frequency in U8 for a `Write` request.  
