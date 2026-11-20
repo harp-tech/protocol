@@ -14,23 +14,23 @@ The Harp Time Code is an asynchronous serial signal on a digital output. Its imp
 
 The output MUST remain HIGH when idle. Each byte MUST be transmitted using one LOW start bit, eight data bits, no parity bit, and one HIGH stop bit (8N1). Data bits within each byte MUST be transmitted least significant bit first.
 
-### Baud Rate
-
-The baud rate MAY be fixed or configurable. A configurable baud rate MAY be exposed as a `U32` register whose value is the number of bits transmitted per second. The active baud rate MUST be documented or readable from a register included in the [register dump](Device.md#r_operation_ctrl-u8--operation-mode-configuration). The selected rate MUST allow the complete transmission packet to finish before the next whole second, leaving an idle HIGH interval between packets.
-
-The baud rate SHOULD be selected according to the sampling rate of the recording device. Lower baud rates allow the signal to be recorded by systems with lower sampling rates, but increase the duration of each transmission. The recording device SHOULD acquire multiple samples per bit to allow reliable decoding.
-
-For example, at 1 kbps, each bit lasts 1 ms, and the four-byte packet occupies 40 ms, since each byte takes ten bits including its start and stop bits.
-
 ### Transmission Packet (4 bytes)
 
-Each transmission packet MUST encode a whole second of the Harp time as a Little-Endian unsigned 32-bit integer (`U32`), corresponding to [`R_TIMESTAMP_SECOND`](Device.md#r_timestamp_second-u32--system-timestamp-seconds), with the structure below:
+The Harp Time Code is transmitted in packets. Each transmission packet MUST encode a whole second of the Harp time as a Little-Endian unsigned 32-bit integer (`U32`), corresponding to [`R_TIMESTAMP_SECOND`](Device.md#r_timestamp_second-u32--system-timestamp-seconds), with the structure below:
 
 | Byte                 | 0        | 1         | 2          | 3          |
 | -------------------- | -------- | --------- | ---------- | ---------- |
 | Whole Second (`U32`) | Bits 0–7 | Bits 8–15 | Bits 16–23 | Bits 24–31 |
 
 The four bytes MUST be transmitted consecutively, with the start bit of each subsequent byte immediately following the stop bit of the preceding byte. No header, fractional timestamp, or checksum is transmitted.
+
+### Baud Rate
+
+The baud rate of the Harp Time Code MAY be fixed or configurable. A configurable baud rate MAY be exposed as a `U32` register whose value is the number of bits transmitted per second. The active baud rate MUST be documented or readable from a register included in the [register dump](Device.md#r_operation_ctrl-u8--operation-mode-configuration). The selected rate MUST allow the complete transmission packet to finish before the next whole second, leaving an idle HIGH interval between packets.
+
+The baud rate SHOULD be selected according to the sampling rate of the recording device. Lower baud rates allow the signal to be recorded by systems with lower sampling rates, but increase the duration of each transmission. The recording device SHOULD acquire multiple samples per bit to allow reliable decoding.
+
+For example, at 1 kbps, each bit lasts 1 ms, and the four-byte packet occupies 40 ms, since each byte takes ten bits including its start and stop bits.
 
 ### Transmission Timing
 
