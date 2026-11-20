@@ -1,6 +1,6 @@
 <img src="./assets/HarpLogo.svg" width="200">
 
-# Harp Time Code
+# Time Code
 
 This document provides the specification for the Harp Time Code, a serial signal carrying the current Harp time in whole seconds, to be recorded by non-Harp acquisition systems alongside data acquired using their own local clock. The recorded data can then be aligned with the Harp time base during post-hoc analysis. Including the whole second in each transmission allows the Harp time to be recovered even when recordings start at different times or individual transmissions are lost. The Harp Time Code is not a synchronization protocol, and Harp devices synchronize their clocks only through the [Harp Synchronization Clock](SynchronizationClock.md).
 

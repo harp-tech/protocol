@@ -50,11 +50,11 @@ Receivers MUST align their clocks so the next whole second starts exactly 672 μ
 
 Example traces of the transmission signals are shown below from a logic analyzer:
 
-  !["SynchClockLogicAnalyzer](./assets/SyncLogicTrace.png)
+![Logic analyzer traces showing the Harp Synchronization Clock on CLKOUT and a Harp Time Code on AUX UART](./assets/SyncLogicTrace.png)
 
 The upper **AUX UART** trace shows a device output that marks the start of each whole second, in this case a [Harp Time Code](TimeCode.md).
 
-## Example code
+## Example Code
 
 Example microcontroller C code dispatching the serialized data:
 
@@ -114,13 +114,13 @@ The physical connection for transmission of the Harp Synchronization Clock SHOUL
 
 The connector pinout for a device *receiving* the timestamp is shown below:
 
-!["SynchReceiverSchematic](./assets/HarpClockSyncReceiver.png)
+![Schematic of the connector on a device receiving the Harp Synchronization Clock](./assets/HarpClockSyncReceiver.png)
 
 The device receiving the timestamp MUST provide 3.3V-5V (~10 mA) on the connector **R** pin. A TVS diode is RECOMMENDED for ESD protection.
 
 The schematic snippet for a device *sending* the timestamp is shown below:
 
-!["SynchSenderSchematic](./assets/HarpClockSyncSender.png)
+![Schematic of the output circuit on a device sending the Harp Synchronization Clock](./assets/HarpClockSyncSender.png)
 
 > [!NOTE]
 > The device *sending* the timestamp MUST isolate each clock output port, preventing ground loops from forming when connecting the audio jack between sender and receiver.

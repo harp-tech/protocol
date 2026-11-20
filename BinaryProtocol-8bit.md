@@ -265,7 +265,7 @@ else
 }
 ```
 
-## Release notes:
+## Release notes
 
 - v0.1
     * First draft.
