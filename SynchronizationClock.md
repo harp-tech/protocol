@@ -48,9 +48,11 @@ Receivers MUST align their clocks so the next whole second starts exactly 672 μ
 
 ## Example Logic Trace
 
-Example traces of the transmission signals are shown below from both a logic analyzer and an oscilloscope:
+Example traces of the transmission signals are shown below from a logic analyzer:
 
   !["SynchClockLogicAnalyzer](./assets/SyncLogicTrace.png)
+
+The upper **AUX UART** trace shows a device output that marks the start of each whole second, in this case a [Harp Time Code](TimeCode.md).
 
 ## Example code
 
