@@ -46,15 +46,6 @@
                 "32-bit IEEE 754 floating-point number."
             ]
         },
-        "access": {
-            "type": "string",
-            "enum": ["Read", "Write", "Event"],
-            "enumDescriptions": [
-                "The controller can read the register.",
-                "The controller can write the register.",
-                "The device can send events from the register."
-            ]
-        },
         "maskValue": {
             "oneOf": [
                 { "type": "integer" },
@@ -190,7 +181,8 @@
                 "maskType": { "$ref": "#/definitions/maskType" },
                 "interfaceType": { "$ref": "#/definitions/interfaceType" },
                 "converter": { "$ref": "#/definitions/converter" }
-            }
+            },
+            "additionalProperties": false
         },
         "register": {
             "type": "object",
@@ -207,18 +199,20 @@
                     "type": "integer",
                     "minimum": 1
                 },
-                "access": {
-                    "description": "Specifies the expected use of the register.",
-                    "oneOf": [
-                        { "$ref": "#/definitions/access" },
-                        {
-                            "type": "array",
-                            "items": { "$ref": "#/definitions/access" },
-                            "uniqueItems": true,
-                            "minItems": 1,
-                            "maxItems": 3
-                        }
-                    ]
+                "read": {
+                    "description": "Specifies whether the controller can read the register.",
+                    "type": "boolean",
+                    "default": true
+                },
+                "write": {
+                    "description": "Specifies whether the controller can write the register.",
+                    "type": "boolean",
+                    "default": false
+                },
+                "event": {
+                    "description": "Specifies whether the device can send events from the register.",
+                    "type": "boolean",
+                    "default": false
                 },
                 "description": {
                     "description": "Specifies a summary description of the register function.",
@@ -255,7 +249,18 @@
                 "interfaceType": { "$ref": "#/definitions/interfaceType" },
                 "converter": { "$ref": "#/definitions/converter" }
             },
-            "required": ["address", "access", "type"]
+            "required": ["address", "type"],
+            "additionalProperties": false,
+            "if": {
+                "properties": { "read": { "const": false } },
+                "required": ["read"]
+            },
+            "then": {
+                "anyOf": [
+                    { "properties": { "write": { "const": true } }, "required": ["write"] },
+                    { "properties": { "event": { "const": true } }, "required": ["event"] }
+                ]
+            }
         },
         "reservedRegister": {
             "description": "Specifies a register reserved for future use.",
@@ -271,10 +276,10 @@
                     "default": "U8"
                 },
                 "length": { "$ref": "#/definitions/register/properties/length" },
-                "access": {
-                    "description": "Specifies the expected use of the register.",
-                    "const": "Read",
-                    "default": "Read"
+                "read": {
+                    "description": "Specifies that the controller can read the reserved register.",
+                    "const": true,
+                    "default": true
                 },
                 "description": {
                     "description": "Specifies a summary description of the reserved register.",
