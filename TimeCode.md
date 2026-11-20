@@ -2,7 +2,7 @@
 
 # Harp Time Code
 
-This document provides the specification for the Harp Time Code, a serial signal carrying the current Harp time in whole seconds, to be recorded by non-Harp acquisition systems alongside data acquired using their own local clock. The recorded data can then be aligned with the Harp time base, correcting for offset and drift, during post-hoc analysis. Including the whole second in each transmission allows the Harp time to be recovered even when recordings start at different times or individual transmissions are lost. The Harp Time Code is not a synchronization protocol, and Harp devices synchronize their clocks only through the [Harp Synchronization Clock](SynchronizationClock.md).
+This document provides the specification for the Harp Time Code, a serial signal carrying the current Harp time in whole seconds, to be recorded by non-Harp acquisition systems alongside data acquired using their own local clock. The recorded data can then be aligned with the Harp time base during post-hoc analysis. Including the whole second in each transmission allows the Harp time to be recovered even when recordings start at different times or individual transmissions are lost. The Harp Time Code is not a synchronization protocol, and Harp devices synchronize their clocks only through the [Harp Synchronization Clock](SynchronizationClock.md).
 
 ## Requirements Language
 
@@ -26,7 +26,7 @@ The four bytes MUST be transmitted consecutively, with the start bit of each sub
 
 ### Baud Rate
 
-The baud rate of the Harp Time Code MAY be fixed or configurable. A configurable baud rate MAY be exposed as a `U32` register whose value is the number of bits transmitted per second. The active baud rate MUST be documented or readable from a register included in the [register dump](Device.md#r_operation_ctrl-u8--operation-mode-configuration). The selected rate MUST allow the complete transmission packet to finish before the next whole second, leaving an idle HIGH interval between packets.
+The baud rate of the Harp Time Code MAY be fixed or configurable. The active baud rate MUST be documented or readable from a register included in the [register dump](Device.md#r_operation_ctrl-u8--operation-mode-configuration). The selected rate MUST allow the complete transmission packet to finish before the next whole second, leaving an idle HIGH interval between packets.
 
 The baud rate SHOULD be selected according to the sampling rate of the recording device. Lower baud rates allow the signal to be recorded by systems with lower sampling rates, but increase the duration of each transmission. The recording device SHOULD acquire multiple samples per bit to allow reliable decoding.
 
@@ -50,7 +50,7 @@ The lower **CLKOUT** trace shows the [Harp Synchronization Clock](Synchronizatio
 
 ## Documentation
 
-A Device implementing the Harp Time Code MUST document:
+A Device implementing the Harp Time Code SHOULD document:
 
 - the output connector, pin assignment and logic levels, since serial framing alone does not imply RS-232 voltage levels or the physical connector of the Harp Synchronization Clock;
 - the baud rate, or the supported values and the default value if the baud rate is configurable;
