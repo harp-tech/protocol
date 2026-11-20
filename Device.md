@@ -1,4 +1,4 @@
-﻿<img src="./assets/HarpLogo.svg" width="200">
+<img src="./assets/HarpLogo.svg" width="200">
 
 # Device Registers and Operation
 
@@ -16,7 +16,7 @@ For example, a register can be used to configure device properties such as sampl
 
 Each register in the Device Interface is assigned a unique zero-based address, and a payload type describing the format of the data stored in the register. Each register also specifies whether the Controller can read or write it, and whether the Device can send events from it. A register MUST support at least one of these. A register SHOULD NOT support `Read` requests if its value does not represent a state of the Device, for example when its `Write` requests only pass the arguments of an action, or its `Event` messages only carry transient data.
 
-Except for [Optional or Deprecated registers](#optional-or-deprecated-registers), whose behavior is clarified below, all registers and functionality specified in this document MUST be implemented by a Device complying with this specification.
+Except for [Optional or Deprecated registers](#optional-and-deprecated-registers), whose behavior is clarified below, all registers and functionality specified in this document MUST be implemented by a Device complying with this specification.
 
 ## Operation Mode
 
@@ -84,7 +84,7 @@ Instead, such cases MAY be handled by sending an event message from a different 
 
 If an event message is sent from a register as a result of a write request sent to a different register, the documentation for the register sending the event SHOULD clearly indicate which cases will raise the event, including specific combinations of values leading to error.
 
-### Register polymorphism
+### Register Polymorphism
 
 A Device SHOULD NOT accept or send different types of data for the same register address. The protocol was designed to be as simple as possible, and having different types of data in the same register would make the parsing and manipulation of messages unnecessarily complex.
 
@@ -140,7 +140,7 @@ The timestamp information in [REP] represents the time when the register content
 
 The timestamp information in [REP] represents the time when the register contents were read.
 
-#### Event message
+#### Event Message
 
 - [EVT] **Device**: `3` `Length` `Address` `Port` `PayloadType` `Timestamp` `Payload` `Checksum`      OK
 
@@ -152,7 +152,7 @@ All registers pertaining to the hardware-specific operation of the Device are ap
 
 ## Optional and Deprecated Registers
 
-Some registers are marked as **Optional** or **Deprecated** in the [Core Registers](#core-registers) table, and their functionality MAY not be fully implemented by the Device. However, all optional or deprecated registers that can be read MUST reply to `Read` requests by sending a message to the Controller with the specified default value. Moreover, they MUST be included as part of the [`R_OPERATION_CTRL`](#r_operation_ctrl-u8--operation-mode-configuration) register dump.
+Some registers are marked as **Optional** or **Deprecated** in the [Core Registers](#core-registers) table, and the Device MAY leave their functionality partly or entirely unimplemented. However, all optional or deprecated registers that can be read MUST reply to `Read` requests by sending a message to the Controller with the specified default value. Moreover, they MUST be included as part of the [`R_OPERATION_CTRL`](#r_operation_ctrl-u8--operation-mode-configuration) register dump.
 
 For any optional or deprecated registers that can be written and whose function is not implemented, the Device MUST always return a `Write` reply payload containing the register default value, to indicate the `Write` request had no effect. The Device SHOULD NOT crash or enter an undefined state when a `Write` request is sent to an optional or deprecated unimplemented register.
 
@@ -199,7 +199,7 @@ Tables can be generated here https://www.tablesgenerator.com/html_tables
 Mermaid plots can be generated here: https://mermaid.live/
 --->
 
-### Register layout diagrams
+### Register Layout Diagrams
 
 Several core registers include a diagram of their bit or byte layout, drawn with one of two orientations. A register that holds a single value, such as a multi-byte integer or a set of bit flags, is indexed by bit and drawn most significant first. A register that holds a structured sequence of fields, such as [`R_VERSION`](#r_version-u8-array--device-version-information), is indexed by byte and drawn in field order from byte 0. On the wire, the bytes of each value are ordered least significant first, as specified by the [Harp Binary Protocol](BinaryProtocol-8bit.md).
 
